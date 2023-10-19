@@ -2,10 +2,7 @@ using Rukha93.ModularAnimeCharacter.Customization.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Unity.Plastic.Newtonsoft.Json;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Rukha93.ModularAnimeCharacter.Customization
 {
