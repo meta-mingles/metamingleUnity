@@ -56,11 +56,18 @@ public class J_PlayerControls : MonoBehaviourPunCallbacks
             playerVelocity.y = 0f; // 플레이어가 땅에 닿은 경우 수직 속도를 0으로 초기화
         }
 
-        if (Input.GetButtonDown("Jump") && groundedPlayer) // 점프 입력이 활성화되고 플레이어가 지면에 있는 경우
+        if (Input.GetButtonDown("Jump")) // 점프 입력이 활성화되고 플레이어가 지면에 있는 경우
         {
-            UpdateJump();
-            
+           if(groundedPlayer) {
+                    UpdateJump();
+            }
+            else
+            {
+                // 움직이면서 점프를 실행할 수 있도록 원하는 다른 동작을 추가하거나 로직을 작성
+            }
+
         }
+ 
 
 
         playerVelocity.y += gravityValue * Time.deltaTime; // 중력을 적용하여 수직 속도 업데이트
@@ -79,11 +86,9 @@ public class J_PlayerControls : MonoBehaviourPunCallbacks
                 UpdateMove(move);
                 //Debug.Log("걷기 애니 실행");
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if ( Input.GetKey(KeyCode.LeftShift))
             {
                 UpdateRun(move);
-
-
             }
         }
         else
