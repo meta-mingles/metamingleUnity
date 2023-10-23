@@ -3,26 +3,18 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-[System.Serializable]
-public class MotionTrack
-{
-    public string key;
-    public Transform target;
-}
-
-
 public class KHHMotionTracking : MonoBehaviour
 {
-    public MotionTrack[] motionTracks;
+    public GameObject[] motionTracks;
     Dictionary<string, Transform> motionTrackTargetDic = new Dictionary<string, Transform>();
     Dictionary<string, Vector3> motionTrackPosDic = new Dictionary<string, Vector3>();
 
     private void Start()
     {
-        foreach (MotionTrack mt in motionTracks)
+        foreach (var mt in motionTracks)
         {
-            motionTrackTargetDic.Add(mt.key, mt.target);
-            motionTrackPosDic.Add(mt.key, new Vector3());
+            motionTrackTargetDic.Add(mt.name, mt.transform);
+            motionTrackPosDic.Add(mt.name, new Vector3());
         }
     }
 
@@ -50,7 +42,7 @@ public class KHHMotionTracking : MonoBehaviour
         if (datas.Length % 4 != 0)
             return;
 
-        //Debug.Log(data);
+        Debug.Log(data);
 
         int length = datas.Length / 4;
         for (int i = 0; i < length; i++)
@@ -62,7 +54,7 @@ public class KHHMotionTracking : MonoBehaviour
 
             if (motionTrackPosDic.ContainsKey(key))
             {
-                motionTrackPosDic[key] = new Vector3(x, -y, z);
+                motionTrackPosDic[key] = new Vector3(-x, -y, z)*0.002f;
             }
         }
     }

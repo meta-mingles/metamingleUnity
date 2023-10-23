@@ -25,13 +25,13 @@ public class KHHEditManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        recordButton.onClick.AddListener(() => { record.SetActive(true); edit.SetActive(false); });
-        videoButton.onClick.AddListener(() => { videoPanel.SetActive(true); soundPanel.SetActive(false); backgroundPanel.SetActive(false); });
-        soundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(true); backgroundPanel.SetActive(false); });
-        backgroundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(false); backgroundPanel.SetActive(true); });
-        interactiveButton.onClick.AddListener(() => { });
+        if (recordButton != null) recordButton.onClick.AddListener(() => { record.SetActive(true); edit.SetActive(false); });
+        if (videoButton != null) videoButton.onClick.AddListener(() => { videoPanel.SetActive(true); soundPanel.SetActive(false); backgroundPanel.SetActive(false); });
+        if (soundButton != null) soundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(true); backgroundPanel.SetActive(false); });
+        if (backgroundButton != null) backgroundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(false); backgroundPanel.SetActive(true); });
+        if (interactiveButton != null) interactiveButton.onClick.AddListener(() => { });
 
-        captureButton.onClick.AddListener(() => { });
+        if (captureButton != null) captureButton.onClick.AddListener(() => { });
     }
 
     // Update is called once per frame
