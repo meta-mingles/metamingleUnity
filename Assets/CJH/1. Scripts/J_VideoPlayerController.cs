@@ -15,8 +15,8 @@ public class J_VideoPlayerController : MonoBehaviour
     public RenderTexture rt;
 
 
-    public Button playBt; //재생 버튼
-    public Button pauseBt; //정지 버튼
+    //public Button playBt; //재생 버튼
+    //public Button pauseBt; //정지 버튼
 
 
     // Start is called before the first frame update

@@ -424,7 +424,7 @@ PrefabInstance:
     - target: {fileID: 3089168593596068044, guid: b4b87a379655fef438683b17f55d1a7b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00060504687
+      value: 0.000009404495
       objectReference: {fileID: 0}
     - target: {fileID: 3089168593596725416, guid: b4b87a379655fef438683b17f55d1a7b,
         type: 3}
@@ -643,9 +643,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b19a9363c48e7641a4322bf4fe30d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rawImag_VideoFactory: {fileID: 8495058288745024567, guid: 31a2d9b3de7a8ba46ae736e6fe12c1b1,
-    type: 3}
-  trCanvas: {fileID: 1365628859}
+  rawImage_VideoFactory: {fileID: 0}
+  trCtOfSV: {fileID: 0}
 --- !u!4 &1761676064
 Transform:
   m_ObjectHideFlags: 0
@@ -685,7 +684,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1925567470}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5dfa095dd4e3fb648aa9135ebb8e1446, type: 3}
   m_Name: 
