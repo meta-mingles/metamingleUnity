@@ -145,8 +145,10 @@ public class J_VideoReceiver : MonoBehaviour
     }
 
     VideoPlayer v;
-    public GameObject rawImag_VideoFactory;
-    public Transform trCanvas;
+    public GameObject rawImage_VideoFactory;
+    public Transform trCtOfSV;
+
+    int videoNum;
     IEnumerator Test(string u, string saveName)
     {
         Uri uri = new Uri(u);
@@ -170,8 +172,18 @@ public class J_VideoReceiver : MonoBehaviour
                 file.Write(videoBytes, 0, videoBytes.Length);
                 file.Close();
 
-                GameObject go = Instantiate(rawImag_VideoFactory, trCanvas);
+
+
+                //비디오 영상 완료
+                GameObject Video = new GameObject("Video" + videoNum); //비디오 프리팹 생성하지말고 넣는다
+                //GameObject Video = Instantiate(rawImage_VideoFactory, trCtOfSV);
+                Video.transform.SetParent(trCtOfSV.transform); //비디오 프리팹 위치 content 하위
+
+
+                GameObject go = Instantiate(rawImage_VideoFactory, trCtOfSV);
+                go.transform.SetParent(Video.transform); //go의 위치 video 하위
                 VideoPlayer videoPlayer = go.GetComponent<VideoPlayer>();
+
 
                 RenderTexture rt = new RenderTexture(512, 256, 24);
                 videoPlayer.targetTexture = rt;
@@ -179,6 +191,19 @@ public class J_VideoReceiver : MonoBehaviour
 
                 videoPlayer.url = Application.dataPath + "/" + saveName;
                 videoPlayer.Play();
+
+
+                //비디오 정보 UI
+                GameObject VideoInfo = new GameObject("VideoInfo");
+                VideoInfo.transform.SetParent(Video.transform);
+
+               // Text text = VideoInfo.AddComponent<Text>();
+
+
+
+               
+
+
 
 
 
