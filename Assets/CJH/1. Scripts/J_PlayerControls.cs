@@ -22,6 +22,13 @@ public class J_PlayerControls : MonoBehaviourPun
     [SerializeField]
     private float rotationSpeed = 2f; // 플레이어 회전 속도
 
+    //서버에서 넘어오는 위치값,회전값
+    //Vector3 receivePos;
+    //Quaternion receiveRot;
+    //보정 속력
+    //float lerpSpeed = 10;
+
+
     private CharacterController cc; // CharacterController 컴포넌트
     private Vector3 playerVelocity; // 플레이어의 현재 속도
     private bool groundedPlayer; // 플레이어가 지면에 있는지 여부
@@ -42,7 +49,7 @@ public class J_PlayerControls : MonoBehaviourPun
     }
     private void Start()
     {
-        anim.Play("Idle");
+        UpdateIdle();
 
         //내가 생성한 플레이어일때만 카메라 활성화
         if (photonView.IsMine)
@@ -74,7 +81,7 @@ public class J_PlayerControls : MonoBehaviourPun
             }
             else if (Input.GetButtonUp("Jump"))
             {
-
+                UpdateIdle();
             }
 
             if (horizontalInput != 0 || verticalInput != 0) // 이동 입력이 있는 경우
@@ -106,8 +113,20 @@ public class J_PlayerControls : MonoBehaviourPun
             cc.Move(playerVelocity * Time.deltaTime); // 플레이어의 수직 이동 업데이트
 
         }
+        //나의 플레이어가 아니라면
+        else
+        {
+            //위치, 회전 보정
+            //transform.position = Vector3.Lerp(transform.position, receivePos, lerpSpeed * Time.deltaTime);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, receiveRot, lerpSpeed * Time.deltaTime);
+        }
       
      }
+
+    void UpdateIdle()
+    {
+        anim.Play("Idle");
+    }
 
     void UpdateMove(Vector3 move)
     {
@@ -122,6 +141,28 @@ public class J_PlayerControls : MonoBehaviourPun
     void UpdateJump()
     {
         playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue); // 점프 높이에 따른 수직 속도 설정
-        anim.CrossFade("Jump", 0, 0);
+        Debug.Log("Jump");
+        anim.CrossFade("Jumping", 0, 0);
     }
+
+    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    //나의 플레이어라면 
+    //    if (stream.IsWriting)
+    //    {
+    //        //나의 위치값 보낸다
+    //        stream.SendNext(transform.position);
+    //        //회전값을 보낸다
+    //        stream.SendNext(transform.rotation);
+    //    }
+    //    //내 플레이어가 아니라면
+    //    else
+    //    {
+    //        //위치와 회전을 받자
+    //        transform.position = (Vector3)stream.ReceiveNext();
+    //        transform.rotation = (Quaternion)stream.ReceiveNext();
+
+    //    }
+
+    //}
 }

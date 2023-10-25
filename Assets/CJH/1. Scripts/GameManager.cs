@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviourPun
     void Start()
     {
         //OnPhotonSerializeView 호출 빈도
-        PhotonNetwork.SerializationRate = 60;
+        PhotonNetwork.SerializationRate = 10;
 
         //나의 플레이어 생성
         GameObject myPlayer = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
