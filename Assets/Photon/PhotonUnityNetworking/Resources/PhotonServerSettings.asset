@@ -17,10 +17,10 @@ MonoBehaviour:
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 
+    AppVersion: 1.0
     UseNameServer: 1
-    FixedRegion: Asia
-    Server: 1.0
+    FixedRegion: asia
+    Server: 
     Port: 0
     ProxyServer: 
     Protocol: 0
