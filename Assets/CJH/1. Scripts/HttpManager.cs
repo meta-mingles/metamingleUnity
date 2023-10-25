@@ -6,93 +6,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-//https://jsonplaceholder.typicode.com
-
-[Serializable]
-public class JsonList<T>
-{
-    public List<T> data;
-}
-
-[Serializable]
-public struct SignUpInfo
-{
-    public string nickname;
-}
-
-[Serializable]
-public struct NetFishInfo
-{
-    public int status;
-    public string message;
-    public data data;
-}
-
-[Serializable]
-public struct data
-{
-    public userDTO user;
-    public fishDTO fish;
-    public int price;
-}
-
-[Serializable]
-public struct userDTO
-{
-    public string nickname;
-    public int money;
-}
-[Serializable]
-public struct fishDTO
-{
-    public string name;
-    public int price;
-}
-
-
-[Serializable]
-public struct NetActivityInfo
-{
-    public int id;
-    public string image;
-    public string village;
-    public string villageEn;
-    public string name;
-    public string price;
-    public string period;
-    public string people;
-
-}
-
-[Serializable]
-public struct NetVillageInfo
-{
-    public int id;
-    public string name;
-    public string image;
-    public string address;
-    public string fishNameEn;
-}
-
-
-[Serializable]
-public struct UserInfo
-{
-    public int id;
-    public string userId;
-    public string password;
-    public string nickname;
-    public int money;
-}
-
-[Serializable]
-public struct ReceiveUserInfo
-{
-    public UserInfo data;
-}
-
-
-
 
 public enum RequestType
 {
@@ -103,7 +16,6 @@ public enum RequestType
     TEXTURE
 }
 
-//�� ����ϱ� ���� ����
 public class HttpInfo
 {
     public RequestType requestType;
@@ -138,9 +50,7 @@ public class HttpManager : MonoBehaviour
     {
         if (instance == null)
         {
-            //���� ������Ʈ �����
             GameObject go = new GameObject("HttpStudy");
-            //������� ���� ������Ʈ�� HttpManager ������Ʈ ������
             go.AddComponent<HttpManager>();
         }
 
@@ -170,7 +80,6 @@ public class HttpManager : MonoBehaviour
 
     }
 
-    //�������� REST API ��û (GET, POST, PUT, DELETE)
     public void SendRequest(HttpInfo httpInfo)
     {
         StartCoroutine(CoSendRequest(httpInfo));
@@ -184,7 +93,6 @@ public class HttpManager : MonoBehaviour
         switch (httpInfo.requestType)
         {
             case RequestType.GET:
-                //Get������� req �� ���� ����
                 req = UnityWebRequest.Get(httpInfo.url);
                 break;
             case RequestType.POST:
@@ -194,7 +102,6 @@ public class HttpManager : MonoBehaviour
 
                 byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
                 req.uploadHandler = new UploadHandlerRaw(byteBody);
-                //��� �߰�
                 req.SetRequestHeader("Content-Type", "application/json");
 
                 break;
@@ -209,13 +116,10 @@ public class HttpManager : MonoBehaviour
                 break;
         }
 
-        //������ ��û�� ������ ������ �ö����� �纸�Ѵ�.
         yield return req.SendWebRequest();
 
-        //���࿡ ������ �����ߴٸ�
         if (req.result == UnityWebRequest.Result.Success)
         {
-            //print("��Ʈ��ũ ���� : " + req.downloadHandler.text);
 
 
             if (httpInfo.requestType == RequestType.TEXTURE)
@@ -234,7 +138,6 @@ public class HttpManager : MonoBehaviour
             }
 
         }
-        //��� ����
         else
         {
             print("네트워크 에러 : " + req.error);

@@ -1,139 +1,125 @@
 using ExitGames.Client.Photon.StructWrapping;
+using RootMotion.Demos;
 using System;
 using System.Collections;
+using System.IO;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class J_VideoReceiver : MonoBehaviour
 {
-    public enum RequestType
-    {
-        GET, //Get 요청
-        POST, //Post 요청
-        PUT, //Put 요청
-        DELETE, // Delete요청
-        TEXTURE //이미지,  비디오 텍스처 요청
-    }
+    public GameObject videoFactory;
+    public Transform trCtOfSV;
 
-    public enum ResponseType
+    private void Update()
     {
-        JSON, //JSON 응답
-        TEXTURE //이미지,  비디오 텍스처 응답
-    }
-
-    [Serializable]
-    public class HttpInfo
-    {
-        public RequestType requestType; //요청유형
-        public string url = ""; //요청 url
-        public string body; //요청 본문 데이터(post, put 요청용)
-        public Action<DownloadHandler> onReceive; //응답 처리 콜백함수
-        //public ResponseType responseType; //응답유형(JSON 또는 TEXTURE)
-
-        // HttpInfo 객체를 설정하는 메서드
-        public void Set(RequestType type, string u, Action<DownloadHandler> callback,bool useDefaultUrl = true)
+        if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            requestType = type;
-            if (useDefaultUrl) url = "http://192.168.0.6:8080/short-form/1";
-            url += u; //지정된 URL로 업데이트
-            onReceive = callback; // 응답 처리 콜백 함수 설정
+            // 서버한테 영상 정보 요청
+            HttpInfo httpInfo = new HttpInfo();
+
+            Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "VideoInfo.csv");
+
+            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) => {
+
+                //데이터 셋팅
+                J_DataManager.instance.SetVideoInfoList(downloadHandler.text);
+
+                //UI 만들자
+                for(int i = 0; i < J_DataManager.instance.videoInfoList.Count; i++)
+                {
+                    GameObject video = Instantiate(videoFactory, trCtOfSV);
+                    J_VideoItem item = video.GetComponent<J_VideoItem>();
+                    item.SetItem(J_DataManager.instance.videoInfoList[i]);
+                }
+
+            }, false);
+
+            HttpManager.Get().SendRequest(httpInfo);
+
+            //for(int i = 0; i < 2; i++)
+            //{
+            //    //서버랑 통신시 아래 링크 넣기
+            //    StartCoroutine(Test("C:/Users/user/Videos/Captures/" + (i + 1) + ".mp4", (i + 1) + ".mp4"));
+
+            //}
+        }
+
+        if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+
+            Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "ShopInfo.csv");
+
+            // 서버한테 영상 정보 요청
+            HttpInfo httpInfo = new HttpInfo();
+            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) => {
+
+                //데이터 셋팅
+                J_DataManager.instance.SetShopInfoList(downloadHandler.text);
+
+
+            }, false);
+
+            HttpManager.Get().SendRequest(httpInfo);
         }
     }
 
-    static J_VideoReceiver instance;
-
-    public static J_VideoReceiver Get()
-    {
-        if (instance == null)
-        {
-            GameObject go = new GameObject("J_VideoReceiver");
-            go.AddComponent<J_VideoReceiver>();
-        }
-
-        return instance;
-    }
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    void Start()
-    {
-        // 예제 사용법
-        // 비디오를 요청하고 처리
-        HttpInfo videoRequest = new HttpInfo();
-        videoRequest.Set(RequestType.GET,string.Empty, (downloadHandler) =>
-        {
-            Debug.Log("비디오 데이터를 받았습니다.");
-            // 비디오 데이터를 처리할 수 있음
-
-            //예를 들면 파일이나 다른 방식으로 저장 가능
-
-        });
-
-        SendRequest(videoRequest);
-    }
-
-    // 서버에게 REST API 요청 (GET, POST, PUT, DELETE)
-    public void SendRequest(HttpInfo httpInfo)
-    {
-        StartCoroutine(CoSendRequest(httpInfo));
-    }
-
-    //IEnumerator CoSendRequest(HttpInfo httpInfo)
+    //int videoNum;
+    //IEnumerator Test(string u, string saveName)
     //{
-    //    using (UnityWebRequest req = UnityWebRequest.Get(httpInfo.url))
+    //    Uri uri = new Uri(u);
+    //    //서버랑 통신받을 땐 위에꺼 주석처리하기
 
-    //    //서버에 요청을 보내고 응답이 올때까지 양보
-    //    yield return req.SendWebRequest();
 
-    //    //만약 응답 성공시
-    //    if (req.result == UnityWebRequest.Result.Success)
+    //    using (UnityWebRequest www = UnityWebRequest.Get(uri))
     //    {
-    //        //비디오 응답처리
-    //        if (httpInfo.onReceive != null)
+    //        yield return www.SendWebRequest();
+
+    //        if (www.result != UnityWebRequest.Result.Success)
     //        {
     //            Debug.Log(www.error);
-    //            httpInfo.onReceive(req.downloadHandler);
+    //        }
+    //        else
+    //        {                
+    //            byte[] videoBytes = www.downloadHandler.data;
+
+    //            FileStream file = new FileStream(Application.dataPath + "/" + saveName, FileMode.Create);                
+    //            //byteData 를 file 에 쓰자
+    //            file.Write(videoBytes, 0, videoBytes.Length);
+    //            file.Close();
+
+    //            //비디오 영상 완료
+    //            //GameObject Video = new GameObject("Video" + videoNum); //비디오 프리팹 생성하지말고 넣는다
+    //            //GameObject Video = Instantiate(videoFactory, trCtOfSV);
+    //            //Video.transform.SetParent(trCtOfSV.transform); //비디오 프리팹 위치 content 하위
+
+    //            videoList = Instantiate(videoFactory, trCtOfSV);
+
+    //            J_VideoItem videoItem = videoList.GetComponent<J_VideoItem>();
+    //            //videoItem.SetItem()
+
+
+    //            //GameObject go = Instantiate(videoFactory, trCtOfSV);
+    //            //go.transform.SetParent(Video.transform); //go의 위치 video 하위
+    //            VideoPlayer videoPlayer = videoList.GetComponentInChildren<VideoPlayer>();
+
+
+    //            RenderTexture rt = new RenderTexture(512, 256, 24);
+    //            videoPlayer.targetTexture = rt;
+    //            videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
+
+
+    //            videoPlayer.url = Application.dataPath + "/" + saveName;
+    //            videoPlayer.Play();
+
+    //            // 여기서 videoBytes를 사용하여 동영상을 처리하거나 저장합니다.
+    //            Debug.Log("Download Successful: " + videoBytes.Length + " bytes received.");
     //        }
     //    }
-    //    //통신 실패
-    //    else
-    //    {
-    //        byte[] videoBytes = www.downloadHandler.data;
-    //        Debug.LogError("네트워크 오류: " + req.error);
-    //    }
-
-        //형훈이형
-        IEnumerator CoSendRequest(HttpInfo httpInfo)
-        {
-            using (UnityWebRequest www = UnityWebRequest.Get(httpInfo.url))
-            {
-                www.downloadHandler = new DownloadHandlerBuffer();
-                 Debug.Log(httpInfo.url);
-
-                yield return www.SendWebRequest();
-
-                if (www.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.Log(www.error);
-                }
-                else
-                {
-                    byte[] videoBytes = www.downloadHandler.data;
-                    // 여기서 videoBytes를 사용하여 동영상을 처리하거나 저장합니다.
-                    Debug.Log("Download Successful: " + videoBytes.Length + " bytes received.");
-                }
-            }
-        }
-    }
+    //}
+}
 
