@@ -210,6 +210,7 @@ public class VNectBarracudaRunner : MonoBehaviour
         videoCapture.Init(InputImageSize, InputImageSize);
         Lock = false;
         //Msg.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     private const string inputName_1 = "input.1";

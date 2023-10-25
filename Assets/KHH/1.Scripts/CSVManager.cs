@@ -41,7 +41,7 @@ public class CSVManager : MonoBehaviour
         for (int index = 0; index < length; index++)
             stringBuilder.AppendLine(string.Join(delimiter, output[index]));
 
-        Stream fileStream = new FileStream(Application.dataPath + "/" + fileName + ".csv", FileMode.CreateNew, FileAccess.Write);
+        Stream fileStream = new FileStream(Application.persistentDataPath + "/" + fileName, FileMode.CreateNew, FileAccess.Write);
         StreamWriter outStream = new StreamWriter(fileStream, Encoding.UTF8);
         outStream.WriteLine(stringBuilder);
         outStream.Close();
@@ -52,7 +52,7 @@ public class CSVManager : MonoBehaviour
     public string[,] ReadCsv(string fileName)
     {
         string value = "";
-        StreamReader reader = new StreamReader(Application.dataPath + "/" + fileName + ".csv", Encoding.UTF8);
+        StreamReader reader = new StreamReader(Application.persistentDataPath + "/" + fileName, Encoding.UTF8);
         value = reader.ReadToEnd();
         reader.Close();
 

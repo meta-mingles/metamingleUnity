@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class KHHModelRecorder : MonoBehaviour
 {
-    VNectModel model;
+    public VNectModel model;
 
     bool isRecording = false;
     bool isPlaying = false;
@@ -23,11 +23,11 @@ public class KHHModelRecorder : MonoBehaviour
 
     [SerializeField] VideoCapture videoCapture;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        model = GetComponent<VNectModel>();
-    }
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    model = GetComponent<VNectModel>();
+    //}
 
     // Update is called once per frame
     void Update()
@@ -57,7 +57,7 @@ public class KHHModelRecorder : MonoBehaviour
             {
                 Vector3 pos = Vector3.Lerp(recordList[timeList[curIdx]][i].Item1, recordList[timeList[curIdx + 1]][i].Item1, ratio);
                 Quaternion rot;
-                if ((recordList[timeList[curIdx]][i].Item2.normalized == Quaternion.identity) && (recordList[timeList[curIdx + 1]][i].Item2.normalized == Quaternion.identity)) rot = recordList[timeList[curIdx + 1]][i].Item2;
+                if ((recordList[timeList[curIdx]][i].Item2.normalized == Quaternion.identity) && (recordList[timeList[curIdx + 1]][i].Item2.normalized == Quaternion.identity)) rot = Quaternion.identity; //recordList[timeList[curIdx + 1]][i].Item2;
                 else rot = Quaternion.Lerp(recordList[timeList[curIdx]][i].Item2, recordList[timeList[curIdx + 1]][i].Item2, ratio);
                 model.JointPoints[i].Pos3D = pos;
                 model.JointPoints[i].InverseRotation = rot;
@@ -100,11 +100,10 @@ public class KHHModelRecorder : MonoBehaviour
         recordData.Add(curJointData);
     }
 
-    public void StopRecord()
+    public void StopRecord(string fileName)
     {
         isRecording = false;
 
-        string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
         TestFileName = fileName;
         CSVManager.Instance.WriteCsv(fileName, recordData);
     }
@@ -149,6 +148,7 @@ public class KHHModelRecorder : MonoBehaviour
     {
         isPlaying = true;
         playTime = 0.0f;
+        curIdx = 0;
     }
 
     public void StopPlay()

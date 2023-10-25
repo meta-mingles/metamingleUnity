@@ -4,6 +4,8 @@ using UnityEngine.Video;
 
 public class VideoCapture : MonoBehaviour
 {
+    public bool SetEnd = false;
+
     public GameObject InputTexture;
     public RawImage VideoScreen;
     public GameObject VideoBackground;
@@ -30,27 +32,27 @@ public class VideoCapture : MonoBehaviour
     {
         this.bgWidth = bgWidth;
         this.bgHeight = bgHeight;
-        if (UseWebCam) CameraPlayStart();
+        if (UseWebCam) CameraStart();
         else VideoPlayStart();
+
+        SetEnd = true;
     }
 
     /// <summary>
     /// Play Web Camera
     /// </summary>
-    private void CameraPlayStart()
+    private void CameraStart()
     {
         WebCamDevice[] devices = WebCamTexture.devices;
-        if(devices.Length <= WebCamIndex)
+        if (devices.Length <= WebCamIndex)
         {
             WebCamIndex = 0;
         }
-        
+
         webCamTexture = new WebCamTexture(devices[WebCamIndex].name);
 
         var sd = VideoScreen.GetComponent<RectTransform>();
         VideoScreen.texture = webCamTexture;
-
-        webCamTexture.Play();
 
         sd.sizeDelta = new Vector2(videoScreenWidth, videoScreenWidth * webCamTexture.height / webCamTexture.width);
         var aspect = (float)webCamTexture.width / webCamTexture.height;
@@ -60,9 +62,16 @@ public class VideoCapture : MonoBehaviour
         InitMainTexture();
     }
 
+    public void CameraPlayStart()
+    {
+        if (webCamTexture != null && !webCamTexture.isPlaying)
+            webCamTexture.Play();
+    }
+
     public void CameraPlayStop()
     {
-        webCamTexture.Stop();
+        if (webCamTexture != null && webCamTexture.isPlaying)
+            webCamTexture.Stop();
     }
 
     /// <summary>
@@ -104,7 +113,7 @@ public class VideoCapture : MonoBehaviour
 
         var camera = go.GetComponent<Camera>();
         camera.orthographic = true;
-        camera.orthographicSize = 0.5f ;
+        camera.orthographicSize = 0.5f;
         camera.depth = -5;
         camera.depthTextureMode = 0;
         camera.clearFlags = CameraClearFlags.Color;
