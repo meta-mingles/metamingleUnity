@@ -2,68 +2,85 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using System;
+using UnityEditor;
 
 public class CSVManager : MonoBehaviour
 {
-    //public string fileName = "Setting.csv";
+    public static CSVManager Instance { get; private set; }
 
-    //public InputField nameText;
-    //public InputField countryText;
-    //public InputField yearText;
-    //public InputField heightText;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            return;
+        }
 
-    //List<string[]> data = new List<string[]>();
-    //string[] tempData;
+        Destroy(this.gameObject);
+    }
 
-    //void Awake()
-    //{
-    //    data.Clear();
+    public void WriteCsv(string fileName, List<string[]> rowData)
+    {
+        string[][] output = new string[rowData.Count][];
 
-    //    tempData = new string[4];
-    //    tempData[0] = "Time";
-    //    tempData[1] = "Country";
-    //    tempData[2] = "Year";
-    //    tempData[3] = "Height";
-    //    data.Add(tempData);
-    //}
+        for (int i = 0; i < output.Length; i++)
+        {
+            output[i] = rowData[i];
+        }
 
-    //public void SaveCSVFile()
-    //{
-    //    tempData = new string[4];
-    //    tempData[0] = nameText.text;
-    //    tempData[1] = countryText.text;
-    //    tempData[2] = yearText.text;
-    //    tempData[3] = heightText.text;
-    //    data.Add(tempData);
+        int length = output.GetLength(0);
+        string delimiter = ",";
 
-    //    string[][] output = new string[data.Count][];
+        StringBuilder stringBuilder = new StringBuilder();
 
-    //    for (int i = 0; i < output.Length; i++)
-    //    {
-    //        output[i] = data[i];
-    //    }
+        for (int index = 0; index < length; index++)
+            stringBuilder.AppendLine(string.Join(delimiter, output[index]));
 
-    //    int length = output.GetLength(0);
-    //    string delimiter = ",";
+        Stream fileStream = new FileStream(Application.dataPath + "/" + fileName + ".csv", FileMode.CreateNew, FileAccess.Write);
+        StreamWriter outStream = new StreamWriter(fileStream, Encoding.UTF8);
+        outStream.WriteLine(stringBuilder);
+        outStream.Close();
 
-    //    StringBuilder sb = new StringBuilder();
+        AssetDatabase.Refresh();
+    }
 
-    //    for (int i = 0; i < length; i++)
-    //    {
-    //        sb.AppendLine(string.Join(delimiter, output[i]));
-    //    }
+    public string[,] ReadCsv(string fileName)
+    {
+        string value = "";
+        StreamReader reader = new StreamReader(Application.dataPath + "/" + fileName + ".csv", Encoding.UTF8);
+        value = reader.ReadToEnd();
+        reader.Close();
 
-    //    string filepath = SystemPath.GetPath();
+        string[] lines = value.Split("\n"[0]);
 
-    //    if (!Directory.Exists(filepath))
-    //    {
-    //        Directory.CreateDirectory(filepath);
-    //    }
+        int width = 0;
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string[] row = SplitCsvLine(lines[i]);
+            width = Mathf.Max(width, row.Length);
+        }
 
-    //    StreamWriter outStream = System.IO.File.CreateText(filepath + fileName);
-    //    outStream.Write(sb);
-    //    outStream.Close();
-    //}
+        string[,] outputGrid = new string[width + 1, lines.Length + 1];
+        for (int y = 0; y < lines.Length; y++)
+        {
+            string[] row = SplitCsvLine(lines[y]);
+            for (int x = 0; x < row.Length; x++)
+            {
+                outputGrid[x, y] = row[x];
+                outputGrid[x, y] = outputGrid[x, y].Replace("\"\"", "\"");
+            }
+        }
+
+        return outputGrid;
+    }
+
+    public string[] SplitCsvLine(string line)
+    {
+        return (from Match m in Regex.Matches(line, @"(((?<x>(?=[,\r\n]+))|""(?<x>([^""]|"""")+)""|(?<x>[^,\r\n]+)),?)", RegexOptions.ExplicitCapture) select m.Groups[1].Value).ToArray();
+    }
 }

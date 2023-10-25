@@ -60,6 +60,11 @@ public class VideoCapture : MonoBehaviour
         InitMainTexture();
     }
 
+    public void CameraPlayStop()
+    {
+        webCamTexture.Stop();
+    }
+
     /// <summary>
     /// Play video
     /// </summary>
