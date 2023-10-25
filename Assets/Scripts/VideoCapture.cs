@@ -50,6 +50,8 @@ public class VideoCapture : MonoBehaviour
         }
 
         webCamTexture = new WebCamTexture(devices[WebCamIndex].name);
+        //미러
+        webCamTexture.wrapMode = TextureWrapMode.Mirror;
 
         var sd = VideoScreen.GetComponent<RectTransform>();
         VideoScreen.texture = webCamTexture;
