@@ -46,7 +46,7 @@ public class CSVManager : MonoBehaviour
         outStream.WriteLine(stringBuilder);
         outStream.Close();
 
-        AssetDatabase.Refresh();
+        //AssetDatabase.Refresh();
     }
 
     public string[,] ReadCsv(string fileName)

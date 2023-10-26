@@ -37,8 +37,10 @@ public class KHHEditManager : MonoBehaviour
     public Button stopButton;
     public Button exportButton;
 
+    public KHHExportWindow exportWindow;
 
     bool isInterActive = false;
+    bool isExporting = false;
 
     private void Awake()
     {
@@ -66,7 +68,7 @@ public class KHHEditManager : MonoBehaviour
 
         if (playButton != null) playButton.onClick.AddListener(() => { screenEditor.Play(); });
         if (stopButton != null) stopButton.onClick.AddListener(() => { screenEditor.Stop(); });
-        if (exportButton != null) exportButton.onClick.AddListener(() => { if (screenEditor.FileLoaded) ExportVideo(); });
+        if (exportButton != null) exportButton.onClick.AddListener(() => { if (screenEditor.FileLoaded) GenerateVideo(); });
     }
 
     //// Update is called once per frame
@@ -82,16 +84,31 @@ public class KHHEditManager : MonoBehaviour
         interactive.SetActive(isInterActive);
     }
 
-    void ExportVideo()
+    void GenerateVideo()
     {
-        if(isInterActive)
+        isExporting = true;
+
+        //전송 윈도우 띄우기
+        exportWindow.gameObject.SetActive(true);
+        exportWindow.StateChange(KHHExportWindow.ExportState.Processing);
+
+        if (isInterActive)
+            StartCoroutine(CoGenerateInteractiveVideo());
+        else
+            StartCoroutine(CoGenerateShortformVideo());
+    }
+
+    public void ExportVideo()
+    {
+        if (isInterActive)
             StartCoroutine(CoExportInteractiveVideo());
         else
             StartCoroutine(CoExportShortformVideo());
     }
 
-    IEnumerator CoExportInteractiveVideo()
+    IEnumerator CoGenerateInteractiveVideo()
     {
+        //first
         screenEditor.Play();
         VideoCaptureCtrl.instance.StartCapture();
 
@@ -106,6 +123,7 @@ public class KHHEditManager : MonoBehaviour
 
         yield return StartCoroutine(screenEditor.LoadFile(interactiveButtonLeft.FileName));
 
+        //choice1
         screenEditor.Play();
         VideoCaptureCtrl.instance.StartCapture();
 
@@ -120,6 +138,7 @@ public class KHHEditManager : MonoBehaviour
 
         yield return StartCoroutine(screenEditor.LoadFile(interactiveButtonRight.FileName));
 
+        //choice2
         screenEditor.Play();
         VideoCaptureCtrl.instance.StartCapture();
 
@@ -132,11 +151,25 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
+        exportWindow.StateChange(KHHExportWindow.ExportState.Generate);
+    }
+
+    IEnumerator CoExportInteractiveVideo()
+    {
+        exportWindow.StateChange(KHHExportWindow.ExportState.Exporting);
+
+        //upload
         KHHVideoCapture.instance.UploadInteractiveVideo("test Interactive", interactiveButtonLeft.Title, interactiveButtonRight.Title);
+        while (KHHVideoCapture.instance.IsUploading)
+            yield return null;
+
+        exportWindow.StateChange(KHHExportWindow.ExportState.Complete);
+        //complete
+        isExporting = false;
         Debug.Log("Interactive Finish");
     }
 
-    IEnumerator CoExportShortformVideo()
+    IEnumerator CoGenerateShortformVideo()
     {
         screenEditor.Play();
         VideoCaptureCtrl.instance.StartCapture();
@@ -150,8 +183,20 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
-        KHHVideoCapture.instance.UploadShortformVideo("test video");
+        exportWindow.StateChange(KHHExportWindow.ExportState.Generate);
+    }
 
+    IEnumerator CoExportShortformVideo()
+    {
+        exportWindow.StateChange(KHHExportWindow.ExportState.Exporting);
+        //upload
+        KHHVideoCapture.instance.UploadShortformVideo("test video");
+        while (KHHVideoCapture.instance.IsUploading)
+            yield return null;
+
+        exportWindow.StateChange(KHHExportWindow.ExportState.Complete);
+        //complete
+        isExporting = false;
         Debug.Log("Finish");
     }
 }

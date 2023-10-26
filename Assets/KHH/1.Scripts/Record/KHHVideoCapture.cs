@@ -20,6 +20,9 @@ public class KHHVideoCapture : MonoBehaviour
     //private bool isPlayVideo = false;
     public bool IsInteractive { get; set; } = false;
 
+    //업로드중
+    public bool IsUploading { get; set; } = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -38,7 +41,7 @@ public class KHHVideoCapture : MonoBehaviour
         {
             if (actionQueue.Count > 0)
             {
-                if(IsInteractive)
+                if (IsInteractive)
                 {
                     filePathInteractive.Add(actionQueue.Dequeue());
                     if (filePathInteractive.Count == 3)
@@ -143,6 +146,9 @@ public class KHHVideoCapture : MonoBehaviour
     public void UploadShortformVideo(string title)
     {
         StartCoroutine(CoUploadShortformVideo(ReadVideoAsBytes(filePathShortform), title));
+
+        ////비디오 삭제
+        //System.IO.File.Delete(filePathShortform);
     }
 
     IEnumerator CoUploadShortformVideo(byte[] videoBytes, string title)
@@ -187,11 +193,18 @@ public class KHHVideoCapture : MonoBehaviour
     string uploadInteractiveURL = "http://" + "192.168.0.115:8080/interactive-movie";
     public void UploadInteractiveVideo(string title, string choice1, string choice2)
     {
+        IsUploading = true;
+
         List<byte[]> videoBytes = new List<byte[]>();
-        for(int i = 0; i < filePathInteractive.Count; i++)
+        for (int i = 0; i < filePathInteractive.Count; i++)
             videoBytes.Add(ReadVideoAsBytes(filePathInteractive[i]));
 
         StartCoroutine(CoUploadInteractiveVideo(videoBytes, title, choice1, choice2));
+
+        ////비디오 삭제
+        //for (int i = 0; i < filePathInteractive.Count; i++)
+        //    System.IO.File.Delete(filePathInteractive[i]);
+        //filePathInteractive.Clear();
     }
 
     IEnumerator CoUploadInteractiveVideo(List<byte[]> videoBytesList, string title, string choice1, string choice2)
@@ -239,6 +252,8 @@ public class KHHVideoCapture : MonoBehaviour
                 string result = Encoding.UTF8.GetString(stringBytes);
                 Debug.Log("Upload Successful:" + result);
             }
+
+            IsUploading = false;
         }
     }
 }

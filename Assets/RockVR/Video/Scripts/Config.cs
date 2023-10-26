@@ -30,7 +30,7 @@ namespace RockVR.Video
 #else
                 if (saveFolder == "")
                 {
-                    saveFolder = persistentDataPath + "/RockVR/Video/";
+                    saveFolder = myDocumentsPath + "/RockVR/Video/";
                 }
                 return saveFolder;
 #endif
