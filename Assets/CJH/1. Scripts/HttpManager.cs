@@ -35,7 +35,7 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://192.168.0.6:8080/short-form/1";
+        if (useDefaultUrl) url = "http://192.168.0.115:8080/short-form-firebase";
         url += u;
         onReceive = callback;
     }

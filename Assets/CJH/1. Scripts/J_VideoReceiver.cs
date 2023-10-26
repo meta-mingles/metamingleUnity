@@ -23,9 +23,12 @@ public class J_VideoReceiver : MonoBehaviour
             // 서버한테 영상 정보 요청
             HttpInfo httpInfo = new HttpInfo();
 
+            Debug.Log(httpInfo.url);
             Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "RealVideoInfo.csv");
 
-            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) => {
+          
+            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) =>
+            {
 
                 //데이터 셋팅
                 J_DataManager.instance.SetRealVideoInfoList(downloadHandler.text);
