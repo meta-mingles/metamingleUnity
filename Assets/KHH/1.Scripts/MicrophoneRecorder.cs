@@ -42,7 +42,7 @@ public class MicrophoneRecorder : MonoBehaviour
 
             recordClip.SetData(cutSamples, 0);
 
-            SavWav.Save(fileName + ".wav", recordClip);
+            SaveLoadWav.Save(fileName, recordClip);
         }
     }
 }

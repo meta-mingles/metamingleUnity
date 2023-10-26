@@ -6,22 +6,19 @@ using UnityEngine;
 public class KHHModelRecorder : MonoBehaviour
 {
     public VNectModel model;
+    public KHHScreenEditor screenEditor;
 
     bool isRecording = false;
-    bool isPlaying = false;
 
     //³ìÈ­
     List<string[]> recordData;
     float recordTime = 0.0f;
-
 
     //Àç»ý
     List<float> timeList;
     Dictionary<float, List<(Vector3, Quaternion)>> recordList;
     float playTime = 0.0f;
     int curIdx = 0;
-
-    [SerializeField] VideoCapture videoCapture;
 
     //// Start is called before the first frame update
     //void Start()
@@ -32,12 +29,12 @@ public class KHHModelRecorder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (model != null && isPlaying)
+        if (model != null && screenEditor.IsPlaying)
         {
             playTime += Time.deltaTime;
             if (playTime > timeList[timeList.Count - 1])
             {
-                isPlaying = false;
+                screenEditor.IsPlaying = false;
                 return;
             }
 
@@ -112,8 +109,6 @@ public class KHHModelRecorder : MonoBehaviour
     string TestFileName;
     public void LoadRecordData(string fileName = "")
     {
-        videoCapture.CameraPlayStop();
-
         if (fileName == "")
             fileName = TestFileName;
         string[,] motionData = CSVManager.Instance.ReadCsv(fileName);
@@ -146,13 +141,11 @@ public class KHHModelRecorder : MonoBehaviour
 
     public void StartPlay()
     {
-        isPlaying = true;
         playTime = 0.0f;
         curIdx = 0;
     }
 
     public void StopPlay()
     {
-        isPlaying = false;
     }
 }

@@ -51,13 +51,12 @@ public class VideoCapture : MonoBehaviour
 
         webCamTexture = new WebCamTexture(devices[WebCamIndex].name);
         //미러
-        webCamTexture.wrapMode = TextureWrapMode.Mirror;
 
         var sd = VideoScreen.GetComponent<RectTransform>();
         VideoScreen.texture = webCamTexture;
 
         sd.sizeDelta = new Vector2(videoScreenWidth, videoScreenWidth * webCamTexture.height / webCamTexture.width);
-        var aspect = (float)webCamTexture.width / webCamTexture.height;
+        var aspect = -(float)webCamTexture.width / webCamTexture.height;
         VideoBackground.transform.localScale = new Vector3(aspect, 1, 1) * VideoBackgroundScale;
         VideoBackground.GetComponent<Renderer>().material.mainTexture = webCamTexture;
 

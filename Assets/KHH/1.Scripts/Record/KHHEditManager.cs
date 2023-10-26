@@ -1,3 +1,4 @@
+using RockVR.Video;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ public class KHHEditManager : MonoBehaviour
     public GameObject edit;
 
     public Camera captureCamera;
-    public KHHModelRecorder recorder;
+    public KHHScreenEditor screenEditor;
     public GameObject barracudaRunner;
 
     [Header("Left")]
@@ -27,11 +28,17 @@ public class KHHEditManager : MonoBehaviour
     public GameObject videoPanel;
     public GameObject soundPanel;
     public GameObject backgroundPanel;
+    public GameObject interactive;
+    public KHHInteractiveButton interactiveButtonLeft;
+    public KHHInteractiveButton interactiveButtonRight;
 
     [Header("Middle")]
     public Button playButton;
     public Button stopButton;
-    public Button captureButton;
+    public Button exportButton;
+
+
+    bool isInterActive = false;
 
     private void Awake()
     {
@@ -44,7 +51,7 @@ public class KHHEditManager : MonoBehaviour
         if (recordButton != null) recordButton.onClick.AddListener(() =>
         {
             //전환이 가능한 상태
-            if(KHHRecordManager.Instance.Init())
+            if (KHHRecordManager.Instance.Init())
             {
                 record.SetActive(true);
                 edit.SetActive(false);
@@ -55,16 +62,96 @@ public class KHHEditManager : MonoBehaviour
         if (videoButton != null) videoButton.onClick.AddListener(() => { videoPanel.SetActive(true); soundPanel.SetActive(false); backgroundPanel.SetActive(false); });
         if (soundButton != null) soundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(true); backgroundPanel.SetActive(false); });
         if (backgroundButton != null) backgroundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(false); backgroundPanel.SetActive(true); });
-        if (interactiveButton != null) interactiveButton.onClick.AddListener(() => { });
+        if (interactiveButton != null) interactiveButton.onClick.AddListener(Interactive);
 
-        if (playButton != null) playButton.onClick.AddListener(() => { recorder.StartPlay(); });
-        if (stopButton != null) stopButton.onClick.AddListener(() => { recorder.StopPlay(); });
-        if (captureButton != null) captureButton.onClick.AddListener(() => { });
+        if (playButton != null) playButton.onClick.AddListener(() => { screenEditor.Play(); });
+        if (stopButton != null) stopButton.onClick.AddListener(() => { screenEditor.Stop(); });
+        if (exportButton != null) exportButton.onClick.AddListener(() => { if (screenEditor.FileLoaded) ExportVideo(); });
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    //// Update is called once per frame
+    //void Update()
+    //{
 
+    //}
+
+    public void Interactive()
+    {
+        isInterActive = !isInterActive;
+        KHHVideoCapture.instance.IsInteractive = isInterActive;
+        interactive.SetActive(isInterActive);
+    }
+
+    void ExportVideo()
+    {
+        if(isInterActive)
+            StartCoroutine(CoExportInteractiveVideo());
+        else
+            StartCoroutine(CoExportShortformVideo());
+    }
+
+    IEnumerator CoExportInteractiveVideo()
+    {
+        screenEditor.Play();
+        VideoCaptureCtrl.instance.StartCapture();
+
+        while (screenEditor.IsPlaying)
+            yield return null;
+
+        screenEditor.Stop();
+        VideoCaptureCtrl.instance.StopCapture();
+
+        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
+            yield return null;
+
+        yield return StartCoroutine(screenEditor.LoadFile(interactiveButtonLeft.FileName));
+
+        screenEditor.Play();
+        VideoCaptureCtrl.instance.StartCapture();
+
+        while (screenEditor.IsPlaying)
+            yield return null;
+
+        screenEditor.Stop();
+        VideoCaptureCtrl.instance.StopCapture();
+
+        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
+            yield return null;
+
+        yield return StartCoroutine(screenEditor.LoadFile(interactiveButtonRight.FileName));
+
+        screenEditor.Play();
+        VideoCaptureCtrl.instance.StartCapture();
+
+        while (screenEditor.IsPlaying)
+            yield return null;
+
+        screenEditor.Stop();
+        VideoCaptureCtrl.instance.StopCapture();
+
+        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
+            yield return null;
+
+        KHHVideoCapture.instance.UploadInteractiveVideo("test Interactive", interactiveButtonLeft.Title, interactiveButtonRight.Title);
+        Debug.Log("Interactive Finish");
+    }
+
+    IEnumerator CoExportShortformVideo()
+    {
+        screenEditor.Play();
+        VideoCaptureCtrl.instance.StartCapture();
+
+        while (screenEditor.IsPlaying)
+            yield return null;
+
+        screenEditor.Stop();
+        VideoCaptureCtrl.instance.StopCapture();
+
+        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
+            yield return null;
+
+        KHHVideoCapture.instance.UploadShortformVideo("test video");
+
+        Debug.Log("Finish");
     }
 }
