@@ -17,7 +17,40 @@ public class J_VideoReceiver : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        //리얼 서버
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            // 서버한테 영상 정보 요청
+            HttpInfo httpInfo = new HttpInfo();
+
+            Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "RealVideoInfo.csv");
+
+            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) => {
+
+                //데이터 셋팅
+                J_DataManager.instance.SetRealVideoInfoList(downloadHandler.text);
+
+                //UI 만들자
+                for (int i = 0; i < J_DataManager.instance.realVideoInfoList.Count; i++)
+                {
+                    GameObject video = Instantiate(videoFactory, trCtOfSV);
+                    J_VideoItem item = video.GetComponent<J_VideoItem>();
+                    item.SetItem(J_DataManager.instance.realVideoInfoList[i]);
+                }
+
+            }, false);
+
+            HttpManager.Get().SendRequest(httpInfo);
+
+            //for(int i = 0; i < 2; i++)
+            //{
+            //    //서버랑 통신시 아래 링크 넣기
+            //    StartCoroutine(Test("C:/Users/user/Videos/Captures/" + (i + 1) + ".mp4", (i + 1) + ".mp4"));
+
+            //}
+        }
+        //샘플 로컬
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             // 서버한테 영상 정보 요청
             HttpInfo httpInfo = new HttpInfo();

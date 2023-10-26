@@ -41,6 +41,31 @@ public class VideoInfo //비디오 정보
     public string url;
 }
 
+
+[System.Serializable] // 직렬화
+public class RealVideoInfo //비디오 정보
+{
+
+    public int shortFormNo; //영상 순서
+
+    public string title; //제목
+
+    public string thumbnailUrl; //썸네일 url
+
+    public string url; //url
+
+    public string description; //영상 설명
+
+    public string memberName; // 닉네임
+
+    public string date; //날짜
+
+    public bool isInteractive; //인터랙티브 여부
+}
+
+
+
+
 [System.Serializable]
 public struct JsonArray<T>
 {
@@ -53,6 +78,9 @@ public class J_DataManager : MonoBehaviour
 
     //비디오 정보
     public List<VideoInfo> videoInfoList = new List<VideoInfo>();
+    //실제 비디오 정보
+    public List<RealVideoInfo> realVideoInfoList = new List<RealVideoInfo>();
+
     //샵 정보
     public List<ShopInfo> shopInfoList = new List<ShopInfo>();
 
@@ -70,6 +98,11 @@ public class J_DataManager : MonoBehaviour
     {
         
     }
+    public void SetRealVideoInfoList(string data)
+    {
+        realVideoInfoList = J_CSVLoader.instance.ParseString<RealVideoInfo>(data);
+    }
+
 
     public void SetVideoInfoList(string data)
     {

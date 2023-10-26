@@ -9,12 +9,16 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
+using UnityEngine.UIElements;
 
 public class PhotonChatManager : MonoBehaviour, IChatClientListener
 {
     public TMP_InputField inputChat;
     public GameObject chatItemFactory;
-    public Transform trContent;
+    public RectTransform trContent;
+    public RectTransform rtScrollView;
+    float prevContentH;//채팅이 추가되기 전의 Content의 H 값을 가지고 있는 변수
+
 
     //photon Chat Setting
     ChatAppSettings chatAppSettings;
@@ -51,6 +55,8 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
     }
     void OnSubmit(string text)
     {
+        //새로운 채팅이 추가되기 전의 content의 H값을 저장
+        prevContentH = trContent.sizeDelta.y;
 
         //귓속말인지 판단
         // /w 아이디 메시지 = > 메시지에 띄어쓰기를 기준으로 string 배열로 판단
@@ -76,9 +82,29 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         //inputChat 강제로 선택되게 함
         inputChat.ActivateInputField();
         //
+        StartCoroutine(AutoScrollBottom());
 
 
     }
+    //자동 스크롤 다운
+    IEnumerator AutoScrollBottom()
+    {
+        yield return 0;
+        //스크롤뷰의 H보다 content의 H값이 크다면
+        if(rtScrollView.sizeDelta.y < trContent.sizeDelta.y)
+        {
+            //이전에 바닥에 닿아있었다면
+            if(prevContentH - rtScrollView.sizeDelta.y <= trContent.anchoredPosition.y)
+            {
+                //content의 y값 재설정
+                trContent.anchoredPosition = new Vector2(0, trContent.sizeDelta.y - rtScrollView.sizeDelta.y);
+
+            }
+        }
+    }
+
+
+
     //스타드 때 호출된 포톤챗 설정
     void PhotonChatSetting()
     {
