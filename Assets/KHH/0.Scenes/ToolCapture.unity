@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: a41810f6a32778c4b9b297b2230717ce,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -590,7 +591,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203844586}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -27.8, y: 3, z: -16.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1487,6 +1488,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20000013847750598, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 20000013847750598, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
       propertyPath: m_TargetDisplay
       value: 0
       objectReference: {fileID: 0}
@@ -1497,13 +1503,33 @@ PrefabInstance:
       objectReference: {fileID: 8600000, guid: fb89e1355fe8cf4439ad7d9fb1f175db, type: 2}
     - target: {fileID: 20000013847750598, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20000013847750598, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20000013847750598, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20000013847750598, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 3072
+      value: 3200
       objectReference: {fileID: 0}
     - target: {fileID: 81000011607292276, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: stereo
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
@@ -1520,6 +1546,21 @@ PrefabInstance:
       propertyPath: isDedicated
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: encodeQuality
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: offlineRender
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 733585179911470089, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: m_Dithering
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 733585179911470089, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
       propertyPath: m_CameraType
@@ -1527,8 +1568,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 733585179911470089, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
+      propertyPath: m_Antialiasing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 733585179911470089, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 733585179911470089, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
       propertyPath: m_VolumeLayerMask.m_Bits
-      value: 0
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fb4eb193786376458450101f3cdd3b3, type: 3}
@@ -3057,7 +3108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce1c4f59cc9242fd926bcc78fcf4ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   startOnAwake: 0
   captureTime: 10
   quitAfterCapture: 0
@@ -3686,7 +3737,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_BackGroundColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -3707,7 +3758,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5479,7 +5530,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1160234427}
   - component: {fileID: 1160234426}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Global Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7398,6 +7449,8 @@ MonoBehaviour:
   record: {fileID: 1309815332}
   edit: {fileID: 278438100}
   captureCamera: {fileID: 464984500}
+  captureRenderTexture: {fileID: 8600000, guid: fb89e1355fe8cf4439ad7d9fb1f175db,
+    type: 2}
   screenEditor: {fileID: 552315165}
   barracudaRunner: {fileID: 1875475999}
   recordButton: {fileID: 2031610878}

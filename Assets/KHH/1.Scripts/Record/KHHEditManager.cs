@@ -15,6 +15,7 @@ public class KHHEditManager : MonoBehaviour
     public GameObject edit;
 
     public Camera captureCamera;
+    public RenderTexture captureRenderTexture;
     public KHHScreenEditor screenEditor;
     public GameObject barracudaRunner;
 
@@ -92,6 +93,8 @@ public class KHHEditManager : MonoBehaviour
         exportWindow.gameObject.SetActive(true);
         exportWindow.StateChange(KHHExportWindow.ExportState.Processing);
 
+        captureCamera.targetTexture = null;
+
         if (isInterActive)
             StartCoroutine(CoGenerateInteractiveVideo());
         else
@@ -151,6 +154,7 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
+        captureCamera.targetTexture = captureRenderTexture;
         exportWindow.StateChange(KHHExportWindow.ExportState.Generate);
     }
 
@@ -183,6 +187,7 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
+        captureCamera.targetTexture = captureRenderTexture;
         exportWindow.StateChange(KHHExportWindow.ExportState.Generate);
     }
 
