@@ -2374,7 +2374,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   microphoneNames: []
-  microphoneName: 
+  microphoneName: "\uBA38\uB9AC\uC5D0 \uAC70\uB294 \uC218\uD654\uAE30 (\uC7AC\uD76C\uC758
+    AirPods Pro - Find My)"
 --- !u!4 &754976542
 Transform:
   m_ObjectHideFlags: 0

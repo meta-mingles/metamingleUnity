@@ -142,7 +142,7 @@ public class KHHVideoCapture : MonoBehaviour
         return null;
     }
 
-    string uploadShortformURL = "http://" + "192.168.0.115:8080/short-form-firebase";
+    string uploadShortformURL = "http://" + "192.168.165.74:8080/short-form-firebase";
     public void UploadShortformVideo(string title)
     {
         StartCoroutine(CoUploadShortformVideo(ReadVideoAsBytes(filePathShortform), title));
@@ -190,7 +190,7 @@ public class KHHVideoCapture : MonoBehaviour
         }
     }
 
-    string uploadInteractiveURL = "http://" + "192.168.0.115:8080/interactive-movie";
+    string uploadInteractiveURL = "http://" + "192.168.165.74:8080/interactive-movie";
     public void UploadInteractiveVideo(string title, string choice1, string choice2)
     {
         IsUploading = true;
