@@ -54,7 +54,7 @@ public class KHHMotionData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (eventData.pointerCurrentRaycast.gameObject != null)
         {
             //드롭 아이템이 편집 영역에 드랍되었을 때 호출
-            KHHScreenEditor screenEditor = eventData.pointerCurrentRaycast.gameObject.GetComponent<KHHScreenEditor>();
+            KHHScreenEditor screenEditor = eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<KHHScreenEditor>();
             if (screenEditor != null)
             {
                 screenEditor.OnDropItem(this.gameObject);
