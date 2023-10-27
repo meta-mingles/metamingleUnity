@@ -35,7 +35,7 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://192.168.0.6:8080/short-form/1";
+        if (useDefaultUrl) url = "http://192.168.0.115:8080/";
         url += u;
         onReceive = callback;
     }
@@ -56,6 +56,18 @@ public class HttpManager : MonoBehaviour
 
         return instance;
     }
+
+    //Texture
+    public static HttpManager Texture()
+    {
+        if(instance == null)
+        {
+            GameObject go = new GameObject("HttpTexture");
+            go.AddComponent<HttpManager>();
+        }
+        return instance;
+    }
+
 
     private void Awake()
     {

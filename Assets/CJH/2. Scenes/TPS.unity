@@ -135,10 +135,9 @@ GameObject:
   - component: {fileID: 529010956}
   - component: {fileID: 529010955}
   - component: {fileID: 529010954}
-  - component: {fileID: 529010958}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -234,7 +233,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529010953}
-  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
+  m_LocalRotation: {x: 0.2588191, y: -0, z: -0, w: 0.9659258}
   m_LocalPosition: {x: 0, y: 2.9, z: -2.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -242,23 +241,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
---- !u!114 &529010958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 529010953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15e4aafdd1024c443b28132166288a9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 1253923776425814891}
-  offsetX: 0
-  offsetY: 0
-  offsetZ: 0
-  DelayTime: 0
 --- !u!1 &1213817754
 GameObject:
   m_ObjectHideFlags: 0
@@ -4749,7 +4731,7 @@ CharacterController:
   m_GameObject: {fileID: 1253923776425814891}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Height: 1.63
   m_Radius: 0.32
@@ -4767,7 +4749,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1253923776425814891}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.31082308
   m_Height: 1.6199446
   m_Direction: 1
@@ -4784,8 +4766,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce05e111c9bab07489dd8952bf5a8cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  turnSpeed: 4
+  playerSpeed: 2
+  runSpeed: 10
+  jumpHeight: 1
+  gravityValue: -9.81
+  rotationSpeed: 2
 --- !u!114 &1253923776425814896
 MonoBehaviour:
   m_ObjectHideFlags: 0
