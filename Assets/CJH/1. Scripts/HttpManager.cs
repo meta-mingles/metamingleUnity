@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -35,7 +36,7 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://192.168.0.115:8080/";
+        if (useDefaultUrl) url = "http://192.168.165.74:8080/";
         url += u;
         onReceive = callback;
     }
@@ -142,13 +143,16 @@ public class HttpManager : MonoBehaviour
                 }
             }
             else
-            {
+            {          
+                if(req.downloadHandler.text.Length > 0)
+                {
+                    print(req.downloadHandler.text);
+                }
                 if (httpInfo.onReceive != null)
                 {
                     httpInfo.onReceive(req.downloadHandler);
                 }
             }
-
         }
         else
         {

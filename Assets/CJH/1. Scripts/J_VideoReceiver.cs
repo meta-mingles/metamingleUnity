@@ -12,12 +12,15 @@ using UnityEngine.Video;
 
 public class J_VideoReceiver : MonoBehaviour
 {
+    public GameObject thumbnailScrollView;
+
     public GameObject thumbnailFactory;
     public Transform trCtOfSV; //썸네일 스크롤뷰 생성장소
 
 
     public GameObject videoFactory;
     public Transform trCtOFVideoSC; //비디오 스크롤뷰 생성장소
+
 
     private void Update()
     {
@@ -32,11 +35,11 @@ public class J_VideoReceiver : MonoBehaviour
             Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "RealVideoInfo.csv");
 
             string url = "short-form";
-            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) =>
+            httpInfo.Set(RequestType.GET, url, (downloadHandler) =>
             {
-
                 //데이터 셋팅
-                J_DataManager.instance.SetRealVideoInfoList(downloadHandler.text);
+                //J_DataManager.instance.SetRealVideoInfoListByCSV(downloadHandler.text);
+                J_DataManager.instance.SetRealVideoInfoListByJSON(downloadHandler.text);
 
                 //UI 만들자
                 for (int i = 0; i < J_DataManager.instance.thumbnailInfoList.Count; i++)
@@ -44,52 +47,17 @@ public class J_VideoReceiver : MonoBehaviour
                     GameObject video = Instantiate(thumbnailFactory, trCtOfSV);
                     J_VideoItem item = video.GetComponent<J_VideoItem>();
                     //item.SetItem(J_DataManager.instance.thumbnailInfoList[i]);
-                    item.OnClickDownloadImage(J_DataManager.instance.thumbnailInfoList[i]);
+                    item.SetItem(J_DataManager.instance.thumbnailInfoList[i]);
+                    item.onClickEvent = CreateShortVideo;
                 }
 
-            }, false);
+            }, true);
 
             HttpManager.Get().SendRequest(httpInfo);
 
-            //for(int i = 0; i < 2; i++)
-            //{
-            //    //서버랑 통신시 아래 링크 넣기
-            //    StartCoroutine(Test("C:/Users/user/Videos/Captures/" + (i + 1) + ".mp4", (i + 1) + ".mp4"));
-
-            //}
+        
         }
-        //숏폼 비디오
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            // 서버한테 영상 정보 요청
-            HttpInfo httpInfo = new HttpInfo();
-
-            Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "videoInfo.csv");
-
-            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) => {
-
-                //데이터 셋팅
-                J_DataManager.instance.SetVideoInfoList(downloadHandler.text);
-
-                //UI 만들자
-                for(int i = 0; i < J_DataManager.instance.videoInfoList.Count; i++)
-                {
-                    GameObject video = Instantiate(videoFactory, trCtOFVideoSC);
-                    J_ShortVideoItem item = video.GetComponent<J_ShortVideoItem>();
-                    item.SetItem(J_DataManager.instance.videoInfoList[i]);
-                }
-
-            }, false);
-
-            HttpManager.Get().SendRequest(httpInfo);
-
-            //for(int i = 0; i < 2; i++)
-            //{
-            //    //서버랑 통신시 아래 링크 넣기
-            //    StartCoroutine(Test("C:/Users/user/Videos/Captures/" + (i + 1) + ".mp4", (i + 1) + ".mp4"));
-
-            //}
-        }
+       
 
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -109,6 +77,24 @@ public class J_VideoReceiver : MonoBehaviour
             HttpManager.Get().SendRequest(httpInfo);
         }
     }
+
+    void CreateShortVideo(ThumbnailInfo info)
+    {
+        GameObject video = Instantiate(videoFactory, trCtOFVideoSC);
+        J_ShortVideoPlayer item = video.GetComponent<J_ShortVideoPlayer>();
+        item.SetItem(info);
+
+        thumbnailScrollView.SetActive(false);
+
+        item.onClickEvent = CloseShortVideo;
+    }
+
+    void CloseShortVideo()
+    {
+        thumbnailScrollView.SetActive(true);
+    }
+
+
 
     //int videoNum;
     //IEnumerator Test(string u, string saveName)
