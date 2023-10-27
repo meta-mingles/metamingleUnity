@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using ExitGames.Client.Photon.StructWrapping;
 
-public class J_VideoItem : MonoBehaviour
+public class J_ThumItem : MonoBehaviour
 {
     public TMP_Text title;
     public TMP_Text date;
