@@ -90,16 +90,18 @@ public class KHHExportWindow : MonoBehaviour
                 break;
             case ExportState.Complete:
                 progressText.text = "영상 내보내기 완료";
-                progressText.DOFade(0, 0.4f).SetDelay(0.2f).OnComplete(() =>
-                {
-                    progressText.gameObject.SetActive(false);
-                    completeCG.gameObject.SetActive(true);
-                    completeCG.DOFade(1, 0.4f);
+                //progressText.DOFade(0, 0.4f).SetDelay(0.2f).OnComplete(() =>
+                //{
+                //    progressText.gameObject.SetActive(false);
+                //    completeCG.gameObject.SetActive(true);
+                //    completeCG.DOFade(1, 0.4f);
 
-                    completeText.gameObject.SetActive(false);
-                    confirmButton.gameObject.SetActive(false);
-                    cancelButtonText.text = "닫기";
-                });
+                //});
+                completeCG.gameObject.SetActive(true);
+                completeCG.DOFade(1, 0.4f);
+                completeText.gameObject.SetActive(false);
+                confirmButton.gameObject.SetActive(false);
+                cancelButtonText.text = "닫기";
                 break;
         }
     }

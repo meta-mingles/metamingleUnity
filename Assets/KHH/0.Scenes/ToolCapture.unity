@@ -3729,7 +3729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   microphoneNames: []
-  microphoneName: 
+  microphoneName: "\uBA38\uB9AC\uC5D0 \uAC70\uB294 \uC218\uD654\uAE30 (2- AirPods)"
 --- !u!4 &754976542
 Transform:
   m_ObjectHideFlags: 0
@@ -11451,7 +11451,7 @@ MonoBehaviour:
   completeText: {fileID: 1030036312}
   confirmButton: {fileID: 941223052}
   cancelButton: {fileID: 2000940196}
-  cancelButtonText: {fileID: 0}
+  cancelButtonText: {fileID: 983229068}
 --- !u!4 &1751718006 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731249386628707140, guid: acd4f936cf4caec48b4bf1d1cbe39fd8,
