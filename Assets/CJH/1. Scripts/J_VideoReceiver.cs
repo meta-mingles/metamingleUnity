@@ -24,7 +24,6 @@ public class J_VideoReceiver : MonoBehaviour
 
     private void Update()
     {
-
         //tumbnail 리스트
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
@@ -59,6 +58,7 @@ public class J_VideoReceiver : MonoBehaviour
         #endregion
     }
 
+
     void OnCompleteSearchVideo(DownloadHandler downloadHandler)
     {
         //데이터 셋팅
@@ -66,21 +66,20 @@ public class J_VideoReceiver : MonoBehaviour
         //J_DataManager.instance.SetRealVideoInfoListByJSON(downloadHandler.text);
 
         //UI 만들자
-        for (int i = 0; i < J_DataManager.instance.thumbnailInfoList.Count; i++)
+        for (int i = 0; i < J_DataManager.instance.videoInfoList.Count; i++)
         {
+            // 섬네일(비디오 썸네일)을 만듭니다.
             GameObject video = Instantiate(thumbnailFactory, trCtOfSV);
             J_ThumItem item = video.GetComponent<J_ThumItem>();
-            //item.SetItem(J_DataManager.instance.thumbnailInfoList[i]);
-            item.SetItem(J_DataManager.instance.thumbnailInfoList[i]);
-            //썸네일 클릭시 숏폼 영상 창 만들기
+            // 항목 설정 - 각 섬네일에 대한 정보를 설정합니다.
+            item.SetItem(J_DataManager.instance.videoInfoList[i]);
+            //썸네일 클릭 시, 숏폼(짧은 형식의) 영상 창을 만듭니다.
             item.onClickEvent = CreateShortVideo;
         }
     }
 
-
-
     //숏폼비디오 열리는 함수
-    void CreateShortVideo(ThumbnailInfo info)
+    void CreateShortVideo(VideolInfo info)
     {
         GameObject video = Instantiate(videoFactory, trCtOFVideoSC);
         J_ShortVideoPlayer item = video.GetComponent<J_ShortVideoPlayer>();

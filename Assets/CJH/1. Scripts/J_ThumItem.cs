@@ -15,11 +15,11 @@ public class J_ThumItem : MonoBehaviour
     public TMP_Text date;
     public TMP_Text description;
 
-    public ThumbnailInfo thumbnailInfo;
+    public VideolInfo videoInfo;
 
     public Image downloadImage;
 
-    public Action<ThumbnailInfo> onClickEvent;
+    public Action<VideolInfo> onClickEvent;
     //public VideoPlayer videoPlayer;
     void Start()
     {
@@ -35,7 +35,7 @@ public class J_ThumItem : MonoBehaviour
     {
         if(onClickEvent != null)
         {
-            onClickEvent(thumbnailInfo);
+            onClickEvent(videoInfo);
         }
     }
 
@@ -43,16 +43,16 @@ public class J_ThumItem : MonoBehaviour
     
 
     //썸네일 이미지 다운로드
-    public void SetItem(ThumbnailInfo thumbInfo)
+    public void SetItem(VideolInfo Info)
     {
-        thumbnailInfo = thumbInfo;
+        videoInfo = Info;
 
-        title.text = thumbnailInfo.title;
-        date.text = thumbnailInfo.date;
-        description.text = thumbnailInfo.description;
+        title.text = videoInfo.title;
+        date.text = videoInfo.date;
+        description.text = videoInfo.description;
 
         HttpInfo info = new HttpInfo();
-        info.Set(RequestType.TEXTURE, thumbnailInfo.thumbnailUrl, null,false);
+        info.Set(RequestType.TEXTURE, videoInfo.thumbnailUrl, null,false);
         info.onReceiveImage = OnCompleteDownloadTexture;
         HttpManager.Get().SendRequest(info);
     }

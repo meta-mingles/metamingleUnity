@@ -22,12 +22,9 @@ public struct UserInfo //나의 정보
     public string Creator;
 }
 
-
-
 [System.Serializable] // 직렬화
-public class ThumbnailInfo //비디오 정보
+public class VideolInfo //비디오 정보
 {
-
     public int shortFormNo; //영상 순서
 
     public string title; //제목
@@ -45,9 +42,6 @@ public class ThumbnailInfo //비디오 정보
     public bool isInteractive; //인터랙티브 여부
 }
 
-
-
-
 [System.Serializable]
 public struct JsonArray<T>
 {
@@ -59,7 +53,7 @@ public class J_DataManager : MonoBehaviour
     public static J_DataManager instance;
 
     //썸네일 리스트 정보
-    public List<ThumbnailInfo> thumbnailInfoList = new List<ThumbnailInfo>();
+    public List<VideolInfo> videoInfoList = new List<VideolInfo>();
 
     //샵 정보
     public List<ShopInfo> shopInfoList = new List<ShopInfo>();
@@ -80,13 +74,13 @@ public class J_DataManager : MonoBehaviour
     }
     public void SetRealVideoInfoListByCSV(string data)
     {
-        thumbnailInfoList = J_CSVLoader.instance.ParseString<ThumbnailInfo>(data);
+        videoInfoList = J_CSVLoader.instance.ParseString<VideolInfo>(data);
     }
 
     public void SetRealVideoInfoListByJSON(string data)
     {
-        JsonArray<ThumbnailInfo> arrayData = JsonUtility.FromJson<JsonArray<ThumbnailInfo>>(data);
-        thumbnailInfoList = arrayData.data;
+        JsonArray<VideolInfo> arrayData = JsonUtility.FromJson<JsonArray<VideolInfo>>(data);
+        videoInfoList = arrayData.data;
     }
 
 
