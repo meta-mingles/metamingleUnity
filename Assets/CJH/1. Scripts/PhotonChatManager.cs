@@ -129,7 +129,7 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
     {
         chatClient = new ChatClient(this);
         //채팅할 때 NickName 설정
-        chatClient.AuthValues = new Photon.Chat.AuthenticationValues("조재희"); //추후에 회원가입에서 닉네임을 서버에서 불러와야함 
+        chatClient.AuthValues = new Photon.Chat.AuthenticationValues("밍글이"); //추후에 회원가입에서 닉네임을 서버에서 불러와야함 
 
         //초기설정을 이용해서 채팅서버에 연결 시도
         chatClient.ConnectUsingSettings(chatAppSettings);

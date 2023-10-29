@@ -424,7 +424,7 @@ PrefabInstance:
     - target: {fileID: 3089168593596068044, guid: b4b87a379655fef438683b17f55d1a7b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000009404495
+      value: 0.00028131885
       objectReference: {fileID: 0}
     - target: {fileID: 3089168593596725416, guid: b4b87a379655fef438683b17f55d1a7b,
         type: 3}
@@ -643,8 +643,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b19a9363c48e7641a4322bf4fe30d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rawImage_VideoFactory: {fileID: 0}
+  thumbnailScrollView: {fileID: 0}
+  thumbnailFactory: {fileID: 0}
   trCtOfSV: {fileID: 0}
+  videoFactory: {fileID: 0}
+  trCtOFVideoSC: {fileID: 0}
 --- !u!4 &1761676064
 Transform:
   m_ObjectHideFlags: 0

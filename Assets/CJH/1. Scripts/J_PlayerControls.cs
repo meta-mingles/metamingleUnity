@@ -22,13 +22,6 @@ public class J_PlayerControls : MonoBehaviourPun
     [SerializeField]
     private float rotationSpeed = 2f; // 플레이어 회전 속도
 
-    //서버에서 넘어오는 위치값,회전값
-    //Vector3 receivePos;
-    //Quaternion receiveRot;
-    //보정 속력
-    //float lerpSpeed = 10;
-
-
     private CharacterController cc; // CharacterController 컴포넌트
     private Vector3 playerVelocity; // 플레이어의 현재 속도
     private bool groundedPlayer; // 플레이어가 지면에 있는지 여부
@@ -60,7 +53,7 @@ public class J_PlayerControls : MonoBehaviourPun
     void Update()
     {
         //내가 만든 플레이어라면
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
 
             horizontalInput = Input.GetAxis("Horizontal"); // 수평 이동 입력값
@@ -92,9 +85,6 @@ public class J_PlayerControls : MonoBehaviourPun
                     float targetAngle = Mathf.Atan2(horizontalInput, verticalInput) * Mathf.Rad2Deg + trCam.eulerAngles.y;
                     Quaternion rotation = Quaternion.Euler(0f, targetAngle, 0f);
                     transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
-
-
-
                 }
                 UpdateMove(move);
                 //Debug.Log("걷기 애니 실행");
@@ -116,12 +106,10 @@ public class J_PlayerControls : MonoBehaviourPun
         //나의 플레이어가 아니라면
         else
         {
-            //위치, 회전 보정
-            //transform.position = Vector3.Lerp(transform.position, receivePos, lerpSpeed * Time.deltaTime);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, receiveRot, lerpSpeed * Time.deltaTime);
+
         }
-      
-     }
+
+    }
 
     void UpdateIdle()
     {
@@ -131,7 +119,7 @@ public class J_PlayerControls : MonoBehaviourPun
     void UpdateMove(Vector3 move)
     {
         cc.Move(move * Time.deltaTime * playerSpeed);
-        anim.SetBool("Walking",true);
+        anim.SetBool("Walking", true);
     }
     void UpdateRun(Vector3 move)
     {
@@ -144,25 +132,4 @@ public class J_PlayerControls : MonoBehaviourPun
         Debug.Log("Jump");
         anim.CrossFade("Jumping", 0, 0);
     }
-
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    //나의 플레이어라면 
-    //    if (stream.IsWriting)
-    //    {
-    //        //나의 위치값 보낸다
-    //        stream.SendNext(transform.position);
-    //        //회전값을 보낸다
-    //        stream.SendNext(transform.rotation);
-    //    }
-    //    //내 플레이어가 아니라면
-    //    else
-    //    {
-    //        //위치와 회전을 받자
-    //        transform.position = (Vector3)stream.ReceiveNext();
-    //        transform.rotation = (Quaternion)stream.ReceiveNext();
-
-    //    }
-
-    //}
 }
