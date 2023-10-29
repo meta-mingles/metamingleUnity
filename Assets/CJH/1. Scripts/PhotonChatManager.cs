@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
 using UnityEngine.UIElements;
 
-public class PhotonChatManager : MonoBehaviour, IChatClientListener
+public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
 {
     public TMP_InputField inputChat;
     public GameObject chatItemFactory;
@@ -58,6 +58,8 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         //새로운 채팅이 추가되기 전의 content의 H값을 저장
         prevContentH = trContent.sizeDelta.y;
 
+
+
         //귓속말인지 판단
         // /w 아이디 메시지 = > 메시지에 띄어쓰기를 기준으로 string 배열로 판단
         string[] s = text.Split(" ", 3);
@@ -68,7 +70,6 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
             if (s[1].Length > 0 && s[2].Length > 0)
             {
                 chatClient.SendPrivateMessage(s[1], s[2]);
-
             }
         }
         else //귓속말
@@ -81,11 +82,19 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         inputChat.text = "";
         //inputChat 강제로 선택되게 함
         inputChat.ActivateInputField();
-        //
+
+        //Rpc함수로 모든사람한테 채팅 내용 전달
+        photonView.RPC(nameof(AddChatRpc), RpcTarget.All, text);
+
+        //자동스크롤
         StartCoroutine(AutoScrollBottom());
-
-
     }
+    [PunRPC]
+    void AddChatRpc(string chat)
+    {
+       //채팅 내용 추가
+    }
+
     //자동 스크롤 다운
     IEnumerator AutoScrollBottom()
     {
@@ -102,9 +111,6 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
             }
         }
     }
-
-
-
     //스타드 때 호출된 포톤챗 설정
     void PhotonChatSetting()
     {
@@ -166,8 +172,6 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         }
         //나의 상태를 온라인으로 한다
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
-
-
     }
 
     public void OnChatStateChange(ChatState state)
@@ -181,8 +185,6 @@ public class PhotonChatManager : MonoBehaviour, IChatClientListener
         {
             CreateChat(senders[i], messages[i].ToString(), Color.black);
         }
-
-
     }
     //귓속말 메세지가 올때
     public void OnPrivateMessage(string sender, object message, string channelName)

@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+
 public class GameManager : MonoBehaviourPun
 {
+    public static GameManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+
     public J_TpsCamera tpsCamera;
     // Start is called before the first frame update
     void Start()
@@ -20,12 +29,5 @@ public class GameManager : MonoBehaviourPun
     void Update()
     {
         
-    }
-
-    //씬이동 
-    //엔터 버튼을 누르면 씬이 로드된다.
-    public interface iState
-    {
-
     }
 }

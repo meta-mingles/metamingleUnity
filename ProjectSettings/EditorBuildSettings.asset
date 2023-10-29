@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/CJH/2. Scenes/Proto_CJH.unity
     guid: 553afc1716e92724ba5ca09e7d285879
+  - enabled: 1
+    path: Assets/CJH/2. Scenes/VideoScene 1.unity
+    guid: 917331368a381b14a8f48ec10b633358
   m_configObjects: {}
