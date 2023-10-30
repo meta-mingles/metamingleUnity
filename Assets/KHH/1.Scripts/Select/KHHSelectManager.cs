@@ -12,7 +12,7 @@ public class KHHSelectManager : MonoBehaviour
     void Start()
     {
         if (createButton != null)
-            createButton.onClick.AddListener(() => { SceneManager.LoadScene("ToolSelect"); });
+            createButton.onClick.AddListener(() => { SceneManager.LoadScene("ToolCapture"); });
     }
 
     //// Update is called once per frame

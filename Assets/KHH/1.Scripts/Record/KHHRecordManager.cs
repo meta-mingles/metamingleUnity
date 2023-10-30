@@ -21,7 +21,7 @@ public class KHHRecordManager : MonoBehaviour
     //[Header("TDPT")]
     //public MovieSender movieSender;
 
-    public KHHModelRecorder recorder;
+    public KHHModelRecorder modelRecorder;
     public MicrophoneRecorder microphoneRecorder;
     public KHHMotionDataManager motionDataManager;
     public VideoCapture videoCapture;
@@ -47,14 +47,14 @@ public class KHHRecordManager : MonoBehaviour
 
         recordStartButton.onClick.AddListener(() =>
         {
-            recorder.StartRecord();
+            modelRecorder.StartRecord();
             microphoneRecorder.StartRecordMicrophone();
         });
 
         recordStopButton.onClick.AddListener(() =>
         {
             string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
-            recorder.StopRecord(fileName);
+            modelRecorder.StopRecord(fileName);
             microphoneRecorder.StopRecordMicrophone(fileName);
         });
 

@@ -124,7 +124,7 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
-        yield return StartCoroutine(screenEditor.LoadFile(interactiveButtonLeft.FileName));
+        yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonLeft.FileName));
 
         //choice1
         screenEditor.Play();
@@ -139,7 +139,7 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
-        yield return StartCoroutine(screenEditor.LoadFile(interactiveButtonRight.FileName));
+        yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonRight.FileName));
 
         //choice2
         screenEditor.Play();
