@@ -22,13 +22,6 @@ public class J_PlayerControls : MonoBehaviourPun
     [SerializeField]
     private float rotationSpeed = 2f; // 플레이어 회전 속도
 
-    //서버에서 넘어오는 위치값,회전값
-    //Vector3 receivePos;
-    //Quaternion receiveRot;
-    //보정 속력
-    //float lerpSpeed = 10;
-
-
     private CharacterController cc; // CharacterController 컴포넌트
     private Vector3 playerVelocity; // 플레이어의 현재 속도
     private bool groundedPlayer; // 플레이어가 지면에 있는지 여부
@@ -36,6 +29,11 @@ public class J_PlayerControls : MonoBehaviourPun
     private Transform trCam; // 메인 카메라의 Transform
 
     Animator anim; //애니메이터
+
+    public GameObject voice; //보이스
+
+    public GameObject chair; //의자
+
 
     private float horizontalInput;
     private float verticalInput;
@@ -60,8 +58,10 @@ public class J_PlayerControls : MonoBehaviourPun
     void Update()
     {
         //내가 만든 플레이어라면
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
+            //만약에 마우스 커서가 활성화되어있으면 함수를 나가자
+            if (Cursor.visible == true) return;
 
             horizontalInput = Input.GetAxis("Horizontal"); // 수평 이동 입력값
             verticalInput = Input.GetAxis("Vertical"); // 수직 이동 입력값
@@ -92,9 +92,6 @@ public class J_PlayerControls : MonoBehaviourPun
                     float targetAngle = Mathf.Atan2(horizontalInput, verticalInput) * Mathf.Rad2Deg + trCam.eulerAngles.y;
                     Quaternion rotation = Quaternion.Euler(0f, targetAngle, 0f);
                     transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
-
-
-
                 }
                 UpdateMove(move);
                 //Debug.Log("걷기 애니 실행");
@@ -106,32 +103,29 @@ public class J_PlayerControls : MonoBehaviourPun
             }
             else
             {
-                anim.SetBool("Walking", false);
+                anim.SetTrigger("Idle");
                 //Debug.Log("걷기 애니 실행 끝");
             }
             playerVelocity.y += gravityValue * Time.deltaTime; // 중력을 적용하여 수직 속도 업데이트
             cc.Move(playerVelocity * Time.deltaTime); // 플레이어의 수직 이동 업데이트
-
         }
         //나의 플레이어가 아니라면
         else
         {
-            //위치, 회전 보정
-            //transform.position = Vector3.Lerp(transform.position, receivePos, lerpSpeed * Time.deltaTime);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, receiveRot, lerpSpeed * Time.deltaTime);
+
         }
-      
-     }
+
+    }
 
     void UpdateIdle()
     {
-        anim.Play("Idle");
+        anim.SetTrigger("Idle");
     }
 
     void UpdateMove(Vector3 move)
     {
         cc.Move(move * Time.deltaTime * playerSpeed);
-        anim.SetBool("Walking",true);
+        anim.SetTrigger("Walk");
     }
     void UpdateRun(Vector3 move)
     {
@@ -142,27 +136,8 @@ public class J_PlayerControls : MonoBehaviourPun
     {
         playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue); // 점프 높이에 따른 수직 속도 설정
         Debug.Log("Jump");
-        anim.CrossFade("Jumping", 0, 0);
+        anim.SetTrigger("Jump");
+       
     }
 
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    //나의 플레이어라면 
-    //    if (stream.IsWriting)
-    //    {
-    //        //나의 위치값 보낸다
-    //        stream.SendNext(transform.position);
-    //        //회전값을 보낸다
-    //        stream.SendNext(transform.rotation);
-    //    }
-    //    //내 플레이어가 아니라면
-    //    else
-    //    {
-    //        //위치와 회전을 받자
-    //        transform.position = (Vector3)stream.ReceiveNext();
-    //        transform.rotation = (Quaternion)stream.ReceiveNext();
-
-    //    }
-
-    //}
 }
