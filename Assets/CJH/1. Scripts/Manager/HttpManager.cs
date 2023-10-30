@@ -36,7 +36,7 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://192.168.165.74:8080/";
+        if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080";
         url += u;
         onReceive = callback;
     }
@@ -106,6 +106,7 @@ public class HttpManager : MonoBehaviour
         switch (httpInfo.requestType)
         {
             case RequestType.GET:
+                Debug.Log(httpInfo.url);
                 req = UnityWebRequest.Get(httpInfo.url);
                 break;
             case RequestType.POST:
@@ -146,7 +147,7 @@ public class HttpManager : MonoBehaviour
             {          
                 if(req.downloadHandler.text.Length > 0)
                 {
-                    print(req.downloadHandler.text);
+                    //print(req.downloadHandler.text);
                 }
                 if (httpInfo.onReceive != null)
                 {

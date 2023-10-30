@@ -30,6 +30,11 @@ public class J_PlayerControls : MonoBehaviourPun
 
     Animator anim; //애니메이터
 
+    public GameObject voice; //보이스
+
+    public GameObject chair; //의자
+
+
     private float horizontalInput;
     private float verticalInput;
 
@@ -55,6 +60,8 @@ public class J_PlayerControls : MonoBehaviourPun
         //내가 만든 플레이어라면
         if (photonView.IsMine)
         {
+            //만약에 마우스 커서가 활성화되어있으면 함수를 나가자
+            if (Cursor.visible == true) return;
 
             horizontalInput = Input.GetAxis("Horizontal"); // 수평 이동 입력값
             verticalInput = Input.GetAxis("Vertical"); // 수직 이동 입력값
@@ -96,12 +103,11 @@ public class J_PlayerControls : MonoBehaviourPun
             }
             else
             {
-                anim.SetBool("Walking", false);
+                anim.SetTrigger("Idle");
                 //Debug.Log("걷기 애니 실행 끝");
             }
             playerVelocity.y += gravityValue * Time.deltaTime; // 중력을 적용하여 수직 속도 업데이트
             cc.Move(playerVelocity * Time.deltaTime); // 플레이어의 수직 이동 업데이트
-
         }
         //나의 플레이어가 아니라면
         else
@@ -113,13 +119,13 @@ public class J_PlayerControls : MonoBehaviourPun
 
     void UpdateIdle()
     {
-        anim.Play("Idle");
+        anim.SetTrigger("Idle");
     }
 
     void UpdateMove(Vector3 move)
     {
         cc.Move(move * Time.deltaTime * playerSpeed);
-        anim.SetBool("Walking", true);
+        anim.SetTrigger("Walk");
     }
     void UpdateRun(Vector3 move)
     {
@@ -130,6 +136,8 @@ public class J_PlayerControls : MonoBehaviourPun
     {
         playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue); // 점프 높이에 따른 수직 속도 설정
         Debug.Log("Jump");
-        anim.CrossFade("Jumping", 0, 0);
+        anim.SetTrigger("Jump");
+       
     }
+
 }

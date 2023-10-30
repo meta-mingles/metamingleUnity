@@ -16,6 +16,8 @@ public class J_ShortVideoPlayer : MonoBehaviour
 
     public Action onClickEvent;
 
+    public Action onPlayEvent;
+
     void Start()
     {
         
@@ -54,7 +56,18 @@ public class J_ShortVideoPlayer : MonoBehaviour
         HttpManager.Get().SendRequest(httpInfo);
     }
 
+    ////¿µ»ó Àç»ý
+    //public void PlayVideo()
+    //{
+    //    videoPlayer.Play();
+    //}
+    ////¿µ»ó ¸ØÃã
+    //public void StopVideo()
+    //{
+    //    videoPlayer.Stop();
+    //}
 
+    //¿µ»ó ²ô±â
     public void CloseVideo()
     {
         if (onClickEvent != null)

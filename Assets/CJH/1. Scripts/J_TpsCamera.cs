@@ -31,8 +31,10 @@ public class J_TpsCamera : MonoBehaviourPun
     void Update()
     {
         ////내것이 아닐때 함수를 나가자
-        //if (photonView.IsMine == false) { return; }
+       // if (photonView.IsMine == false) { return; }
 
+        //만약에 마우스 커서가 활성화되어있으면 함수를 나가자
+        if (Cursor.visible == true) return;
 
         float speed = (moveSpeed + (Input.GetAxis("Fire3") * shiftAdditionalSpeed));  // 이동 속도 계산
 
@@ -47,10 +49,6 @@ public class J_TpsCamera : MonoBehaviourPun
 
         // 카메라 회전 강제 제한
         this.gameObject.transform.localEulerAngles = new Vector3(this.gameObject.transform.localEulerAngles.x, this.gameObject.transform.localEulerAngles.y, 0);
-
-
-
-
         #region 커서 락
         //// 커서 락 상태 변경
         //if (Cursor.lockState == CursorLockMode.None && Input.GetMouseButtonDown(0))
@@ -62,7 +60,6 @@ public class J_TpsCamera : MonoBehaviourPun
         //    Cursor.lockState = CursorLockMode.None;  // 커서 락 해제
         //}
         #endregion
-
     }
 
     private void LateUpdate()
