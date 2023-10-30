@@ -142,9 +142,11 @@ public class KHHVideoCapture : MonoBehaviour
         return null;
     }
 
-    string uploadShortformURL = "http://" + "192.168.165.74:8080/short-form-firebase";
+    string uploadShortformURL = "http://metaverse.ohgiraffers.com:8080/short-form-firebase";
     public void UploadShortformVideo(string title)
     {
+        IsUploading = true;
+
         StartCoroutine(CoUploadShortformVideo(ReadVideoAsBytes(filePathShortform), title));
 
         ////비디오 삭제
@@ -187,10 +189,12 @@ public class KHHVideoCapture : MonoBehaviour
                 string result = Encoding.UTF8.GetString(stringBytes);
                 Debug.Log("Upload Successful:" + result);
             }
+
+            IsUploading = false;
         }
     }
-
-    string uploadInteractiveURL = "http://" + "192.168.165.74:8080/interactive-movie";
+    
+    string uploadInteractiveURL = "http://metaverse.ohgiraffers.com:8080/interactive-movie";
     public void UploadInteractiveVideo(string title, string choice1, string choice2)
     {
         IsUploading = true;

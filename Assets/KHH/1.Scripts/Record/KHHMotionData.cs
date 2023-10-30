@@ -4,15 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class KHHMotionData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class KHHMotionData : KHHData
 {
     public TextMeshProUGUI dataNameText;
-
-
     GameObject dragObject;
-
-    string fileName;
-    public string FileName { get { return fileName; } }
 
     public void Set(string fileName)
     {
@@ -32,7 +27,7 @@ public class KHHMotionData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     }
 
-    void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
+    public override void OnBeginDrag(PointerEventData eventData)
     {
         //복사 생성
         dragObject = Instantiate(this.gameObject);
@@ -42,19 +37,19 @@ public class KHHMotionData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         dragObject.GetComponent<CanvasGroup>().alpha = 0.5f;
     }
 
-    void IDragHandler.OnDrag(PointerEventData eventData)
+    public override void OnDrag(PointerEventData eventData)
     {
         Vector2 currentPos = eventData.position;
         dragObject.transform.position = currentPos;
     }
 
-    void IEndDragHandler.OnEndDrag(PointerEventData eventData)
+    public override void OnEndDrag(PointerEventData eventData)
     {
         //스크린 에디터 영역 안에 드롭했는지 확인
         if (eventData.pointerCurrentRaycast.gameObject != null)
         {
             //드롭 아이템이 편집 영역에 드랍되었을 때 호출
-            KHHScreenEditor screenEditor = eventData.pointerCurrentRaycast.gameObject.GetComponent<KHHScreenEditor>();
+            KHHScreenEditor screenEditor = eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<KHHScreenEditor>();
             if (screenEditor != null)
             {
                 screenEditor.OnDropItem(this.gameObject);

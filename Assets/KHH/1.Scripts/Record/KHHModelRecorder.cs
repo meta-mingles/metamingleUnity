@@ -15,16 +15,12 @@ public class KHHModelRecorder : MonoBehaviour
     float recordTime = 0.0f;
 
     //재생
-    List<float> timeList;
-    Dictionary<float, List<(Vector3, Quaternion)>> recordList;
     float playTime = 0.0f;
     int curIdx = 0;
-
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    model = GetComponent<VNectModel>();
-    //}
+    List<float> timeList;
+    public List<float> TimeList { get { return timeList; } }
+    Dictionary<float, List<(Vector3, Quaternion)>> recordDic;
+    public Dictionary<float, List<(Vector3, Quaternion)>> RecordDic { get { return recordDic; } }
 
     // Update is called once per frame
     void Update()
@@ -52,10 +48,10 @@ public class KHHModelRecorder : MonoBehaviour
             //모델 위치 조정
             for (int i = 0; i < model.JointPoints.Length; i++)
             {
-                Vector3 pos = Vector3.Lerp(recordList[timeList[curIdx]][i].Item1, recordList[timeList[curIdx + 1]][i].Item1, ratio);
+                Vector3 pos = Vector3.Lerp(recordDic[timeList[curIdx]][i].Item1, recordDic[timeList[curIdx + 1]][i].Item1, ratio);
                 Quaternion rot;
-                if ((recordList[timeList[curIdx]][i].Item2.normalized == Quaternion.identity) && (recordList[timeList[curIdx + 1]][i].Item2.normalized == Quaternion.identity)) rot = Quaternion.identity; //recordList[timeList[curIdx + 1]][i].Item2;
-                else rot = Quaternion.Lerp(recordList[timeList[curIdx]][i].Item2, recordList[timeList[curIdx + 1]][i].Item2, ratio);
+                if ((recordDic[timeList[curIdx]][i].Item2.normalized == Quaternion.identity) && (recordDic[timeList[curIdx + 1]][i].Item2.normalized == Quaternion.identity)) rot = Quaternion.identity; //recordList[timeList[curIdx + 1]][i].Item2;
+                else rot = Quaternion.Lerp(recordDic[timeList[curIdx]][i].Item2, recordDic[timeList[curIdx + 1]][i].Item2, ratio);
                 model.JointPoints[i].Pos3D = pos;
                 model.JointPoints[i].InverseRotation = rot;
             }
@@ -100,52 +96,13 @@ public class KHHModelRecorder : MonoBehaviour
     public void StopRecord(string fileName)
     {
         isRecording = false;
-
-        TestFileName = fileName;
+        //TestFileName = fileName;
         CSVManager.Instance.WriteCsv(fileName, recordData);
     }
 
-
-    string TestFileName;
-    public void LoadRecordData(string fileName = "")
+    public void Load(KHHEditItemMotion motion)
     {
-        if (fileName == "")
-            fileName = TestFileName;
-        string[,] motionData = CSVManager.Instance.ReadCsv(fileName);
-
-        timeList = new List<float>();
-        recordList = new Dictionary<float, List<(Vector3, Quaternion)>>();
-
-        for (int i = 1; i < motionData.GetLength(1); i++)
-        {
-            if (string.IsNullOrEmpty(motionData[0, i])) continue;
-            float time = float.Parse(motionData[0, i]);
-            List<(Vector3, Quaternion)> jointData = new List<(Vector3, Quaternion)>();
-            for (int j = 1; j < motionData.GetLength(0); j++)
-            {
-                if (string.IsNullOrEmpty(motionData[j, i])) continue;
-                string[] jointDatas = motionData[j, i].Split('_');
-                if (jointDatas.Length != 7) continue;
-                //Debug.Log(jointDatas[0] + "_" + jointDatas[1] + "_" + jointDatas[2]);
-                Vector3 pos = new Vector3(float.Parse(jointDatas[0]), float.Parse(jointDatas[1]), float.Parse(jointDatas[2]));
-                Quaternion rot = new Quaternion(float.Parse(jointDatas[3]), float.Parse(jointDatas[4]), float.Parse(jointDatas[5]), float.Parse(jointDatas[6]));
-                jointData.Add((pos, rot));
-            }
-
-            timeList.Add(time);
-            recordList.Add(time, jointData);
-        }
-
-        curIdx = 0;
-    }
-
-    public void StartPlay()
-    {
-        playTime = 0.0f;
-        curIdx = 0;
-    }
-
-    public void StopPlay()
-    {
+        timeList = motion.TimeList;
+        recordDic = motion.RecordDic;
     }
 }
