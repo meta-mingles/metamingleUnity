@@ -1,3 +1,4 @@
+using DG.Tweening;
 using RockVR.Video;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ public class KHHEditManager : MonoBehaviour
     public Button backgroundButton;
     public Button interactiveButton;
 
+    public CanvasGroup recordWaitCG;
     public GameObject videoPanel;
     public GameObject soundPanel;
     public GameObject backgroundPanel;
@@ -65,24 +67,29 @@ public class KHHEditManager : MonoBehaviour
         if (videoButton != null) videoButton.onClick.AddListener(() => { videoPanel.SetActive(true); soundPanel.SetActive(false); backgroundPanel.SetActive(false); });
         if (soundButton != null) soundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(true); backgroundPanel.SetActive(false); });
         if (backgroundButton != null) backgroundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(false); backgroundPanel.SetActive(true); });
-        if (interactiveButton != null) interactiveButton.onClick.AddListener(Interactive);
+        if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
 
         if (playButton != null) playButton.onClick.AddListener(() => { screenEditor.Play(); });
         if (stopButton != null) stopButton.onClick.AddListener(() => { screenEditor.Stop(); });
         if (exportButton != null) exportButton.onClick.AddListener(() => { if (screenEditor.FileLoaded) GenerateVideo(); });
     }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
+    // Update is called once per frame
+    void Update()
+    {
+        if (KHHRecordManager.Instance.videoCapture.SetEnd && recordWaitCG.alpha == 1)
+        {
+            recordWaitCG.DOFade(0, 0.5f).OnComplete(() => { recordWaitCG.gameObject.SetActive(false); });
+            recordWaitCG.blocksRaycasts = false;
+        }
+    }
 
-    //}
-
-    public void Interactive()
+    void InteractiveButtonEvent()
     {
         isInterActive = !isInterActive;
         KHHVideoCapture.instance.IsInteractive = isInterActive;
         interactive.SetActive(isInterActive);
+        interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
     }
 
     void GenerateVideo()

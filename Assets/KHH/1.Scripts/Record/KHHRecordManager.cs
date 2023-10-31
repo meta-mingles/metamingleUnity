@@ -12,6 +12,7 @@ public class KHHRecordManager : MonoBehaviour
     public GameObject edit;
 
     public Camera captureCamera;
+    public GameObject captureScreen;
     public RenderTexture captureRenderTexture;
 
     public Button recordExitButton;
@@ -39,6 +40,7 @@ public class KHHRecordManager : MonoBehaviour
         {
             record.SetActive(false);
             edit.SetActive(true);
+            captureScreen.gameObject.SetActive(false);
             captureCamera.targetTexture = captureRenderTexture;
             motionDataManager.Refresh();
             videoCapture.CameraPlayStop();
@@ -49,6 +51,8 @@ public class KHHRecordManager : MonoBehaviour
         {
             modelRecorder.StartRecord();
             microphoneRecorder.StartRecordMicrophone();
+            recordStartButton.gameObject.SetActive(false);
+            recordStopButton.gameObject.SetActive(true);
         });
 
         recordStopButton.onClick.AddListener(() =>
@@ -56,6 +60,8 @@ public class KHHRecordManager : MonoBehaviour
             string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
             modelRecorder.StopRecord(fileName);
             microphoneRecorder.StopRecordMicrophone(fileName);
+            recordStartButton.gameObject.SetActive(true);
+            recordStopButton.gameObject.SetActive(false);
         });
 
         //movieSender.CameraPlayStart();
@@ -64,7 +70,10 @@ public class KHHRecordManager : MonoBehaviour
     public bool Init()
     {
         if (videoCapture.SetEnd)
+        {
+            captureScreen.gameObject.SetActive(true);
             videoCapture.CameraPlayStart();
+        }
         return videoCapture.SetEnd;
     }
 

@@ -18,7 +18,7 @@ public class VideoCapture : MonoBehaviour
     private WebCamTexture webCamTexture;
     private RenderTexture videoTexture;
 
-    private int videoScreenWidth = 2560;
+    private int videoScreenWidth = 1920;//2560;
     private int bgWidth, bgHeight;
 
     public RenderTexture MainTexture { get; private set; }
@@ -55,7 +55,7 @@ public class VideoCapture : MonoBehaviour
         var sd = VideoScreen.GetComponent<RectTransform>();
         VideoScreen.texture = webCamTexture;
 
-        sd.sizeDelta = new Vector2(videoScreenWidth, videoScreenWidth * webCamTexture.height / webCamTexture.width);
+        sd.sizeDelta = new Vector2(videoScreenWidth, videoScreenWidth * 9f / 16f);//webCamTexture.height / webCamTexture.width);
         var aspect = -(float)webCamTexture.width / webCamTexture.height;
         VideoBackground.transform.localScale = new Vector3(aspect, 1, 1) * VideoBackgroundScale;
         VideoBackground.GetComponent<Renderer>().material.mainTexture = webCamTexture;
