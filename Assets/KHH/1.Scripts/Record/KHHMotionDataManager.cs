@@ -13,7 +13,6 @@ public class KHHMotionDataManager : MonoBehaviour
     void Start()
     {
         kHHMotionDatas = new List<KHHMotionData>();
-        Refresh();
     }
 
     /// <summary>

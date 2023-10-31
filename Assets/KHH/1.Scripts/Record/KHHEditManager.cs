@@ -15,20 +15,25 @@ public class KHHEditManager : MonoBehaviour
     public GameObject record;
     public GameObject edit;
 
+    public KHHMotionDataManager motionDataManager;
+    public KHHBackgroundDataManager backgroundDataMaanger;
+
     public Camera captureCamera;
     public RenderTexture captureRenderTexture;
     public KHHScreenEditor screenEditor;
     public GameObject barracudaRunner;
 
+
     [Header("Left")]
     public Button recordButton;
-    public Button videoButton;
+    public Button motionButton;
     public Button soundButton;
     public Button backgroundButton;
+    public Button captionButton;
     public Button interactiveButton;
 
     public CanvasGroup recordWaitCG;
-    public GameObject videoPanel;
+    public GameObject motionPanel;
     public GameObject soundPanel;
     public GameObject backgroundPanel;
     public GameObject interactive;
@@ -53,25 +58,17 @@ public class KHHEditManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (recordButton != null) recordButton.onClick.AddListener(() =>
-        {
-            //전환이 가능한 상태
-            if (KHHRecordManager.Instance.Init())
-            {
-                record.SetActive(true);
-                edit.SetActive(false);
-                captureCamera.targetTexture = null;
-                barracudaRunner.SetActive(true);
-            }
-        });
-        if (videoButton != null) videoButton.onClick.AddListener(() => { videoPanel.SetActive(true); soundPanel.SetActive(false); backgroundPanel.SetActive(false); });
-        if (soundButton != null) soundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(true); backgroundPanel.SetActive(false); });
-        if (backgroundButton != null) backgroundButton.onClick.AddListener(() => { videoPanel.SetActive(false); soundPanel.SetActive(false); backgroundPanel.SetActive(true); });
+        if (recordButton != null) recordButton.onClick.AddListener(RecordButtonEvent);
+        if (motionButton != null) motionButton.onClick.AddListener(MotionButtonEvent);
+        if (soundButton != null) soundButton.onClick.AddListener(SoundButtonEvent);
+        if (backgroundButton != null) backgroundButton.onClick.AddListener(BackgroundButtonEvent);
         if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
 
         if (playButton != null) playButton.onClick.AddListener(() => { screenEditor.Play(); });
         if (stopButton != null) stopButton.onClick.AddListener(() => { screenEditor.Stop(); });
         if (exportButton != null) exportButton.onClick.AddListener(() => { if (screenEditor.FileLoaded) GenerateVideo(); });
+
+        MotionButtonEvent();
     }
 
     // Update is called once per frame
@@ -82,6 +79,52 @@ public class KHHEditManager : MonoBehaviour
             recordWaitCG.DOFade(0, 0.5f).OnComplete(() => { recordWaitCG.gameObject.SetActive(false); });
             recordWaitCG.blocksRaycasts = false;
         }
+    }
+
+    void RecordButtonEvent()
+    {
+        //전환이 가능한 상태
+        if (KHHRecordManager.Instance.Init())
+        {
+            record.SetActive(true);
+            edit.SetActive(false);
+            captureCamera.targetTexture = null;
+            barracudaRunner.SetActive(true);
+        }
+    }
+
+    void MotionButtonEvent()
+    {
+        motionPanel.SetActive(true);
+        soundPanel.SetActive(false);
+        backgroundPanel.SetActive(false);
+        motionButton.image.color = new Color32(200, 200, 200, 255);
+        soundButton.image.color = new Color32(255, 255, 255, 255);
+        backgroundButton.image.color = new Color32(255, 255, 255, 255);
+
+        motionDataManager.Refresh();
+    }
+
+    void SoundButtonEvent()
+    {
+        motionPanel.SetActive(false);
+        soundPanel.SetActive(true);
+        backgroundPanel.SetActive(false);
+        motionButton.image.color = new Color32(255, 255, 255, 255);
+        soundButton.image.color = new Color32(200, 200, 200, 255);
+        backgroundButton.image.color = new Color32(255, 255, 255, 255);
+    }
+
+    public void BackgroundButtonEvent()
+    {
+        motionPanel.SetActive(false);
+        soundPanel.SetActive(false);
+        backgroundPanel.SetActive(true);
+        motionButton.image.color = new Color32(255, 255, 255, 255);
+        soundButton.image.color = new Color32(255, 255, 255, 255);
+        backgroundButton.image.color = new Color32(200, 200, 200, 255);
+
+        backgroundDataMaanger.Refresh();
     }
 
     void InteractiveButtonEvent()
