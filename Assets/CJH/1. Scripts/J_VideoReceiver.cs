@@ -1,4 +1,4 @@
-using ExitGames.Client.Photon.StructWrapping;
+ï»¿using ExitGames.Client.Photon.StructWrapping;
 using RootMotion.Demos;
 using System;
 using System.Collections;
@@ -16,20 +16,20 @@ public class J_VideoReceiver : MonoBehaviour
     public GameObject thumbnailScrollView;
 
     public GameObject thumbnailFactory;
-    public Transform trCtOfSV; //½æ³×ÀÏ ½ºÅ©·Ñºä »ı¼ºÀå¼Ò
+    public Transform trCtOfSV; //ì¸ë„¤ì¼ ìŠ¤í¬ë¡¤ë·° ìƒì„±ì¥ì†Œ
 
 
     public GameObject videoFactory;
-    public Transform trCtOFVideoSC; //ºñµğ¿À ½ºÅ©·Ñºä »ı¼ºÀå¼Ò
+    public Transform trCtOFVideoSC; //ë¹„ë””ì˜¤ ìŠ¤í¬ë¡¤ë·° ìƒì„±ì¥ì†Œ
 
     public TextMeshProUGUI nothingText;
 
     private void Update()
     {
-        //tumbnail ¸®½ºÆ®
+        //tumbnail ë¦¬ìŠ¤íŠ¸
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            // ¼­¹öÇÑÅ× ¿µ»ó Á¤º¸ ¿äÃ»
+            // ì„œë²„í•œí…Œ ì˜ìƒ ì •ë³´ ìš”ì²­
             HttpInfo httpInfo = new HttpInfo();
 
             //Debug.Log(httpInfo.url);
@@ -39,21 +39,21 @@ public class J_VideoReceiver : MonoBehaviour
             //CSV
             //httpInfo.Set(RequestType.GET, uri.AbsoluteUri, OnCompleteSearchVideo, false);
             httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
-            Debug.Log("¿µ»óÀÌ ³ª¿É´Ï´Ù");
+            Debug.Log("ì˜ìƒì´ ë‚˜ì˜µë‹ˆë‹¤");
             HttpManager.Get().SendRequest(httpInfo);
         }
 
-        #region ¿¹½Ã
+        #region ì˜ˆì‹œ
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
 
             Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "ShopInfo.csv");
 
-            // ¼­¹öÇÑÅ× ¿µ»ó Á¤º¸ ¿äÃ»
+            // ì„œë²„í•œí…Œ ì˜ìƒ ì •ë³´ ìš”ì²­
             HttpInfo httpInfo = new HttpInfo();
             httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) => {
 
-                //µ¥ÀÌÅÍ ¼ÂÆÃ
+                //ë°ì´í„° ì…‹íŒ…
                 J_DataManager.instance.SetShopInfoList(downloadHandler.text);
             }, false);
 
@@ -70,25 +70,25 @@ public class J_VideoReceiver : MonoBehaviour
 
     void OnCompleteSearchVideo(DownloadHandler downloadHandler)
     {
-        //µ¥ÀÌÅÍ ¼ÂÆÃ
+        //ë°ì´í„° ì…‹íŒ…
         //J_DataManager.instance.SetRealVideoInfoListByCSV(downloadHandler.text);
         J_DataManager.instance.SetRealVideoInfoListByJSON(downloadHandler.text);
 
-        //UI ¸¸µéÀÚ
+        //UI ë§Œë“¤ì
         for (int i = 0; i < J_DataManager.instance.videoInfoList.Count; i++)
         {
-            // ¼¶³×ÀÏ(ºñµğ¿À ½æ³×ÀÏ)À» ¸¸µì´Ï´Ù.
+            // ì„¬ë„¤ì¼(ë¹„ë””ì˜¤ ì¸ë„¤ì¼)ì„ ë§Œë“­ë‹ˆë‹¤.
             GameObject video = Instantiate(thumbnailFactory, trCtOfSV);
             J_ThumItem item = video.GetComponent<J_ThumItem>();
 
-            // Ç×¸ñ ¼³Á¤ - °¢ ¼¶³×ÀÏ¿¡ ´ëÇÑ Á¤º¸¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+            // í•­ëª© ì„¤ì • - ê° ì„¬ë„¤ì¼ì— ëŒ€í•œ ì •ë³´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
             item.SetItem(J_DataManager.instance.videoInfoList[i]);
-            //½æ³×ÀÏ Å¬¸¯ ½Ã, ¼ôÆû(ÂªÀº Çü½ÄÀÇ) ¿µ»ó Ã¢À» ¸¸µì´Ï´Ù.
+            //ì¸ë„¤ì¼ í´ë¦­ ì‹œ, ìˆí¼(ì§§ì€ í˜•ì‹ì˜) ì˜ìƒ ì°½ì„ ë§Œë“­ë‹ˆë‹¤.
             item.onClickEvent = CreateShortVideo;
         }
     }
 
-    //¼ôÆûºñµğ¿À ¿­¸®´Â ÇÔ¼ö
+    //ìˆí¼ë¹„ë””ì˜¤ ì—´ë¦¬ëŠ” í•¨ìˆ˜
     void CreateShortVideo(VideolInfo info)
     {
         GameObject video = Instantiate(videoFactory, trCtOFVideoSC);
@@ -100,7 +100,7 @@ public class J_VideoReceiver : MonoBehaviour
         item.onClickEvent = CloseShortVideo;
     }
 
-    //¼ôÆûºñµğ¿À ´İ´Â ÇÔ¼ö
+    //ìˆí¼ë¹„ë””ì˜¤ ë‹«ëŠ” í•¨ìˆ˜
     void CloseShortVideo()
     {
         thumbnailScrollView.SetActive(true);

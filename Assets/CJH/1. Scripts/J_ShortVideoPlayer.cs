@@ -1,10 +1,9 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using UnityEngine.Video;
 
 public class J_ShortVideoPlayer : MonoBehaviour
@@ -18,6 +17,13 @@ public class J_ShortVideoPlayer : MonoBehaviour
 
     public Action onPlayEvent;
 
+    public Button likeBt;
+
+    public Text likeCountText;
+
+    private int likeCount = 0;
+
+
     void Start()
     {
         
@@ -28,11 +34,11 @@ public class J_ShortVideoPlayer : MonoBehaviour
         
     }
 
-    //¼ôÆû ºñµğ¿À ¼­¹ö 
+    //ìˆí¼ ë¹„ë””ì˜¤ ì„œë²„ 
     public void SetItem(VideolInfo Info)
     {
         videoInfo = Info;
-        // ¿µ»ó ´Ù¿î·Îµå
+        // ì˜ìƒ ë‹¤ìš´ë¡œë“œ
         HttpInfo httpInfo = new HttpInfo();
         httpInfo.Set(RequestType.GET, videoInfo.url, (downloadHandler) =>
         {
@@ -40,7 +46,7 @@ public class J_ShortVideoPlayer : MonoBehaviour
             byte[] videoBytes = downloadHandler.data;
 
             FileStream file = new FileStream(Application.dataPath + "/" + videoInfo.title + ".mp4", FileMode.Create);
-            //byteData ¸¦ file ¿¡ ¾²ÀÚ
+            //byteData ë¥¼ file ì— ì“°ì
             file.Write(videoBytes, 0, videoBytes.Length);
             file.Close();
 
@@ -55,17 +61,17 @@ public class J_ShortVideoPlayer : MonoBehaviour
 
         HttpManager.Get().SendRequest(httpInfo);
     }
-    //ÁÁ¾Æ¿ä 
+    //ì¢‹ì•„ìš” 
     public void LikeVideo()
     {
-        //¹öÆ°À» ´©¸¦¶§¸¶´Ù ÅØ½ºÆ® °¹¼ö°¡ Áõ°¡ÇÑ´Ù.
+        //ë²„íŠ¼ì„ ëˆ„ë¥¼ë•Œë§ˆë‹¤ í…ìŠ¤íŠ¸ ê°¯ìˆ˜ê°€ ì¦ê°€í•œë‹¤.
 
-        //¼­¹ö¿¡´Ù°¡ ÁÁ¾Æ¿ä 
+        //ì„œë²„ì—ë‹¤ê°€ ì¢‹ì•„ìš” 
 
     }
 
 
-    //¿µ»ó Àç»ı
+    //ì˜ìƒ ì¬ìƒ
     public void PlayPauseVideo()
     {
         if (videoPlayer.isPlaying)
@@ -77,7 +83,7 @@ public class J_ShortVideoPlayer : MonoBehaviour
             videoPlayer.Play();
         }
     }
-    //¿µ»ó ²ô±â
+    //ì˜ìƒ ë„ê¸°
     public void CloseVideo()
     {
         if (onClickEvent != null)
