@@ -7,13 +7,13 @@ using System.IO;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine.Networking;
-using ExitGames.Client.Photon.StructWrapping;
 
 public class J_ThumItem : MonoBehaviour
 {
     public TMP_Text title;
     public TMP_Text date;
     public TMP_Text description;
+    public TMP_Text memberName;
 
     public VideolInfo videoInfo;
 
@@ -39,7 +39,7 @@ public class J_ThumItem : MonoBehaviour
         }
     }
 
-
+    
     
 
     //썸네일 이미지 다운로드
@@ -48,8 +48,13 @@ public class J_ThumItem : MonoBehaviour
         videoInfo = Info;
 
         title.text = videoInfo.title;
-        date.text = videoInfo.date;
+
+
+        //날짜파싱
+        string mydate= videoInfo.date.Substring(0, 10);
+        date.text = mydate;
         description.text = videoInfo.description;
+        memberName.text = videoInfo.memberName;
 
         HttpInfo info = new HttpInfo();
         info.Set(RequestType.TEXTURE, videoInfo.thumbnailUrl, null,false);
@@ -62,4 +67,5 @@ public class J_ThumItem : MonoBehaviour
         Texture2D texture = ((DownloadHandlerTexture)downloadHandler).texture;
         downloadImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
     }
+
 }

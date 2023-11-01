@@ -55,18 +55,28 @@ public class J_ShortVideoPlayer : MonoBehaviour
 
         HttpManager.Get().SendRequest(httpInfo);
     }
+    //좋아요 
+    public void LikeVideo()
+    {
+        //버튼을 누를때마다 텍스트 갯수가 증가한다.
 
-    ////영상 재생
-    //public void PlayVideo()
-    //{
-    //    videoPlayer.Play();
-    //}
-    ////영상 멈춤
-    //public void StopVideo()
-    //{
-    //    videoPlayer.Stop();
-    //}
+        //서버에다가 좋아요 
 
+    }
+
+
+    //영상 재생
+    public void PlayPauseVideo()
+    {
+        if (videoPlayer.isPlaying)
+        {
+            videoPlayer.Pause();
+        }
+        else
+        {
+            videoPlayer.Play();
+        }
+    }
     //영상 끄기
     public void CloseVideo()
     {
