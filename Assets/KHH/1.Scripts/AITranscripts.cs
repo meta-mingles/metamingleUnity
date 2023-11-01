@@ -9,8 +9,8 @@ using UnityEngine.UI;
 
 public class AITranscripts : MonoBehaviour
 {
-    private string apiUrl_chat = "https://b4ad-221-163-19-218.ngrok.io/chatbot/test_text";
-    private string apiUrl = "https://b4ad-221-163-19-218.ngrok.io/chatbot/test_image";
+    private string apiUrl_chat = "https://5198-221-163-19-218.ngrok.io/chatbot/test_text";
+    private string apiUrl = "https://5198-221-163-19-218.ngrok.io/chatbot/test_image";
     //private string apiUrl_chat = "https://bec3-221-163-19-218.ngrok-free.app/chatbot/test_text";
     //private string apiUrl = "https://bec3-221-163-19-218.ngrok-free.app/chatbot/test_image"; // FastAPI 서버의 엔드포인트 URL을 입력하세요.
     // private string apiUrl_chat = "http://192.168.0.77:8001/chatbot/test_text";
@@ -43,14 +43,14 @@ public class AITranscripts : MonoBehaviour
         if(isGeneratingBG)
         {
             transcriptsInputField.text = "대본 작성 중...";
-        }        
+        }
     }
 
     // 첫번째 Box안에 있는 텍스트를 Python으로 보내라.
     void AITranscriptsButtonEvent()
     {
         string inputText = chatInputField.text;
-        Debug.Log(inputText);
+        //Debug.Log(inputText);
         string json = "{\"text\":\"" + inputText + "\"}";
 
         aiTranscriptsButtonText.text = "작성중";
@@ -61,9 +61,9 @@ public class AITranscripts : MonoBehaviour
 
         // JSON 데이터를 바이트 배열로 변환
         byte[] jsonData = Encoding.UTF8.GetBytes(json);
-        Debug.Log("배경생성 요청");
+        //Debug.Log("배경생성 요청");
         StartCoroutine(PostImageFile(jsonData));
-        Debug.Log("시나리오 생성 요청");
+        //Debug.Log("시나리오 생성 요청");
         StartCoroutine(PostJson(jsonData));
     }
 
@@ -122,14 +122,17 @@ public class AITranscripts : MonoBehaviour
 
                 SaveImage(www.downloadHandler.data, Application.persistentDataPath + "/Images/test.jpg");
                 //SaveImage(www.downloadHandler.data, "./Assets/Resources/Images/test.jpg");
-                Debug.Log("Success!!!!!");
+                //Debug.Log("Success!!!!!");
 
                 // 여기에서 responseText를 파싱하여 결과값을 추출
             }
 
             isGeneratingBG = false;
             if (isGeneratingBG == false && isGeneratingTS == false)
+            {
+                aiTranscriptsButtonText.text = "작성";
                 aiTranscriptsButton.interactable = true;
+            }
 
             KHHEditManager.Instance.BackgroundButtonEvent();
         }
@@ -152,7 +155,7 @@ public class AITranscripts : MonoBehaviour
             else
             {
                 string responseText = www.downloadHandler.text;
-                Debug.Log("Response from server: " + responseText);
+                //Debug.Log("Response from server: " + responseText);
                 responseText = responseText.Replace("\\n", "\n").Replace("\\\"", "\"");
                 transcriptsInputField.text = responseText;
                 // 여기에서 responseText를 파싱하여 결과값을 추출
@@ -160,7 +163,10 @@ public class AITranscripts : MonoBehaviour
 
             isGeneratingTS = false;
             if(isGeneratingBG == false && isGeneratingTS == false)
+            {
+                aiTranscriptsButtonText.text = "작성";
                 aiTranscriptsButton.interactable = true;
+            }
         }
     }
 }

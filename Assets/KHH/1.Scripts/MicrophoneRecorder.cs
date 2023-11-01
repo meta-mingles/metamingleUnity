@@ -22,7 +22,7 @@ public class MicrophoneRecorder : MonoBehaviour
 
     public void StopRecordMicrophone(string fileName)
     {
-        int lastTime = Microphone.GetPosition(null);
+        int lastTime = Microphone.GetPosition(microphoneName);
 
         if (lastTime == 0)
             return;
