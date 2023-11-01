@@ -1,10 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class KHHMotionDataManager : MonoBehaviour
 {
+    public Transform content;
     public GameObject motionDataPrefab;
 
     List<KHHMotionData> kHHMotionDatas;
@@ -16,7 +17,7 @@ public class KHHMotionDataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// »õ·Î°íÄ§
+    /// ìƒˆë¡œê³ ì¹¨
     /// </summary>
     public void Refresh()
     {
@@ -27,7 +28,7 @@ public class KHHMotionDataManager : MonoBehaviour
         DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath);
         foreach (FileInfo file in di.GetFiles("*.csv"))
         {
-            GameObject gameObject = Instantiate(motionDataPrefab, this.transform);
+            GameObject gameObject = Instantiate(motionDataPrefab, content);
             KHHMotionData motionData = gameObject.GetComponent<KHHMotionData>();
             motionData.Set(file.Name);
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UniHumanoid;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class KHHEditItem : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class KHHEditItem : MonoBehaviour
     RectTransform item;
 
     //재생
-    protected float playTime = 0.0f;
     protected float itemCorrectTime = 0.0f;
+    protected float delayTime = 0.0f;
+
+    public float EndTime { get { return (endX + changeRightX) / lengthScale; } }
     protected int curIdx = 0;
     protected int startIdx = 0;
     protected int endIdx = 0;
@@ -33,7 +36,7 @@ public class KHHEditItem : MonoBehaviour
     float changeLeftX;
     float changeRightX;
 
-    protected float lengthScale = 10;
+    protected float lengthScale = 10f;
 
     EditItemSelect left;
     EditItemSelect middle;
@@ -43,6 +46,11 @@ public class KHHEditItem : MonoBehaviour
 
     public void Set()
     {
+        startX = timeList[0] * lengthScale;
+        endX = timeList[timeList.Count - 1] * lengthScale;
+        maxLength = endX - startX;
+        curIdx = 0;
+
         rt = GetComponent<RectTransform>();
         item = transform.Find("Item").GetComponent<RectTransform>();
         left = item.Find("Left").GetComponent<EditItemSelect>();
@@ -112,8 +120,8 @@ public class KHHEditItem : MonoBehaviour
 
     public virtual void PlayStart()
     {
-        playTime = 0.0f;
         itemCorrectTime = changeLeftX / lengthScale;
+        delayTime = changePosX / lengthScale;
 
         //시작 시간 찾기
         float itemStartTime = (startX + changeLeftX) / lengthScale;
@@ -143,10 +151,15 @@ public class KHHEditItem : MonoBehaviour
 
     }
 
-    public virtual void LoadRecordData(KHHScreenEditor editor, string fileName)
+    public virtual void LoadItemData(KHHScreenEditor editor, string fileName, UnityAction action)
     {
         screenEditor = editor;
     }
+
+    //public virtual void LoadRecordData(KHHScreenEditor editor, string fileName, UnityAction action)
+    //{
+    //    screenEditor = editor;
+    //}
 
     protected virtual void EditTimeLeft()
     {

@@ -15,19 +15,30 @@ public class KHHScreenEditor : MonoBehaviour
     List<KHHEditItem> editItemList;
     public GameObject[] editItemPrefabs;
 
-    List<AudioSource> audioSourceList;
-    List<AudioClip> audioClipList;
-
     public Transform editItemParent;
     public KHHModelRecorder modelRecorder;
+
+    public float playTime = 0.0f;
+    float endTime = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        audioSourceList = new List<AudioSource>();
-        audioClipList = new List<AudioClip>();
-
         editItemList = new List<KHHEditItem>();
+    }
+
+    void Update()
+    {
+        if(isPlaying)
+        {
+            playTime += Time.deltaTime;
+            if(playTime > endTime)
+            {
+                End();
+                KHHEditManager.Instance.StopButtonEvent();
+                return;
+            }
+        }        
     }
 
     //드롭 아이템이 편집 영역에 드랍되었을 때 호출
@@ -60,7 +71,7 @@ public class KHHScreenEditor : MonoBehaviour
 
         KHHEditItemMotion editItem = go.GetComponent<KHHEditItemMotion>();
         //모델 레코더에 파일 이름을 전달한다.
-        //editItem.LoadRecordData(this, fileName, () => { fileLoaded = true; });
+        editItem.LoadItemData(this, fileName, () => fileLoaded = true);
         editItem.Init(model);
         editItem.Set();
         editItemList.Add(editItem);
@@ -68,17 +79,15 @@ public class KHHScreenEditor : MonoBehaviour
 
     public void Play()
     {
+        playTime = 0.0f;
+        endTime = 0.0f;
         if (fileLoaded)
         {
             isPlaying = true;
             for (int i = 0; i < editItemList.Count; i++)
             {
                 editItemList[i].PlayStart();
-            }
-            for (int i = 0; i < audioSourceList.Count; i++)
-            {
-                audioSourceList[i].clip = audioClipList[i];
-                audioSourceList[i].Play();
+                if (endTime < editItemList[i].EndTime) endTime = editItemList[i].EndTime;
             }
         }
     }
@@ -92,10 +101,6 @@ public class KHHScreenEditor : MonoBehaviour
             {
                 editItemList[i].PlayStop();
             }
-            for (int i = 0; i < audioSourceList.Count; i++)
-            {
-                audioSourceList[i].Stop();
-            }
         }
     }
 
@@ -108,11 +113,6 @@ public class KHHScreenEditor : MonoBehaviour
             {
                 editItemList[i].PlayEnd();
             }
-            for (int i = 0; i < audioSourceList.Count; i++)
-            {
-                audioSourceList[i].Stop();
-            }
         }
-
     }
 }

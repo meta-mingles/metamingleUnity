@@ -16,6 +16,7 @@ public class KHHEditManager : MonoBehaviour
     public GameObject edit;
 
     public KHHMotionDataManager motionDataManager;
+    public KHHSoundDataManager soundDataManager;
     public KHHBackgroundDataManager backgroundDataMaanger;
 
     public Camera captureCamera;
@@ -113,6 +114,8 @@ public class KHHEditManager : MonoBehaviour
         motionButton.image.color = new Color32(255, 255, 255, 255);
         soundButton.image.color = new Color32(200, 200, 200, 255);
         backgroundButton.image.color = new Color32(255, 255, 255, 255);
+
+        soundDataManager.Refresh();
     }
 
     public void BackgroundButtonEvent()
@@ -142,7 +145,7 @@ public class KHHEditManager : MonoBehaviour
         screenEditor.Play();
     }
 
-    void StopButtonEvent()
+    public void StopButtonEvent()
     {
         playButton.gameObject.SetActive(true);
         stopButton.gameObject.SetActive(false);
@@ -151,7 +154,7 @@ public class KHHEditManager : MonoBehaviour
 
     void ExportButtonEvent()
     {
-         if (screenEditor.FileLoaded)
+        if (screenEditor.FileLoaded)
             GenerateVideo();
     }
 
