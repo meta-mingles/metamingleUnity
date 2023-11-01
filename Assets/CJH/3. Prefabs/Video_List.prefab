@@ -626,13 +626,8 @@ MonoBehaviour:
   title: {fileID: 3919374998824487534}
   date: {fileID: 3919374998459425090}
   description: {fileID: 3919374998375815222}
-  info:
-    Title: 
-    date: 
-    description: 
-    Creator: 
-    url: 
-  VideoInfo:
+  memberName: {fileID: 3919374998375815222}
+  videoInfo:
     shortFormNo: 0
     title: 
     thumbnailUrl: 
@@ -641,4 +636,4 @@ MonoBehaviour:
     memberName: 
     date: 
     isInteractive: 0
-  videoPlayer: {fileID: 8593917940052514385}
+  downloadImage: {fileID: 0}

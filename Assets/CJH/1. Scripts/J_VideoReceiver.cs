@@ -23,6 +23,7 @@ public class J_VideoReceiver : MonoBehaviour
     public Transform trCtOFVideoSC; //비디오 스크롤뷰 생성장소
 
     public TextMeshProUGUI nothingText;
+
     private void Update()
     {
         //tumbnail 리스트
@@ -39,7 +40,7 @@ public class J_VideoReceiver : MonoBehaviour
             //httpInfo.Set(RequestType.GET, uri.AbsoluteUri, OnCompleteSearchVideo, false);
             httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
             Debug.Log("영상이 나옵니다");
-            HttpManager.Get().SendRequest(httpInfo);        
+            HttpManager.Get().SendRequest(httpInfo);
         }
 
         #region 예시
@@ -59,6 +60,11 @@ public class J_VideoReceiver : MonoBehaviour
             HttpManager.Get().SendRequest(httpInfo);
         }
         #endregion
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            VideolInfo testvideolInfo = new VideolInfo();
+            CreateShortVideo(testvideolInfo);
+        }
     }
 
 
