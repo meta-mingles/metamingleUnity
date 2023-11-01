@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -29,7 +29,7 @@ public class KHHMotionData : KHHData
 
     public override void OnBeginDrag(PointerEventData eventData)
     {
-        //º¹»ç »ı¼º
+        //ë³µì‚¬ ìƒì„±
         dragObject = Instantiate(this.gameObject);
         dragObject.transform.SetParent(this.transform.parent);
         dragObject.AddComponent<CanvasGroup>();
@@ -45,17 +45,17 @@ public class KHHMotionData : KHHData
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        //½ºÅ©¸° ¿¡µğÅÍ ¿µ¿ª ¾È¿¡ µå·ÓÇß´ÂÁö È®ÀÎ
+        //ìŠ¤í¬ë¦° ì—ë””í„° ì˜ì—­ ì•ˆì— ë“œë¡­í–ˆëŠ”ì§€ í™•ì¸
         if (eventData.pointerCurrentRaycast.gameObject != null)
         {
-            //µå·Ó ¾ÆÀÌÅÛÀÌ ÆíÁı ¿µ¿ª¿¡ µå¶øµÇ¾úÀ» ¶§ È£Ãâ
+            //ë“œë¡­ ì•„ì´í…œì´ í¸ì§‘ ì˜ì—­ì— ë“œëë˜ì—ˆì„ ë•Œ í˜¸ì¶œ
             KHHScreenEditor screenEditor = eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<KHHScreenEditor>();
             if (screenEditor != null)
             {
                 screenEditor.OnDropItem(this.gameObject);
             }
 
-            //µå·Ó ¾ÆÀÌÅÛÀÌ Interactive¹öÆ° À§¿¡ µå¶øµÇ¾úÀ» ¶§ È£Ãâ
+            //ë“œë¡­ ì•„ì´í…œì´ Interactiveë²„íŠ¼ ìœ„ì— ë“œëë˜ì—ˆì„ ë•Œ í˜¸ì¶œ
             KHHInteractiveButton interactiveButton = eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<KHHInteractiveButton>();
             if (interactiveButton != null)
             {

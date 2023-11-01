@@ -1,4 +1,4 @@
-using DG.Tweening;
+Ôªøusing DG.Tweening;
 using RockVR.Video;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,9 +64,9 @@ public class KHHEditManager : MonoBehaviour
         if (backgroundButton != null) backgroundButton.onClick.AddListener(BackgroundButtonEvent);
         if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
 
-        if (playButton != null) playButton.onClick.AddListener(() => { screenEditor.Play(); });
-        if (stopButton != null) stopButton.onClick.AddListener(() => { screenEditor.Stop(); });
-        if (exportButton != null) exportButton.onClick.AddListener(() => { if (screenEditor.FileLoaded) GenerateVideo(); });
+        if (playButton != null) playButton.onClick.AddListener(PlayButtonEvent);
+        if (stopButton != null) stopButton.onClick.AddListener(StopButtonEvent);
+        if (exportButton != null) exportButton.onClick.AddListener(ExportButtonEvent);
 
         MotionButtonEvent();
     }
@@ -83,7 +83,7 @@ public class KHHEditManager : MonoBehaviour
 
     void RecordButtonEvent()
     {
-        //¿¸»Ø¿Ã ∞°¥…«— ªÛ≈¬
+        //Ï†ÑÌôòÏù¥ Í∞ÄÎä•Ìïú ÏÉÅÌÉú
         if (KHHRecordManager.Instance.Init())
         {
             record.SetActive(true);
@@ -135,11 +135,31 @@ public class KHHEditManager : MonoBehaviour
         interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
     }
 
+    void PlayButtonEvent()
+    {
+        playButton.gameObject.SetActive(false);
+        stopButton.gameObject.SetActive(true);
+        screenEditor.Play();
+    }
+
+    void StopButtonEvent()
+    {
+        playButton.gameObject.SetActive(true);
+        stopButton.gameObject.SetActive(false);
+        screenEditor.Stop();
+    }
+
+    void ExportButtonEvent()
+    {
+         if (screenEditor.FileLoaded)
+            GenerateVideo();
+    }
+
     void GenerateVideo()
     {
         isExporting = true;
 
-        //¿¸º€ ¿©µµøÏ ∂ÁøÏ±‚
+        //Ï†ÑÏÜ° ÏúàÎèÑÏö∞ ÎùÑÏö∞Í∏∞
         exportWindow.gameObject.SetActive(true);
         exportWindow.StateChange(KHHExportWindow.ExportState.Processing);
 
@@ -174,7 +194,10 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
-        yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonLeft.FileName));
+        //yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonLeft.FileName));
+        screenEditor.LoadFileMotion(interactiveButtonLeft.FileName);
+        while (screenEditor.FileLoaded)
+            yield return null;
 
         //choice1
         screenEditor.Play();
@@ -189,7 +212,10 @@ public class KHHEditManager : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
-        yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonRight.FileName));
+        //yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonRight.FileName));
+        screenEditor.LoadFileMotion(interactiveButtonLeft.FileName);
+        while (screenEditor.FileLoaded)
+            yield return null;
 
         //choice2
         screenEditor.Play();

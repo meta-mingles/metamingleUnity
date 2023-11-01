@@ -1,36 +1,47 @@
+﻿using ExitGames.Demos.DemoPunVoice;
 using System.Collections;
 using System.Collections.Generic;
+using UniHumanoid;
 using UnityEngine;
 
 public class KHHEditItem : MonoBehaviour
 {
     public KHHData.DataType type;
 
-    KHHScreenEditor screenEditor;
+    protected KHHScreenEditor screenEditor;
 
     RectTransform rt;
     RectTransform item;
 
-    //���
+    //재생
     protected float playTime = 0.0f;
+    protected float itemCorrectTime = 0.0f;
     protected int curIdx = 0;
+    protected int startIdx = 0;
+    protected int endIdx = 0;
 
     protected List<float> timeList;
     public List<float> TimeList { get { return timeList; } }
 
-    public float curlength;
+    public float curLength;
     public float maxLength;
+
+    public float startX;
     public float endX;
 
-    float scale = 1;
+    float changePosX;
+    float changeLeftX;
+    float changeRightX;
+
+    protected float lengthScale = 10;
 
     EditItemSelect left;
     EditItemSelect middle;
     EditItemSelect right;
 
-    KHHModelRecorder recorder;
+    //KHHModelRecorder recorder;
 
-    public virtual void Set(KHHModelRecorder recorder)
+    public void Set()
     {
         rt = GetComponent<RectTransform>();
         item = transform.Find("Item").GetComponent<RectTransform>();
@@ -38,71 +49,103 @@ public class KHHEditItem : MonoBehaviour
         middle = item.Find("Middle").GetComponent<EditItemSelect>();
         right = item.Find("Right").GetComponent<EditItemSelect>();
 
-        this.recorder = recorder;
-        maxLength = recorder.TimeList[TimeList.Count - 1] - recorder.TimeList[0];
-        curlength = maxLength;
-        rt.sizeDelta = new Vector2(maxLength * 10, 60);
-        item.sizeDelta = new Vector2(maxLength * 10, 60);
+        curLength = maxLength;
 
-        endX = recorder.TimeList[TimeList.Count - 1] * 10;
+        changePosX = 0;
+        changeLeftX = 0;
+        changeRightX = 0;
+
+        rt.sizeDelta = new Vector2(maxLength, 60);
+        item.sizeDelta = new Vector2(maxLength, 60);
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        if (recorder == null) return;
+        //if (recorder == null) return;
 
+        //크기조절
         if (left.isDrag)
         {
-            if (item.localPosition.x + left.posXDiff < 0)
+            changeLeftX += left.posXDiff;
+            if (changeLeftX < 0)
             {
-                item.localPosition = new Vector3(0, item.localPosition.y, item.localPosition.z);
+                changeLeftX = 0;
             }
-            else if (item.sizeDelta.x - left.posXDiff > maxLength)
+            else if (startX + changeLeftX > endX + changeRightX)
             {
-                item.sizeDelta = new Vector2(maxLength, item.sizeDelta.y);
+                changeLeftX = (endX + changeRightX) - startX;
             }
-            else
-            {
-                item.localPosition = new Vector3(item.localPosition.x+ left.posXDiff, item.localPosition.y, item.localPosition.z);
-                item.sizeDelta = new Vector2(item.sizeDelta.x - left.posXDiff, item.sizeDelta.y);
-            }
+
+            curLength = (endX + changeRightX) - (startX + changeLeftX);
+            item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
+            item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
         }
 
         if (middle.isDrag)
         {
-            item.localPosition =
-                new Vector3(item.localPosition.x + middle.posXDiff < 0 ? 0 : item.localPosition.x + middle.posXDiff, item.localPosition.y, item.localPosition.z);
+            changePosX += middle.posXDiff;
+            if (startX + changePosX + changeLeftX < 0)
+            {
+                changePosX = (startX + changeLeftX) * -1;
+            }
+
+            item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
         }
 
         if (right.isDrag)
         {
-            //if (right.posXDiff -  < 0)
-            //{
+            changeRightX += right.posXDiff;
+            if (changeRightX > 0)
+            {
+                changeRightX = 0;
+            }
+            else if (endX + changeRightX < startX + changeLeftX)
+            {
+                changeRightX = (startX + changeLeftX) - endX;
+            }
 
-            //}
-            //else
-
-
-                item.sizeDelta = new Vector2(item.sizeDelta.x + right.posXDiff, item.sizeDelta.y);
+            curLength = (endX + changeRightX) - (startX + changeLeftX);
+            item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
         }
-
-        curlength = item.sizeDelta.x;
     }
 
-    public void StartPlay()
+    public virtual void PlayStart()
     {
         playTime = 0.0f;
-        curIdx = 0;
+        itemCorrectTime = changeLeftX / lengthScale;
+
+        //시작 시간 찾기
+        float itemStartTime = (startX + changeLeftX) / lengthScale;
+        float itemEndTime = (endX + changeRightX) / lengthScale;
+
+        startIdx = 0;
+        endIdx = timeList.Count - 1;
+
+        for (int i = 0; i < timeList.Count; i++)
+        {
+            if (timeList[i] < itemStartTime)
+                startIdx = i;
+            if (timeList[i] < itemEndTime)
+                endIdx = i;
+        }
+
+        curIdx = startIdx;
     }
 
-    public void StopPlay()
+    public virtual void PlayStop()
     {
+
     }
 
-    public virtual void LoadRecordData(KHHScreenEditor screenEditor, string fileName)
+    public virtual void PlayEnd()
     {
-        this.screenEditor = screenEditor;
+
+    }
+
+    public virtual void LoadRecordData(KHHScreenEditor editor, string fileName)
+    {
+        screenEditor = editor;
     }
 
     protected virtual void EditTimeLeft()

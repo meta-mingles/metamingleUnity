@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -22,6 +22,7 @@ public class EditItemSelect : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         isDrag = true;
         recentPosX = eventData.position.x;
+        Debug.Log("BeginDrag");
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -31,5 +32,6 @@ public class EditItemSelect : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public void OnEndDrag(PointerEventData eventData)
     {
         isDrag = false;
+        Debug.Log("EndDrag");
     }
 }

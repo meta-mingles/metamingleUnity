@@ -1,20 +1,67 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Unity.Barracuda;
 using UnityEngine;
 
 public class KHHEditItemMotion : KHHEditItem
 {
+    public VNectModel model;
+
     Dictionary<float, List<(Vector3, Quaternion)>> recordDic;
     public Dictionary<float, List<(Vector3, Quaternion)>> RecordDic { get { return recordDic; } }
 
-    public override void Set(KHHModelRecorder recorder)
+    // Update is called once per frame
+    protected override void Update()
     {
-        base.Set(recorder);
+        base.Update();
+
+        if (model != null && screenEditor.IsPlaying)
+        {
+            playTime += Time.deltaTime;
+            if (playTime > timeList[endIdx] - itemCorrectTime)
+            {
+                screenEditor.End();
+                return;
+            }
+
+            //현재 시간에 가장 근접하는 키 데이터를 추론한다.
+            for (int i = curIdx + 1; i < timeList.Count; i++)
+            {
+                if (timeList[i] - itemCorrectTime > playTime)
+                {
+                    curIdx = i - 1;
+                    break;
+                }
+            }
+
+            float ratio = (playTime - (timeList[curIdx] - itemCorrectTime)) / (timeList[curIdx + 1] - timeList[curIdx]);
+            //모델 위치 조정
+            for (int i = 0; i < model.JointPoints.Length; i++)
+            {
+                Vector3 pos = Vector3.Lerp(recordDic[timeList[curIdx]][i].Item1, recordDic[timeList[curIdx + 1]][i].Item1, ratio);
+                Quaternion rot;
+                if ((recordDic[timeList[curIdx]][i].Item2.normalized == Quaternion.identity) && (recordDic[timeList[curIdx + 1]][i].Item2.normalized == Quaternion.identity)) rot = Quaternion.identity; //recordList[timeList[curIdx + 1]][i].Item2;
+                else rot = Quaternion.Lerp(recordDic[timeList[curIdx]][i].Item2, recordDic[timeList[curIdx + 1]][i].Item2, ratio);
+                model.JointPoints[i].Pos3D = pos;
+                model.JointPoints[i].InverseRotation = rot;
+            }
+        }
+    }
+
+    public void Init(VNectModel model)
+    {
+        this.model = model;
         type = KHHData.DataType.MotionData;
     }
 
-    public override void LoadRecordData(KHHScreenEditor screenEditor, string fileName)
+    //public void Load(KHHEditItemMotion motion)
+    //{
+    //    timeList = motion.TimeList;
+    //    recordDic = motion.RecordDic;
+    //}
+
+    public override void LoadRecordData(KHHScreenEditor editor, string fileName)
     {
-        base.LoadRecordData(screenEditor, fileName);
+        base.LoadRecordData(editor, fileName);
         string[,] motionData = CSVManager.Instance.ReadCsv(fileName);
 
         timeList = new List<float>();
@@ -40,6 +87,18 @@ public class KHHEditItemMotion : KHHEditItem
             recordDic.Add(time, jointData);
         }
 
+        startX = timeList[0] * lengthScale;
+        endX = timeList[timeList.Count - 1] * lengthScale;
+        maxLength = endX - startX;
         curIdx = 0;
+
+        ////오디오
+        //GameObject audioObject = new GameObject();
+        //audioObject.transform.SetParent(this.transform);
+        //audioObject.name = "AudioSource";
+        //AudioSource audioSource = audioObject.AddComponent<AudioSource>();
+        //audioSource.playOnAwake = false;
+        //yield return StartCoroutine(SaveLoadWav.Load(fileName, audioSource));
+
     }
 }

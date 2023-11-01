@@ -1,9 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class KHHScreenEditor : MonoBehaviour
 {
+    public VNectModel model;
+
     bool fileLoaded = false;
     public bool FileLoaded { get { return fileLoaded; } }
 
@@ -28,21 +30,21 @@ public class KHHScreenEditor : MonoBehaviour
         editItemList = new List<KHHEditItem>();
     }
 
-    //µå·Ó ¾ÆÀÌÅÛÀÌ ÆíÁı ¿µ¿ª¿¡ µå¶øµÇ¾úÀ» ¶§ È£Ãâ
+    //ë“œë¡­ ì•„ì´í…œì´ í¸ì§‘ ì˜ì—­ì— ë“œëë˜ì—ˆì„ ë•Œ í˜¸ì¶œ
     public void OnDropItem(GameObject dropItem)
     {
         fileLoaded = false;
 
-        //µå·Ó ¾ÆÀÌÅÛÀÇ ÆÄÀÏ ÀÌ¸§À» ¾ò¾î¿Â´Ù.
+        //ë“œë¡­ ì•„ì´í…œì˜ íŒŒì¼ ì´ë¦„ì„ ì–»ì–´ì˜¨ë‹¤.
         KHHData data = dropItem.GetComponent<KHHData>();
 
-        //µå·Ó ¾ÆÀÌÅÛÀÇ Å¸ÀÔÀ» ¾ò¾î¿Â´Ù.
+        //ë“œë¡­ ì•„ì´í…œì˜ íƒ€ì…ì„ ì–»ì–´ì˜¨ë‹¤.
         switch (data.type)
         {
             case KHHData.DataType.None:
                 break;
             case KHHData.DataType.MotionData:
-                StartCoroutine(LoadFileMotion(data.FileName));
+                LoadFileMotion(data.FileName);
                 break;
             case KHHData.DataType.SoundData:
                 break;
@@ -51,36 +53,18 @@ public class KHHScreenEditor : MonoBehaviour
         }
     }
 
-    public IEnumerator LoadFileMotion(string fileName)
+    public void LoadFileMotion(string fileName)
     {
+        fileLoaded = false;
         GameObject go = Instantiate(editItemPrefabs[0], editItemParent);
 
         KHHEditItemMotion editItem = go.GetComponent<KHHEditItemMotion>();
-        //¸ğµ¨ ·¹ÄÚ´õ¿¡ ÆÄÀÏ ÀÌ¸§À» Àü´ŞÇÑ´Ù.
-        editItem.LoadRecordData(this, fileName);
-        modelRecorder.Load(editItem);
-        editItem.Set(modelRecorder);
+        //ëª¨ë¸ ë ˆì½”ë”ì— íŒŒì¼ ì´ë¦„ì„ ì „ë‹¬í•œë‹¤.
+        //editItem.LoadRecordData(this, fileName, () => { fileLoaded = true; });
+        editItem.Init(model);
+        editItem.Set();
         editItemList.Add(editItem);
-
-        RectTransform goRT = go.GetComponent<RectTransform>();
-        goRT.sizeDelta = new Vector2(editItem.curlength * 10, 60);
-
-        GameObject audioObject = new GameObject();
-        audioObject.transform.SetParent(this.transform);
-        audioObject.name = "AudioSource";
-        AudioSource audioSource = audioObject.AddComponent<AudioSource>();
-        audioSource.playOnAwake = false;
-
-        audioSourceList.Add(audioSource);
-
-        yield return StartCoroutine(SaveLoadWav.Load(fileName, audioSource));
-
-        audioClipList.Add(audioSource.clip);
-
-        fileLoaded = true;
     }
-
-
 
     public void Play()
     {
@@ -89,7 +73,7 @@ public class KHHScreenEditor : MonoBehaviour
             isPlaying = true;
             for (int i = 0; i < editItemList.Count; i++)
             {
-                editItemList[i].StartPlay();
+                editItemList[i].PlayStart();
             }
             for (int i = 0; i < audioSourceList.Count; i++)
             {
@@ -106,12 +90,29 @@ public class KHHScreenEditor : MonoBehaviour
             isPlaying = false;
             for (int i = 0; i < editItemList.Count; i++)
             {
-                editItemList[i].StopPlay();
+                editItemList[i].PlayStop();
             }
             for (int i = 0; i < audioSourceList.Count; i++)
             {
                 audioSourceList[i].Stop();
             }
         }
+    }
+
+    public void End()
+    {
+        if (fileLoaded)
+        {
+            isPlaying = false;
+            for (int i = 0; i < editItemList.Count; i++)
+            {
+                editItemList[i].PlayEnd();
+            }
+            for (int i = 0; i < audioSourceList.Count; i++)
+            {
+                audioSourceList[i].Stop();
+            }
+        }
+
     }
 }
