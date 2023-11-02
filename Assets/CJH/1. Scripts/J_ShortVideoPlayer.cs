@@ -11,22 +11,20 @@ public class J_ShortVideoPlayer : MonoBehaviour
 
     public VideoPlayer videoPlayer;
 
-    public VideolInfo videoInfo;
+    public ShortVideolInfo videoInfo;
 
     public Action onClickEvent;
 
     public Action onPlayEvent;
 
-    public Button likeBt;
+    //public GameObject interactiveMovieList;
 
-    public Text likeCountText;
-
-    private int likeCount = 0;
+    //public bool isInteractive;
 
 
     void Start()
     {
-        
+        //interactiveMovieList.SetActive(false);
     }
 
     void Update()
@@ -35,7 +33,7 @@ public class J_ShortVideoPlayer : MonoBehaviour
     }
 
     //숏폼 비디오 서버 
-    public void SetItem(VideolInfo Info)
+    public void SetItem(ShortVideolInfo Info)
     {
         videoInfo = Info;
         // 영상 다운로드
@@ -61,15 +59,6 @@ public class J_ShortVideoPlayer : MonoBehaviour
 
         HttpManager.Get().SendRequest(httpInfo);
     }
-    //좋아요 
-    public void LikeVideo()
-    {
-        //버튼을 누를때마다 텍스트 갯수가 증가한다.
-
-        //서버에다가 좋아요 
-
-    }
-
 
     //영상 재생
     public void PlayPauseVideo()
@@ -92,4 +81,14 @@ public class J_ShortVideoPlayer : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    //좋아요 
+    public void LikeVideo()
+    {
+        //버튼을 누를때마다 텍스트 갯수가 증가한다.
+
+        //서버에다가 좋아요 
+
+    }
+
 }

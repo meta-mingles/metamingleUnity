@@ -1,46 +1,68 @@
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [System.Serializable] 
-public class ShopInfo
+public class InteractiveMovieInfo //ë¹„ë””ì˜¤ ì •ë³´
 {
-    public string name;
-    public int price;
-    public bool sale;
-    public string thumbnail;
+    public long interactiveMovieNo; //ì¸í„°ë™í‹°ë¸Œ ë¬´ë¹„ ë²ˆí˜¸
+
+    public string title; //ì˜ìƒ ì œëª©
+
+    public string thumbnailUrl; //ì¸ë„¤ì¼ url
+
+    public string description; //ì˜ìƒ ì„¤ëª…
+
+    public string memberName; // ì˜ìƒ ì œì‘ì ì´ë¦„
+
+    public DateTime date; //ì˜ìƒ ì œì‘ ë‚ ì§œ
+
+    public int sequence; // ì˜ìƒ ìˆœì„œ (ì—°ê²°ë˜ì–´ìˆëŠ” 3ê°œì˜ ì˜ìƒ ì¤‘ ìˆœì„œ)
 }
 
-
-[System.Serializable] // Á÷·ÄÈ­
-public struct UserInfo //³ªÀÇ Á¤º¸
+[System.Serializable] 
+public class ShortVideolInfo //ë¹„ë””ì˜¤ ì •ë³´
 {
-    //id
-    public string name;
+    public int shortFormNo; //ì˜ìƒ ìˆœì„œ
 
-    //Å©¸®¿¡ÀÌÅÍ
-    public string Creator;
-}
+    public string title; //ì œëª©
 
-[System.Serializable] // Á÷·ÄÈ­
-public class VideolInfo //ºñµğ¿À Á¤º¸
-{
-    public int shortFormNo; //¿µ»ó ¼ø¼­
-
-    public string title; //Á¦¸ñ
-
-    public string thumbnailUrl; //½æ³×ÀÏ url
+    public string thumbnailUrl; //ì¸ë„¤ì¼ url
 
     public string url; //url
 
-    public string description; //¿µ»ó ¼³¸í
+    public string description; //ì˜ìƒ ì„¤ëª…
 
-    public string memberName; // ´Ğ³×ÀÓ
+    public string memberName; // ë‹‰ë„¤ì„
 
-    public string date; //³¯Â¥
+    public string date; //ë‚ ì§œ
 
-    public bool isInteractive; //ÀÎÅÍ·¢Æ¼ºê ¿©ºÎ
+    public bool isInteractive;//ì¸í„°ë™í‹°ë¸Œ ì—¬ë¶€
+
+    public InteractiveDTOS interactiveData;
 }
+
+[System.Serializable] 
+public class InteractiveDTOS
+{
+    public string url;
+    public string choice;
+    public int interactiveMovieNo;
+
+}
+[System.Serializable] 
+public class ShortVideoInfoContainer
+{
+    public List<ShortVideolInfo> data;
+}
+[System.Serializable]
+public class InteractiveDTOSContainer
+{
+    public List<InteractiveDTOS> data;
+}
+
 
 [System.Serializable]
 public struct JsonArray<T>
@@ -52,11 +74,16 @@ public class J_DataManager : MonoBehaviour
 {
     public static J_DataManager instance;
 
-    //½æ³×ÀÏ ¸®½ºÆ® Á¤º¸
-    public List<VideolInfo> videoInfoList = new List<VideolInfo>();
+    //ìˆë¹„ë””ì˜¤ ì •ë³´
+    public List<ShortVideolInfo> shortVideoInfoList = new List<ShortVideolInfo>();
 
-    //¼¥ Á¤º¸
-    public List<ShopInfo> shopInfoList = new List<ShopInfo>();
+    //interactiveDTOS ë¦¬ìŠ¤íŠ¸
+    //public List<InteractiveDTOS> interactiveList = new List<InteractiveDTOS>();
+
+
+    //ì¸í„°ë ‰í‹°ë¸Œ ë¹„ë””ì˜¤ ì •ë³´
+    public List<InteractiveMovieInfo> interactiveMovieInfoList = new List<InteractiveMovieInfo>();
+
 
     private void Awake()
     {
@@ -72,20 +99,45 @@ public class J_DataManager : MonoBehaviour
     {
         
     }
-    public void SetRealVideoInfoListByCSV(string data)
+
+    #region ì˜ë˜ëŠ”ê±° ì ê¹ ì£¼ì„ì²˜ë¦¬
+    //CSV
+    //public void SetShortVideoInfoListByCSV(string data)
+    //{
+    //    shortVideoInfoList = J_CSVLoader.instance.ParseString<ShortVideolInfo>(data);
+    //}
+    ////JSON
+    //public void SetShortVideoInfoListByJSON(string data)
+    //{
+    //    JsonArray<ShortVideolInfo> arrayData = JsonUtility.FromJson<JsonArray<ShortVideolInfo>>(data);
+    //    shortVideoInfoList = arrayData.data;
+    //}
+
+    ////ì¸í„°ë ‰í‹°ë¸Œ ë¬´ë¹„ì¼ê²½ìš° ë¦¬ìŠ¤íŠ¸ì¶”ê°€
+    //public void SetInteractiveListByJSON(string data)
+    //{
+    //    JsonArray<InteractiveDTOS> arrayData = JsonUtility.FromJson<JsonArray<InteractiveDTOS>>(data);
+    //    interactiveList = arrayData.data;
+    //}
+    #endregion
+
+    public void SetShortVideoInfoListByJSON(string data)
     {
-        videoInfoList = J_CSVLoader.instance.ParseString<VideolInfo>(data);
+        ShortVideoInfoContainer videoContainer = JsonUtility.FromJson<ShortVideoInfoContainer>(data);
+        shortVideoInfoList = videoContainer.data;
+    }
+    //public void SetInteractiveListByJSON(string data)
+    //{
+    //    InteractiveDTOSContainer interactiveContainer = JsonUtility.FromJson<InteractiveDTOSContainer>(data);
+    //    interactiveList = interactiveContainer.data;
+    //}
+
+
+    //ì¸í„°ë ‰í‹°ë¸Œ ë¬´ë¹„ ë‹¤ìš´
+    public void SetInteractiveMovieInfoListByJSON(string data)
+    {
+        JsonArray<InteractiveMovieInfo> arrayData = JsonUtility.FromJson<JsonArray<InteractiveMovieInfo>>(data);
+        interactiveMovieInfoList = arrayData.data;
     }
 
-    public void SetRealVideoInfoListByJSON(string data)
-    {
-        JsonArray<VideolInfo> arrayData = JsonUtility.FromJson<JsonArray<VideolInfo>>(data);
-        videoInfoList = arrayData.data;
-    }
-
-
-    public void SetShopInfoList(string data)
-    {
-        shopInfoList = J_CSVLoader.instance.ParseString<ShopInfo>(data);
-    }
 }

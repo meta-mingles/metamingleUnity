@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -15,11 +15,13 @@ public class J_ThumItem : MonoBehaviour
     public TMP_Text description;
     public TMP_Text memberName;
 
-    public VideolInfo videoInfo;
+    public bool isInteractive;
+
+    public ShortVideolInfo videoInfo;
 
     public Image downloadImage;
 
-    public Action<VideolInfo> onClickEvent;
+    public Action<ShortVideolInfo> onClickEvent;
     //public VideoPlayer videoPlayer;
     void Start()
     {
@@ -39,21 +41,22 @@ public class J_ThumItem : MonoBehaviour
         }
     }
 
-    
-    
-
-    //½æ³×ÀÏ ÀÌ¹ÌÁö ´Ù¿î·Îµå
-    public void SetItem(VideolInfo Info)
+    //ë¹„ë””ì˜¤ ë°ì´í„° ì…‹íŒ…
+    public void SetItem(ShortVideolInfo Info)
     {
         videoInfo = Info;
 
+        //ì œëª©
         title.text = videoInfo.title;
+        //ì¸í„°ë ‰í‹°ë¸Œ ì—¬ë¶€
+        isInteractive = videoInfo.isInteractive;
 
-
-        //³¯Â¥ÆÄ½Ì
+        //ë‚ ì§œ ë¹¼ê¸°
         string mydate= videoInfo.date.Substring(0, 10);
         date.text = mydate;
+        //ì˜ìƒ ì„¤ëª…
         description.text = videoInfo.description;
+        //í¬ë¦¬ì—ì´í„°
         memberName.text = videoInfo.memberName;
 
         HttpInfo info = new HttpInfo();
@@ -61,9 +64,10 @@ public class J_ThumItem : MonoBehaviour
         info.onReceiveImage = OnCompleteDownloadTexture;
         HttpManager.Get().SendRequest(info);
     }
+    //ì¸ë„¤ì¼ ì´ë¯¸ì§€ ë‹¤ìš´ë¡œë“œ
     void OnCompleteDownloadTexture(DownloadHandler downloadHandler, int id)
     {
-        //´Ù¿î·ÎµåµÈ ÀÌ¹ÌÁö µ¥ÀÌÅÍ¸¦ sprite·Î ¸¸µç´Ù
+        //ë‹¤ìš´ë¡œë“œëœ ì´ë¯¸ì§€ ë°ì´í„°ë¥¼ spriteë¡œ ë§Œë“ ë‹¤
         Texture2D texture = ((DownloadHandlerTexture)downloadHandler).texture;
         downloadImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
     }

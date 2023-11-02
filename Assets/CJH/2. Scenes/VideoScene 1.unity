@@ -4497,7 +4497,9 @@ MonoBehaviour:
   trCtOfSV: {fileID: 2104555767}
   videoFactory: {fileID: 8241539764084789306, guid: 541d46f32203f8144841168ae9d0367e,
     type: 3}
-  trCtOFVideoSC: {fileID: 25840263}
+  trCtOFVideoSV: {fileID: 25840263}
+  interactivemovieFactory: {fileID: 0}
+  trCtOFIMSV: {fileID: 0}
   nothingText: {fileID: 0}
 --- !u!4 &1761676064
 Transform:
