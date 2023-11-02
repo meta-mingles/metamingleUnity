@@ -1,6 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class KHHMotionTracking : MonoBehaviour
@@ -54,7 +53,7 @@ public class KHHMotionTracking : MonoBehaviour
 
             if (motionTrackPosDic.ContainsKey(key))
             {
-                motionTrackPosDic[key] = new Vector3(-x, -y, z)*0.002f;
+                motionTrackPosDic[key] = new Vector3(-x, -y, z) * 0.002f;
             }
         }
     }

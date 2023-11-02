@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Net;
@@ -17,13 +17,13 @@ public class Animationcode : MonoBehaviour
     {
         Process psi = new Process();
         psi.StartInfo.FileName = "C:/Users/user/AppData/Local/Programs/Python/Python310/python.exe";
-        // ÆÄÀÌ½ã È¯°æ ¿¬°á
+        // íŒŒì´ì¬ í™˜ê²½ ì—°ê²°
         psi.StartInfo.Arguments = $"{Application.dataPath}/KHH/socket_pose_cvzone.py";
-        // ½ÇÇàÇÒ ÆÄÀÌ½ã ÆÄÀÏ
+        // ì‹¤í–‰í•  íŒŒì´ì¬ íŒŒì¼
         psi.StartInfo.CreateNoWindow = true;
         psi.StartInfo.UseShellExecute = false;
         psi.Start();
-        UnityEngine.Debug.Log("½ÇÇà¿Ï·á");
+        UnityEngine.Debug.Log("ì‹¤í–‰ì™„ë£Œ");
 
         clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         IPAddress serverIP = IPAddress.Parse("127.0.0.1");
@@ -45,17 +45,17 @@ public class Animationcode : MonoBehaviour
     {
         try
         {
-            //À¯´ÏÆ¼¿¡ °ªº¸³»±â 
+            //ìœ ë‹ˆí‹°ì— ê°’ë³´ë‚´ê¸° 
             string message = "Hello from Unity!";
             byte[] messageBytes = System.Text.Encoding.UTF8.GetBytes(message);
             clientSocket.Send(messageBytes);
 
-            //ÆÄÀÌ½ã¿¡¼­ °ª ¹Ş±â
+            //íŒŒì´ì¬ì—ì„œ ê°’ ë°›ê¸°
             clientSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), buffer);
         }
         catch (Exception e)
         {
-            UnityEngine.Debug.LogError("[¾Ë¸²] ¿¡·¯¹ß»ı: " + e.Message);
+            UnityEngine.Debug.LogError("[ì•Œë¦¼] ì—ëŸ¬ë°œìƒ: " + e.Message);
             clientSocket.Shutdown(SocketShutdown.Both);
             clientSocket.Close();
         }
@@ -64,12 +64,12 @@ public class Animationcode : MonoBehaviour
     void ReceiveCallback(IAsyncResult ar)
     {
         int receivedBytes = clientSocket.EndReceive(ar);
-        string receivedMessage = System.Text.Encoding.UTF8.GetString(buffer, 0, receivedBytes); //receivedMessage ¹®ÀÚ¿­¹Ş±â
+        string receivedMessage = System.Text.Encoding.UTF8.GetString(buffer, 0, receivedBytes); //receivedMessage ë¬¸ìì—´ë°›ê¸°
         khhMotionTracking.MotionTracking(receivedMessage);
     }
     private void OnDisable()
     {
-        // °ÔÀÓ ¿ÀºêÁ§Æ®°¡ ºñÈ°¼ºÈ­µÉ ¶§ ½ÇÇàµÇ´Â ÄÚµå
+        // ê²Œì„ ì˜¤ë¸Œì íŠ¸ê°€ ë¹„í™œì„±í™”ë  ë•Œ ì‹¤í–‰ë˜ëŠ” ì½”ë“œ
         clientSocket.Shutdown(SocketShutdown.Both);
         clientSocket.Close();
     }

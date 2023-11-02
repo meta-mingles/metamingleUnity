@@ -1,4 +1,4 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -64,12 +64,12 @@ public class KHHExportWindow : MonoBehaviour
             case ExportState.Processing:
                 progressText.gameObject.SetActive(true);
                 progressText.alpha = 1;
-                progressText.text = "¿µ»ó »ý¼ºÁß...";
+                progressText.text = "ì˜ìƒ ìƒì„±ì¤‘...";
                 completeCG.gameObject.SetActive(false);
                 completeCG.alpha = 0;
                 break;
             case ExportState.Generate:
-                progressText.text = "¿µ»ó »ý¼º¿Ï·á";
+                progressText.text = "ì˜ìƒ ìƒì„±ì™„ë£Œ";
                 progressText.DOFade(0, 0.4f).SetDelay(0.2f).OnComplete(() =>
                 {
                     progressText.gameObject.SetActive(false);
@@ -78,18 +78,18 @@ public class KHHExportWindow : MonoBehaviour
 
                     completeText.gameObject.SetActive(true);
                     confirmButton.gameObject.SetActive(true);
-                    cancelButtonText.text = "Ãë¼Ò";
+                    cancelButtonText.text = "ì·¨ì†Œ";
                 });
                 break;
             case ExportState.Exporting:
                 progressText.gameObject.SetActive(true);
                 progressText.alpha = 1;
-                progressText.text = "¿µ»ó ³»º¸³»´Â Áß...";
+                progressText.text = "ì˜ìƒ ë‚´ë³´ë‚´ëŠ” ì¤‘...";
                 completeCG.gameObject.SetActive(false);
                 completeCG.alpha = 0;
                 break;
             case ExportState.Complete:
-                progressText.text = "¿µ»ó ³»º¸³»±â ¿Ï·á";
+                progressText.text = "ì˜ìƒ ë‚´ë³´ë‚´ê¸° ì™„ë£Œ";
                 //progressText.DOFade(0, 0.4f).SetDelay(0.2f).OnComplete(() =>
                 //{
                 //    progressText.gameObject.SetActive(false);
@@ -101,7 +101,7 @@ public class KHHExportWindow : MonoBehaviour
                 completeCG.DOFade(1, 0.4f);
                 completeText.gameObject.SetActive(false);
                 confirmButton.gameObject.SetActive(false);
-                cancelButtonText.text = "´Ý±â";
+                cancelButtonText.text = "ë‹«ê¸°";
                 break;
         }
     }

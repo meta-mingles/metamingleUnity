@@ -1,6 +1,4 @@
-using RockVR.Video;
-using System;
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -20,7 +18,7 @@ public class KHHVideoCapture : MonoBehaviour
     //private bool isPlayVideo = false;
     public bool IsInteractive { get; set; } = false;
 
-    //¾÷·ÎµåÁß
+    //ì—…ë¡œë“œì¤‘
     public bool IsUploading { get; set; } = false;
 
     private void Awake()
@@ -36,7 +34,7 @@ public class KHHVideoCapture : MonoBehaviour
 
     void Update()
     {
-        //ºñµğ¿À Àü¼Û
+        //ë¹„ë””ì˜¤ ì „ì†¡
         lock (_lock)
         {
             if (actionQueue.Count > 0)
@@ -130,7 +128,7 @@ public class KHHVideoCapture : MonoBehaviour
     public void OnCaptureComplete()
     {
         Debug.Log("Capture Finish");
-        //¿Ï·áÃ¢ ¶ç¿ì±â
+        //ì™„ë£Œì°½ ë„ìš°ê¸°
     }
 
     byte[] ReadVideoAsBytes(string path)
@@ -149,7 +147,7 @@ public class KHHVideoCapture : MonoBehaviour
 
         StartCoroutine(CoUploadShortformVideo(ReadVideoAsBytes(filePathShortform), title));
 
-        ////ºñµğ¿À »èÁ¦
+        ////ë¹„ë””ì˜¤ ì‚­ì œ
         //System.IO.File.Delete(filePathShortform);
     }
 
@@ -193,7 +191,7 @@ public class KHHVideoCapture : MonoBehaviour
             IsUploading = false;
         }
     }
-    
+
     string uploadInteractiveURL = "http://metaverse.ohgiraffers.com:8080/interactive-movie";
     public void UploadInteractiveVideo(string title, string choice1, string choice2)
     {
@@ -205,7 +203,7 @@ public class KHHVideoCapture : MonoBehaviour
 
         StartCoroutine(CoUploadInteractiveVideo(videoBytes, title, choice1, choice2));
 
-        ////ºñµğ¿À »èÁ¦
+        ////ë¹„ë””ì˜¤ ì‚­ì œ
         //for (int i = 0; i < filePathInteractive.Count; i++)
         //    System.IO.File.Delete(filePathInteractive[i]);
         //filePathInteractive.Clear();
@@ -224,9 +222,9 @@ public class KHHVideoCapture : MonoBehaviour
                 form.AddBinaryData($"video{i + 1}", videoBytesList[i], $"video{i + 1}.mp4", "video/mp4");
             }
 
-            //form.AddBinaryData("video1", videoBytesList[0], "video1.mp4", "video/mp4"); //Ã¹ µ¿¿µ»ó
-            //form.AddBinaryData("video2", videoBytesList[1], "video2.mp4", "video/mp4"); //¼±ÅÃÁö1
-            //form.AddBinaryData("video3", videoBytesList[2], "video3.mp4", "video/mp4"); //¼±ÅÃÁö2
+            //form.AddBinaryData("video1", videoBytesList[0], "video1.mp4", "video/mp4"); //ì²« ë™ì˜ìƒ
+            //form.AddBinaryData("video2", videoBytesList[1], "video2.mp4", "video/mp4"); //ì„ íƒì§€1
+            //form.AddBinaryData("video3", videoBytesList[2], "video3.mp4", "video/mp4"); //ì„ íƒì§€2
 
             // Add the title to the form data.
             form.AddField("title", title);

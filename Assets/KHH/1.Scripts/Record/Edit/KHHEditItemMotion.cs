@@ -8,6 +8,8 @@ public class KHHEditItemMotion : KHHEditItem
     public VNectModel model;
     AudioSource audioSource;
 
+    float audioSinkTime = 0.0f; //오디오 싱크 보정
+
     Dictionary<float, List<(Vector3, Quaternion)>> recordDic;
     public Dictionary<float, List<(Vector3, Quaternion)>> RecordDic { get { return recordDic; } }
 

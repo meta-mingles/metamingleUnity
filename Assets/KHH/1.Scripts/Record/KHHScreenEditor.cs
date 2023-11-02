@@ -29,16 +29,16 @@ public class KHHScreenEditor : MonoBehaviour
 
     void Update()
     {
-        if(isPlaying)
+        if (isPlaying)
         {
             playTime += Time.deltaTime;
-            if(playTime > endTime)
+            if (playTime > endTime)
             {
                 End();
                 KHHEditManager.Instance.StopButtonEvent();
                 return;
             }
-        }        
+        }
     }
 
     //드롭 아이템이 편집 영역에 드랍되었을 때 호출

@@ -2,15 +2,13 @@
 using RockVR.Video;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using Unity.Barracuda;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.UI;
 
 public class KHHEditManager : MonoBehaviour
 {
     public static KHHEditManager Instance;
+    public string videoName = "test video";
 
     public GameObject record;
     public GameObject edit;
@@ -106,7 +104,7 @@ public class KHHEditManager : MonoBehaviour
         motionDataManager.Refresh();
     }
 
-    void SoundButtonEvent()
+    public void SoundButtonEvent()
     {
         motionPanel.SetActive(false);
         soundPanel.SetActive(true);

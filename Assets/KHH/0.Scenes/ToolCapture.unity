@@ -6545,6 +6545,7 @@ GameObject:
   - component: {fileID: 668374377}
   - component: {fileID: 668374376}
   - component: {fileID: 668374375}
+  - component: {fileID: 668374378}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -6642,6 +6643,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 668374373}
   m_CullTransparentMesh: 1
+--- !u!114 &668374378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668374373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c13c4f32e82d542896e6964ab215d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 2135084307}
+  backgroundDataPrefab: {fileID: 5514624570501041291, guid: b969ffa166109434bba531b7eed086ae,
+    type: 3}
 --- !u!1 &675322846
 GameObject:
   m_ObjectHideFlags: 0
@@ -8623,7 +8639,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 261847167}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.7222222
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10574,7 +10590,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 751821861}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.7222222
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10914,7 +10930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1011801577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17263,6 +17279,7 @@ GameObject:
   - component: {fileID: 1539302741}
   - component: {fileID: 1539302740}
   - component: {fileID: 1539302743}
+  - component: {fileID: 1539302744}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -17282,11 +17299,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc7edad6e365dd4b8733ae800ed6408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  videoName: test video
   record: {fileID: 1309815332}
   edit: {fileID: 278438100}
   motionDataManager: {fileID: 117738387}
-  soundDataManager: {fileID: 0}
-  backgroundDataMaanger: {fileID: 0}
+  soundDataManager: {fileID: 1423845888}
+  backgroundDataMaanger: {fileID: 668374378}
   captureCamera: {fileID: 464984500}
   captureRenderTexture: {fileID: 8400000, guid: b57cffba5da218f46b32755661186b0f,
     type: 2}
@@ -17299,9 +17317,9 @@ MonoBehaviour:
   captionButton: {fileID: 64220023}
   interactiveButton: {fileID: 1586611351}
   recordWaitCG: {fileID: 1340219502}
-  motionPanel: {fileID: 0}
-  soundPanel: {fileID: 0}
-  backgroundPanel: {fileID: 0}
+  motionPanel: {fileID: 117738382}
+  soundPanel: {fileID: 1423845886}
+  backgroundPanel: {fileID: 668374373}
   interactive: {fileID: 1946617422}
   interactiveButtonLeft: {fileID: 175979334}
   interactiveButtonRight: {fileID: 1147241751}
@@ -17332,7 +17350,7 @@ MonoBehaviour:
   recordStopButton: {fileID: 231255313}
   modelRecorder: {fileID: 754976543}
   microphoneRecorder: {fileID: 754976541}
-  motionDataManager: {fileID: 0}
+  motionDataManager: {fileID: 117738387}
   videoCapture: {fileID: 1873549733}
   barracudaRunner: {fileID: 1875475999}
 --- !u!4 &1539302742
@@ -17362,6 +17380,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7001586bcbada824499c608b57ffbe5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1539302744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539302739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15062c6d008260b40b68a1dc2f4a130c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1545055763
@@ -23431,7 +23461,7 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 250, y: 150}
+  m_CellSize: {x: 250, y: 250}
   m_Spacing: {x: 0, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2

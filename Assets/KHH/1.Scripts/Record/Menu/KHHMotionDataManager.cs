@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class KHHMotionDataManager : MonoBehaviour
+public class KHHMotionDataManager : KHHDataManager
 {
-    public Transform content;
-    public GameObject motionDataPrefab;
-
     List<KHHMotionData> kHHMotionDatas;
 
     // Start is called before the first frame update
@@ -19,16 +16,16 @@ public class KHHMotionDataManager : MonoBehaviour
     /// <summary>
     /// 새로고침
     /// </summary>
-    public void Refresh()
+    public override void Refresh()
     {
         foreach (KHHMotionData motionData in kHHMotionDatas)
             Destroy(motionData.gameObject);
         kHHMotionDatas.Clear();
 
-        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath);
+        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/" + KHHEditManager.Instance.videoName + "/Motions");
         foreach (FileInfo file in di.GetFiles("*.csv"))
         {
-            GameObject gameObject = Instantiate(motionDataPrefab, content);
+            GameObject gameObject = Instantiate(dataPrefab, content);
             KHHMotionData motionData = gameObject.GetComponent<KHHMotionData>();
             motionData.Set(file.Name);
 

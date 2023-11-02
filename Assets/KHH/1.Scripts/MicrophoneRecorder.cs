@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +28,7 @@ public class MicrophoneRecorder : MonoBehaviour
             return;
         else
         {
-            Microphone.End(Microphone.devices[0]);
+            Microphone.End(microphoneName);
 
             float[] samples = new float[recordClip.samples];
 
@@ -36,7 +36,7 @@ public class MicrophoneRecorder : MonoBehaviour
 
             float[] cutSamples = new float[lastTime];
 
-            Array.Copy(samples, cutSamples, cutSamples.Length - 1);
+            Array.Copy(samples, cutSamples, cutSamples.Length); //Length-1
 
             recordClip = AudioClip.Create(fileName, cutSamples.Length, 1, 44100, false);
 

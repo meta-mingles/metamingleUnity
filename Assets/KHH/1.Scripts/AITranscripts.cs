@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -9,14 +9,14 @@ using UnityEngine.UI;
 
 public class AITranscripts : MonoBehaviour
 {
-    private string apiUrl_chat = "https://5198-221-163-19-218.ngrok.io/chatbot/test_text";
-    private string apiUrl = "https://5198-221-163-19-218.ngrok.io/chatbot/test_image";
+    private string apiUrl_chat = "https://7091-221-163-19-218.ngrok.io/chatbot/test_text";
+    private string apiUrl = "https://7091-221-163-19-218.ngrok.io/chatbot/test_image";
     //private string apiUrl_chat = "https://bec3-221-163-19-218.ngrok-free.app/chatbot/test_text";
-    //private string apiUrl = "https://bec3-221-163-19-218.ngrok-free.app/chatbot/test_image"; // FastAPI ¼­¹öÀÇ ¿£µåÆ÷ÀÎÆ® URLÀ» ÀÔ·ÂÇÏ¼¼¿ä.
+    //private string apiUrl = "https://bec3-221-163-19-218.ngrok-free.app/chatbot/test_image"; // FastAPI ì„œë²„ì˜ ì—”ë“œí¬ì¸íŠ¸ URLì„ ì…ë ¥í•˜ì„¸ìš”.
     // private string apiUrl_chat = "http://192.168.0.77:8001/chatbot/test_text";
-    // private string apiUrl = "http://192.168.0.77:8001/chatbot/test_image"; // FastAPI ¼­¹öÀÇ ¿£µåÆ÷ÀÎÆ® URLÀ» ÀÔ·ÂÇÏ¼¼¿ä.
+    // private string apiUrl = "http://192.168.0.77:8001/chatbot/test_image"; // FastAPI ì„œë²„ì˜ ì—”ë“œí¬ì¸íŠ¸ URLì„ ì…ë ¥í•˜ì„¸ìš”.
     /*    private string apiUrl_chat = "http://127.0.0.1:8000/chatbot/test_text";
-        private string apiUrl = "http://127.0.0.1:8000/chatbot/test_image"; // FastAPI ¼­¹öÀÇ ¿£µåÆ÷ÀÎÆ® URLÀ» ÀÔ·ÂÇÏ¼¼¿ä.*/
+        private string apiUrl = "http://127.0.0.1:8000/chatbot/test_image"; // FastAPI ì„œë²„ì˜ ì—”ë“œí¬ì¸íŠ¸ URLì„ ì…ë ¥í•˜ì„¸ìš”.*/
 
     public Button aiTranscriptsButton;
     public TextMeshProUGUI aiTranscriptsButtonText;
@@ -29,7 +29,7 @@ public class AITranscripts : MonoBehaviour
     bool isGeneratingBG = false;
     bool isGeneratingTS = false;
 
-    // btn, btn2 ¿¡ Å¬¸¯ ÀÌº¥Æ®°¡ ¹ß»ıÇÏ¸é TaskOnClick, TaskOnClick2¸¦ °¢°¢ ½ÇÇàÇÏ¶ó.
+    // btn, btn2 ì— í´ë¦­ ì´ë²¤íŠ¸ê°€ ë°œìƒí•˜ë©´ TaskOnClick, TaskOnClick2ë¥¼ ê°ê° ì‹¤í–‰í•˜ë¼.
     void Start()
     {
         aiTranscriptsButton.onClick.AddListener(AITranscriptsButtonEvent);
@@ -42,33 +42,33 @@ public class AITranscripts : MonoBehaviour
     {
         if(isGeneratingBG)
         {
-            transcriptsInputField.text = "´ëº» ÀÛ¼º Áß...";
+            transcriptsInputField.text = "ëŒ€ë³¸ ì‘ì„± ì¤‘...";
         }
     }
 
-    // Ã¹¹øÂ° Box¾È¿¡ ÀÖ´Â ÅØ½ºÆ®¸¦ PythonÀ¸·Î º¸³»¶ó.
+    // ì²«ë²ˆì§¸ Boxì•ˆì— ìˆëŠ” í…ìŠ¤íŠ¸ë¥¼ Pythonìœ¼ë¡œ ë³´ë‚´ë¼.
     void AITranscriptsButtonEvent()
     {
         string inputText = chatInputField.text;
         //Debug.Log(inputText);
         string json = "{\"text\":\"" + inputText + "\"}";
 
-        aiTranscriptsButtonText.text = "ÀÛ¼ºÁß";
+        aiTranscriptsButtonText.text = "ì‘ì„±ì¤‘";
         aiTranscriptsButton.interactable = false;
 
         isGeneratingBG = true;
         isGeneratingTS = true;
 
-        // JSON µ¥ÀÌÅÍ¸¦ ¹ÙÀÌÆ® ¹è¿­·Î º¯È¯
+        // JSON ë°ì´í„°ë¥¼ ë°”ì´íŠ¸ ë°°ì—´ë¡œ ë³€í™˜
         byte[] jsonData = Encoding.UTF8.GetBytes(json);
-        //Debug.Log("¹è°æ»ı¼º ¿äÃ»");
+        //Debug.Log("ë°°ê²½ìƒì„± ìš”ì²­");
         StartCoroutine(PostImageFile(jsonData));
-        //Debug.Log("½Ã³ª¸®¿À »ı¼º ¿äÃ»");
+        //Debug.Log("ì‹œë‚˜ë¦¬ì˜¤ ìƒì„± ìš”ì²­");
         StartCoroutine(PostJson(jsonData));
     }
 
 
-    //// µÎ¹øÂ° Box¾È¿¡ ÀÖ´Â ÅØ½ºÆ®¸¦ PythonÀ¸·Î º¸³»¶ó.
+    //// ë‘ë²ˆì§¸ Boxì•ˆì— ìˆëŠ” í…ìŠ¤íŠ¸ë¥¼ Pythonìœ¼ë¡œ ë³´ë‚´ë¼.
     //void TaskOnClick2()
     //{
     //    // string json = "{\"text\":\"Image Test Hi!\"}";
@@ -76,7 +76,7 @@ public class AITranscripts : MonoBehaviour
     //    // Debug.Log(inputText);
     //    // string json = "{\"text\":\"" + inputText + "\"}";
 
-    //    // JSON µ¥ÀÌÅÍ¸¦ ¹ÙÀÌÆ® ¹è¿­·Î º¯È¯
+    //    // JSON ë°ì´í„°ë¥¼ ë°”ì´íŠ¸ ë°°ì—´ë¡œ ë³€í™˜
     //    // byte[] jsonData = Encoding.UTF8.GetBytes(json);
 
     //    // StartCoroutine(PostImageFile(jsonData));
@@ -87,10 +87,10 @@ public class AITranscripts : MonoBehaviour
     //    //Texture2D new_image = Resources.Load<Texture2D>("Images/test");
     //    //Debug.Log(new_image);
 
-    //    // ÀÌ¹ÌÁö Áß¿¡¼­ ·£´ıÀ¸·Î ÇÏ³ª¸¦ ¼±ÅÃÇÕ´Ï´Ù.
+    //    // ì´ë¯¸ì§€ ì¤‘ì—ì„œ ëœë¤ìœ¼ë¡œ í•˜ë‚˜ë¥¼ ì„ íƒí•©ë‹ˆë‹¤.
     //    // Texture2D randomTexture = textures[Random.Range(0, textures.Length)];
 
-    //    // ¼±ÅÃÇÑ ÀÌ¹ÌÁö¸¦ Raw ImageÀÇ ÅØ½ºÃ³·Î ¼³Á¤ÇÕ´Ï´Ù.
+    //    // ì„ íƒí•œ ì´ë¯¸ì§€ë¥¼ Raw Imageì˜ í…ìŠ¤ì²˜ë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
     //    //yourRawImage.texture = randomTexture;
     //    //yourRawImage.texture = new_image;
     //}
@@ -124,13 +124,13 @@ public class AITranscripts : MonoBehaviour
                 //SaveImage(www.downloadHandler.data, "./Assets/Resources/Images/test.jpg");
                 //Debug.Log("Success!!!!!");
 
-                // ¿©±â¿¡¼­ responseText¸¦ ÆÄ½ÌÇÏ¿© °á°ú°ªÀ» ÃßÃâ
+                // ì—¬ê¸°ì—ì„œ responseTextë¥¼ íŒŒì‹±í•˜ì—¬ ê²°ê³¼ê°’ì„ ì¶”ì¶œ
             }
 
             isGeneratingBG = false;
             if (isGeneratingBG == false && isGeneratingTS == false)
             {
-                aiTranscriptsButtonText.text = "ÀÛ¼º";
+                aiTranscriptsButtonText.text = "ì‘ì„±";
                 aiTranscriptsButton.interactable = true;
             }
 
@@ -158,13 +158,13 @@ public class AITranscripts : MonoBehaviour
                 //Debug.Log("Response from server: " + responseText);
                 responseText = responseText.Replace("\\n", "\n").Replace("\\\"", "\"");
                 transcriptsInputField.text = responseText;
-                // ¿©±â¿¡¼­ responseText¸¦ ÆÄ½ÌÇÏ¿© °á°ú°ªÀ» ÃßÃâ
+                // ì—¬ê¸°ì—ì„œ responseTextë¥¼ íŒŒì‹±í•˜ì—¬ ê²°ê³¼ê°’ì„ ì¶”ì¶œ
             }
 
             isGeneratingTS = false;
             if(isGeneratingBG == false && isGeneratingTS == false)
             {
-                aiTranscriptsButtonText.text = "ÀÛ¼º";
+                aiTranscriptsButtonText.text = "ì‘ì„±";
                 aiTranscriptsButton.interactable = true;
             }
         }
