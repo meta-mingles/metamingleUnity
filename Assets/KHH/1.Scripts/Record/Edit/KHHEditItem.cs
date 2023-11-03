@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UniHumanoid;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class KHHEditItem : MonoBehaviour
 {
+    public bool isLoad = false;
     public KHHData.DataType type;
 
     protected KHHScreenEditor screenEditor;
@@ -54,12 +56,15 @@ public class KHHEditItem : MonoBehaviour
 
         rt.sizeDelta = new Vector2(curLength, 60);
         item.sizeDelta = new Vector2(curLength, 60);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>());
+        isLoad = true;
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        //if (recorder == null) return;
+        if (!isLoad) return;
 
         //크기조절
         if (left.isDrag)
@@ -110,7 +115,7 @@ public class KHHEditItem : MonoBehaviour
     public virtual void PlayStart()
     {
         itemCorrectTime = changeLeftX / lengthScale;
-        delayTime = changePosX / lengthScale;
+        delayTime = (changePosX + changeLeftX) / lengthScale;
     }
 
     public virtual void PlayStop()

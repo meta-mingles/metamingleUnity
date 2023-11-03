@@ -17,16 +17,17 @@ public class KHHSoundDataManager : KHHDataManager
             //사운드 파일인 경우 데이터 아이템 생성
             if (ext == ".wav")
             {
-                StartCoroutine(CoLoadSound(file));
+                StartCoroutine(CoLoadSound(file, ext));
             }
         }
     }
 
-    IEnumerator CoLoadSound(FileInfo fileInfo)
+    IEnumerator CoLoadSound(FileInfo fileInfo, string fileExtension)
     {
         GameObject gameObject = Instantiate(dataPrefab, content);
         KHHSoundData soundData = gameObject.GetComponent<KHHSoundData>();
-        soundData.Set(fileInfo.Name, ".wav", this);
+        string fileName = fileInfo.Name.Replace(fileExtension, "");
+        soundData.Set(fileName, fileExtension, this);
         khhDatas.Add(soundData);
 
         yield return StartCoroutine(SaveLoadWav.Load(fileInfo.FullName, soundData.AudioSource));

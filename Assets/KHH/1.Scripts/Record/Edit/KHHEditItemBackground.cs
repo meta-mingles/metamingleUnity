@@ -56,5 +56,6 @@ public class KHHEditItemBackground : KHHEditItem
         maxLength = -1f;
 
         action?.Invoke();
+        Set();
     }
 }

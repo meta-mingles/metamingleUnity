@@ -8,6 +8,11 @@ public class KHHEditItemSound : KHHEditItem
 {
     AudioSource audioSource;
 
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     // Update is called once per frame
     protected override void Update()
     {
@@ -53,11 +58,14 @@ public class KHHEditItemSound : KHHEditItem
 
     IEnumerator CoLoadAudioData(string fileName, UnityAction action)
     {
-        yield return StartCoroutine(SaveLoadWav.Load(fileName, audioSource));
-        action?.Invoke();
+        string filePath = KHHVideoData.FileSoundPath + "/" + fileName;
+        yield return StartCoroutine(SaveLoadWav.Load(filePath, audioSource));
 
         startX = 0f;
         endX = audioSource.clip.length * lengthScale;
         maxLength = endX;
+
+        action?.Invoke();
+        Set();
     }
 }

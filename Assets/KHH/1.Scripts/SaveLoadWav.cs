@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 Manuel T. Schrempf
+﻿/* Copyright (c) 2018 Manuel T. Schrempf
 
 This software is provided 'as-is', without any express or implied warranty. In
 no event will the authors be held liable for any damages arising from the use
@@ -25,9 +25,11 @@ https://gist.github.com/darktable/2317063
 with corrected errors and an additional load method.*/
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.Networking;
 
 // Saves and loads in Unity .wav files in the Application.persistentDataPath
 public static class SaveLoadWav
@@ -54,21 +56,31 @@ public static class SaveLoadWav
     }
 
     // Assigns the loaded audio clip to the source or does nothing if the argument filename or path is inexistend. Call this method inside the StartCoroutine of C#
-    public static IEnumerator<WWW> Load(string filename, AudioSource audioSource)
+    public static IEnumerator Load(string filename, AudioSource audioSource)
     {
-        if (!String.IsNullOrEmpty(filename) && audioSource != null)
+        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(filename, AudioType.WAV))
         {
-            string path = GetPath(filename);
+            yield return www.SendWebRequest();
 
-            if (File.Exists(path))
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
-                WWW www = new WWW("file:" + path);
-                yield return www;
-                audioSource.clip = www.GetAudioClip(false, false, AudioType.WAV);
-                audioSource.clip.name = filename;
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                //AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
+                //audioSource.clip = clip;
+                try
+                {
+                    AudioClip myClip = DownloadHandlerAudioClip.GetContent(www);
+                    audioSource.clip = myClip;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.Message);
+                }
             }
         }
-        yield break;
     }
 
     // Returns the used path with filename and its ending

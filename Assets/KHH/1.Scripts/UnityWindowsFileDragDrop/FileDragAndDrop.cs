@@ -45,7 +45,7 @@ public class FileDragAndDrop : MonoBehaviour
             }
 
             //사운드 파일인 경우 사운드 매니저 오픈
-            if (ext == "wav")
+            if (ext == ".wav")
             {
                 //경로가 없으면 생성
                 if (!System.IO.Directory.Exists(KHHVideoData.FileSoundPath))

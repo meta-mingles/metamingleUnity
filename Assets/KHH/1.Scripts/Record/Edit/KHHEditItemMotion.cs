@@ -99,10 +99,22 @@ public class KHHEditItemMotion : KHHEditItem
         audioSource.PlayDelayed(delayTime);
     }
 
+    public override void PlayStop()
+    {
+        base.PlayStop();
+        audioSource.Stop();
+    }
+
+    public override void PlayEnd()
+    {
+        base.PlayEnd();
+        audioSource.Stop();
+    }
+
     public override void LoadItemData(KHHScreenEditor editor, string fileName, UnityAction action)
     {
         base.LoadItemData(editor, fileName, action);
-        string[,] motionData = CSVManager.Instance.ReadCsv(KHHVideoData.FileMotionPath + "/" + fileName);
+        string[,] motionData = CSVManager.Instance.ReadCsv(KHHVideoData.FileMotionPath + "/" + fileName + ".csv");
 
         timeList = new List<float>();
         recordDic = new Dictionary<float, List<(Vector3, Quaternion)>>();
@@ -138,7 +150,8 @@ public class KHHEditItemMotion : KHHEditItem
 
     IEnumerator CoLoadAudioData(string fileName, UnityAction action)
     {
-        yield return StartCoroutine(SaveLoadWav.Load(KHHVideoData.FileMotionPath + "/" + fileName, audioSource));
+        yield return StartCoroutine(SaveLoadWav.Load(KHHVideoData.FileMotionPath + "/" + fileName + ".wav", audioSource));
         action?.Invoke();
+        Set();
     }
 }

@@ -9,12 +9,11 @@ public class KHHSoundData : KHHData
 {
     AudioSource audioSource;
     public AudioSource AudioSource { get { return audioSource; } }
-    AudioClip audioClip;
 
     protected override void Awake()
     {
         base.Awake();
-        audioClip = GetComponent<AudioClip>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Update()
