@@ -34,11 +34,10 @@ public class FileDragAndDrop : MonoBehaviour
             if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
             {
                 //경로가 없으면 생성
-                string newPath = Application.persistentDataPath + "/" + KHHEditManager.Instance.videoName + "/Images";
-                if (!System.IO.Directory.Exists(newPath))
-                    System.IO.Directory.CreateDirectory(newPath);
-                if (!System.IO.Directory.Exists(newPath + "/" + fi.Name))
-                    System.IO.File.Copy(f, newPath + "/" + fi.Name, true);
+                if (!System.IO.Directory.Exists(KHHVideoData.FileImagePath))
+                    System.IO.Directory.CreateDirectory(KHHVideoData.FileImagePath);
+                if (!System.IO.Directory.Exists(KHHVideoData.FileImagePath + "/" + fi.Name))
+                    System.IO.File.Copy(f, KHHVideoData.FileImagePath + "/" + fi.Name, true);
                 file = f;
 
                 KHHEditManager.Instance.BackgroundButtonEvent();
@@ -49,11 +48,10 @@ public class FileDragAndDrop : MonoBehaviour
             if (ext == "wav")
             {
                 //경로가 없으면 생성
-                string newPath = Application.persistentDataPath + "/" + KHHEditManager.Instance.videoName + "/Sounds";
-                if (!System.IO.Directory.Exists(newPath))
-                    System.IO.Directory.CreateDirectory(newPath);
-                if (!System.IO.Directory.Exists(newPath + "/" + fi.Name))
-                    System.IO.File.Copy(f, newPath + "/" + fi.Name, true);
+                if (!System.IO.Directory.Exists(KHHVideoData.FileSoundPath))
+                    System.IO.Directory.CreateDirectory(KHHVideoData.FileSoundPath);
+                if (!System.IO.Directory.Exists(KHHVideoData.FileSoundPath + "/" + fi.Name))
+                    System.IO.File.Copy(f, KHHVideoData.FileSoundPath + "/" + fi.Name, true);
                 file = f;
 
                 KHHEditManager.Instance.SoundButtonEvent();

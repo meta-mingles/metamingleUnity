@@ -1,42 +1,34 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class KHHSoundDataManager : KHHDataManager
 {
-    List<KHHSoundData> soundDatas;
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     public override void Refresh()
     {
-        foreach (var soundData in soundDatas)
-            Destroy(soundData.gameObject);
-        soundDatas.Clear();
-
-        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/" + KHHEditManager.Instance.videoName + "/Sounds");
+        base.Refresh();
+        //경로가 없으면 생성
+        if (!Directory.Exists(KHHVideoData.FileSoundPath))
+            Directory.CreateDirectory(KHHVideoData.FileSoundPath);
+        DirectoryInfo di = new DirectoryInfo(KHHVideoData.FileSoundPath);
         foreach (FileInfo file in di.GetFiles())
         {
             var ext = file.Extension.ToLower();
             //사운드 파일인 경우 데이터 아이템 생성
-            if (ext == "wav")
+            if (ext == ".wav")
             {
-                StartCoroutine(CoLoadSound(file.FullName, file.Name));
+                StartCoroutine(CoLoadSound(file));
             }
         }
     }
-    IEnumerator CoLoadSound(string filePath, string fileName)
+
+    IEnumerator CoLoadSound(FileInfo fileInfo)
     {
         GameObject gameObject = Instantiate(dataPrefab, content);
         KHHSoundData soundData = gameObject.GetComponent<KHHSoundData>();
-        soundData.Set(fileName);
-        soundDatas.Add(soundData);
+        soundData.Set(fileInfo.Name, ".wav", this);
+        khhDatas.Add(soundData);
 
-        yield return StartCoroutine(SaveLoadWav.Load(filePath, soundData.AudioSource));
+        yield return StartCoroutine(SaveLoadWav.Load(fileInfo.FullName, soundData.AudioSource));
     }
 }

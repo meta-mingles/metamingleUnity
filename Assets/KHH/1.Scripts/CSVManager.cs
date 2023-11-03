@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -51,8 +51,10 @@ public class CSVManager : MonoBehaviour
 
     public string[,] ReadCsv(string fileName)
     {
-        string value = "";
-        StreamReader reader = new StreamReader(Application.persistentDataPath + "/" + fileName, Encoding.UTF8);
+        //string path = KHHVideoData.FileMotionPath + "/" + fileName + ".csv";
+        StreamReader reader = new StreamReader(fileName, Encoding.UTF8);
+
+        string value;
         value = reader.ReadToEnd();
         reader.Close();
 

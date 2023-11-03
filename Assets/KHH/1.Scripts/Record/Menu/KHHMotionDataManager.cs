@@ -5,31 +5,27 @@ using UnityEngine;
 
 public class KHHMotionDataManager : KHHDataManager
 {
-    List<KHHMotionData> kHHMotionDatas;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        kHHMotionDatas = new List<KHHMotionData>();
-    }
-
     /// <summary>
     /// 새로고침
     /// </summary>
     public override void Refresh()
     {
-        foreach (KHHMotionData motionData in kHHMotionDatas)
-            Destroy(motionData.gameObject);
-        kHHMotionDatas.Clear();
+        base.Refresh();
+        //경로가 없으면 생성
+        if (!Directory.Exists(KHHVideoData.FileMotionPath))
+            Directory.CreateDirectory(KHHVideoData.FileMotionPath);
+        DirectoryInfo di = new DirectoryInfo(KHHVideoData.FileMotionPath);
+        if (!di.Exists)
+            return;
 
-        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/" + KHHEditManager.Instance.videoName + "/Motions");
         foreach (FileInfo file in di.GetFiles("*.csv"))
         {
             GameObject gameObject = Instantiate(dataPrefab, content);
             KHHMotionData motionData = gameObject.GetComponent<KHHMotionData>();
-            motionData.Set(file.Name);
+            string fileName = file.Name.Replace(".csv", "");
+            motionData.Set(fileName, ".csv", this);
 
-            kHHMotionDatas.Add(motionData);
+            khhDatas.Add(motionData);
         }
     }
 }

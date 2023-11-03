@@ -6,24 +6,16 @@ using UnityEngine.UI;
 
 public class KHHBackgroundDataManager : KHHDataManager
 {
-    List<KHHBackgroundData> backgroundDatas;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        backgroundDatas = new List<KHHBackgroundData>();
-    }
-
     /// <summary>
     /// 새로고침
     /// </summary>
     public override void Refresh()
     {
-        foreach (var backgroundData in backgroundDatas)
-            Destroy(backgroundData.gameObject);
-        backgroundDatas.Clear();
-
-        DirectoryInfo di = new DirectoryInfo(Application.persistentDataPath + "/" + KHHEditManager.Instance.videoName + "/Images");
+        base.Refresh();
+        //경로가 없으면 생성
+        if (!Directory.Exists(KHHVideoData.FileImagePath))
+            Directory.CreateDirectory(KHHVideoData.FileImagePath);
+        DirectoryInfo di = new DirectoryInfo(KHHVideoData.FileImagePath);
         foreach (FileInfo file in di.GetFiles())
         {
             var ext = file.Extension.ToLower();
@@ -38,8 +30,9 @@ public class KHHBackgroundDataManager : KHHDataManager
                 GameObject gameObject = Instantiate(dataPrefab, content);
 
                 KHHBackgroundData backgroundData = gameObject.GetComponent<KHHBackgroundData>();
-                backgroundData.Set(file.Name, texture);
-                backgroundDatas.Add(backgroundData);
+                string fileName = file.Name.Replace(ext, "");
+                backgroundData.Set(fileName, ext, this, texture);
+                khhDatas.Add(backgroundData);
             }
         }
     }

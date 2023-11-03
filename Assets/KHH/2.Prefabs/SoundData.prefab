@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MotionName
+  m_text: SoundName
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
   m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
@@ -147,10 +147,10 @@ GameObject:
   - component: {fileID: 5647296361933322447}
   - component: {fileID: 5647296361933322433}
   - component: {fileID: 5647296361933322432}
-  - component: {fileID: 5647296361933322434}
-  - component: {fileID: 998270721842822043}
+  - component: {fileID: -4659906669293200099}
+  - component: {fileID: -1135401034757905516}
   m_Layer: 5
-  m_Name: MotionData
+  m_Name: SoundData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5647296361933322434
+--- !u!114 &-4659906669293200099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5647296361933322446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e3e9636e422232499dffaa6a15b94fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 23e0f2b94cc1f5f439b56b7ec46b8aee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -256,9 +256,9 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5647296361933322432}
-  type: 1
+  type: 2
   dataNameText: {fileID: 5647296360878954991}
---- !u!114 &998270721842822043
+--- !u!114 &-1135401034757905516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

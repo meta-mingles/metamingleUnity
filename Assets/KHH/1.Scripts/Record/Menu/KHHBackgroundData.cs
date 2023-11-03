@@ -1,21 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class KHHBackgroundData : KHHData
 {
-    RawImage image;
+    RawImage rawImage;
+    //public Texture ImageTexture { get { return rawImage.texture as Texture; } }
 
-    private void Start()
+    protected override void Awake()
     {
-        image = GetComponent<RawImage>();
+        base.Awake();
+        rawImage = GetComponent<RawImage>();
     }
 
-    public void Set(string fileName, Texture2D texture)
+    public void Update()
     {
-        base.Set(fileName);
-        image.texture = texture;
+        if (IsSelected)
+        {
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                //파일 삭제
+                File.Delete(KHHVideoData.FileMotionPath + "/" + fileName + fileExtension);
+                khhDataManager.Refresh();
+            }
+        }
+    }
+
+    public void Set(string fileName, string fileExtension, KHHDataManager manager, Texture2D texture)
+    {
+        base.Set(fileName, fileExtension, manager);
+        this.fileExtension = fileExtension;
+        rawImage.texture = texture;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,13 +11,22 @@ public class KHHSoundData : KHHData
     public AudioSource AudioSource { get { return audioSource; } }
     AudioClip audioClip;
 
-    void Start()
+    protected override void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        base.Awake();
+        audioClip = GetComponent<AudioClip>();
     }
 
-    public override void Set(string fileName)
+    public void Update()
     {
-        base.Set(fileName);
+        if (IsSelected)
+        {
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                //파일 삭제
+                File.Delete(KHHVideoData.FileSoundPath + "/" + fileName + ".wav");
+                khhDataManager.Refresh();
+            }
+        }
     }
 }

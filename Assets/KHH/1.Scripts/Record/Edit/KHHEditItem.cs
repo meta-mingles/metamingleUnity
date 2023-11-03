@@ -19,12 +19,6 @@ public class KHHEditItem : MonoBehaviour
     protected float delayTime = 0.0f;
 
     public float EndTime { get { return (endX + changeRightX) / lengthScale; } }
-    protected int curIdx = 0;
-    protected int startIdx = 0;
-    protected int endIdx = 0;
-
-    protected List<float> timeList;
-    public List<float> TimeList { get { return timeList; } }
 
     public float curLength;
     public float maxLength;
@@ -32,9 +26,9 @@ public class KHHEditItem : MonoBehaviour
     public float startX;
     public float endX;
 
-    float changePosX;
-    float changeLeftX;
-    float changeRightX;
+    protected float changePosX;
+    protected float changeLeftX;
+    protected float changeRightX;
 
     protected float lengthScale = 10f;
 
@@ -46,25 +40,20 @@ public class KHHEditItem : MonoBehaviour
 
     public void Set()
     {
-        startX = timeList[0] * lengthScale;
-        endX = timeList[timeList.Count - 1] * lengthScale;
-        maxLength = endX - startX;
-        curIdx = 0;
-
         rt = GetComponent<RectTransform>();
         item = transform.Find("Item").GetComponent<RectTransform>();
         left = item.Find("Left").GetComponent<EditItemSelect>();
         middle = item.Find("Middle").GetComponent<EditItemSelect>();
         right = item.Find("Right").GetComponent<EditItemSelect>();
 
-        curLength = maxLength;
+        curLength = endX - startX;
 
         changePosX = 0;
         changeLeftX = 0;
         changeRightX = 0;
 
-        rt.sizeDelta = new Vector2(maxLength, 60);
-        item.sizeDelta = new Vector2(maxLength, 60);
+        rt.sizeDelta = new Vector2(curLength, 60);
+        item.sizeDelta = new Vector2(curLength, 60);
     }
 
     // Update is called once per frame
@@ -76,7 +65,7 @@ public class KHHEditItem : MonoBehaviour
         if (left.isDrag)
         {
             changeLeftX += left.posXDiff;
-            if (changeLeftX < 0)
+            if (maxLength > 0 && changeLeftX < 0)
             {
                 changeLeftX = 0;
             }
@@ -104,7 +93,7 @@ public class KHHEditItem : MonoBehaviour
         if (right.isDrag)
         {
             changeRightX += right.posXDiff;
-            if (changeRightX > 0)
+            if (maxLength > 0 && changeRightX > 0)
             {
                 changeRightX = 0;
             }
@@ -122,23 +111,6 @@ public class KHHEditItem : MonoBehaviour
     {
         itemCorrectTime = changeLeftX / lengthScale;
         delayTime = changePosX / lengthScale;
-
-        //시작 시간 찾기
-        float itemStartTime = (startX + changeLeftX) / lengthScale;
-        float itemEndTime = (endX + changeRightX) / lengthScale;
-
-        startIdx = 0;
-        endIdx = timeList.Count - 1;
-
-        for (int i = 0; i < timeList.Count; i++)
-        {
-            if (timeList[i] < itemStartTime)
-                startIdx = i;
-            if (timeList[i] < itemEndTime)
-                endIdx = i;
-        }
-
-        curIdx = startIdx;
     }
 
     public virtual void PlayStop()

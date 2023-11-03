@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KHHScreenEditor : MonoBehaviour
 {
     public VNectModel model;
+    public RawImage backgroundImage;
 
     bool fileLoaded = false;
     public bool FileLoaded { get { return fileLoaded; } }
@@ -48,16 +50,20 @@ public class KHHScreenEditor : MonoBehaviour
 
         //드롭 아이템의 파일 이름을 얻어온다.
         KHHData data = dropItem.GetComponent<KHHData>();
-
+        string fileName = data.FileName + data.FileExtension;
         //드롭 아이템의 타입을 얻어온다.
         switch (data.type)
         {
             case KHHData.DataType.None:
                 break;
             case KHHData.DataType.MotionData:
-                LoadFileMotion(data.FileName);
+                LoadFileMotion(fileName);
                 break;
             case KHHData.DataType.SoundData:
+                LoadFileSound(fileName);
+                break;
+            case KHHData.DataType.BackgroundData:
+                LoadFileBackground(fileName);
                 break;
             case KHHData.DataType.CaptionData:
                 break;
@@ -73,6 +79,30 @@ public class KHHScreenEditor : MonoBehaviour
         //모델 레코더에 파일 이름을 전달한다.
         editItem.LoadItemData(this, fileName, () => fileLoaded = true);
         editItem.Init(model);
+        editItem.Set();
+        editItemList.Add(editItem);
+    }
+
+    public void LoadFileSound(string fileName)
+    {
+        fileLoaded = false;
+        GameObject go = Instantiate(editItemPrefabs[1], editItemParent);
+
+        KHHEditItemSound editItem = go.GetComponent<KHHEditItemSound>();
+        //모델 레코더에 파일 이름을 전달한다.
+        editItem.LoadItemData(this, fileName, () => fileLoaded = true);
+        editItem.Set();
+        editItemList.Add(editItem);
+    }
+
+    public void LoadFileBackground(string fileName)
+    {
+        fileLoaded = false;
+        GameObject go = Instantiate(editItemPrefabs[2], editItemParent);
+
+        KHHEditItemBackground editItem = go.GetComponent<KHHEditItemBackground>();
+        //모델 레코더에 파일 이름을 전달한다.
+        editItem.LoadItemData(this, fileName, () => fileLoaded = true);
         editItem.Set();
         editItemList.Add(editItem);
     }

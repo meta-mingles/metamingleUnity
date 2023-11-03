@@ -10,6 +10,12 @@ public class KHHEditItemMotion : KHHEditItem
 
     float audioSinkTime = 0.0f; //오디오 싱크 보정
 
+    protected int curIdx = 0;
+    protected int startIdx = 0;
+    protected int endIdx = 0;
+
+    protected List<float> timeList;
+    public List<float> TimeList { get { return timeList; } }
     Dictionary<float, List<(Vector3, Quaternion)>> recordDic;
     public Dictionary<float, List<(Vector3, Quaternion)>> RecordDic { get { return recordDic; } }
 
@@ -59,7 +65,7 @@ public class KHHEditItemMotion : KHHEditItem
     public void Init(VNectModel model)
     {
         this.model = model;
-        type = KHHData.DataType.MotionData;
+        //type = KHHData.DataType.MotionData;
     }
 
     //public void Load(KHHEditItemMotion motion)
@@ -72,6 +78,22 @@ public class KHHEditItemMotion : KHHEditItem
     {
         base.PlayStart();
 
+        //시작 시간 찾기
+        float itemStartTime = (startX + changeLeftX) / lengthScale;
+        float itemEndTime = (endX + changeRightX) / lengthScale;
+
+        startIdx = 0;
+        endIdx = timeList.Count - 1;
+
+        for (int i = 0; i < timeList.Count; i++)
+        {
+            if (timeList[i] < itemStartTime)
+                startIdx = i;
+            if (timeList[i] < itemEndTime)
+                endIdx = i;
+        }
+
+        curIdx = startIdx;
         //사운드 시작 지점 설정
         audioSource.time = itemCorrectTime;
         audioSource.PlayDelayed(delayTime);
@@ -80,7 +102,7 @@ public class KHHEditItemMotion : KHHEditItem
     public override void LoadItemData(KHHScreenEditor editor, string fileName, UnityAction action)
     {
         base.LoadItemData(editor, fileName, action);
-        string[,] motionData = CSVManager.Instance.ReadCsv(fileName);
+        string[,] motionData = CSVManager.Instance.ReadCsv(KHHVideoData.FileMotionPath + "/" + fileName);
 
         timeList = new List<float>();
         recordDic = new Dictionary<float, List<(Vector3, Quaternion)>>();
@@ -105,13 +127,18 @@ public class KHHEditItemMotion : KHHEditItem
             recordDic.Add(time, jointData);
         }
 
+        curIdx = 0;
+        startX = timeList[0] * lengthScale;
+        endX = timeList[timeList.Count - 1] * lengthScale;
+        maxLength = endX - startX;
+
         //오디오 로드
         StartCoroutine(CoLoadAudioData(fileName, action));
     }
 
     IEnumerator CoLoadAudioData(string fileName, UnityAction action)
     {
-        yield return StartCoroutine(SaveLoadWav.Load(fileName, audioSource));
+        yield return StartCoroutine(SaveLoadWav.Load(KHHVideoData.FileMotionPath + "/" + fileName, audioSource));
         action?.Invoke();
     }
 }

@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class KHHEditManager : MonoBehaviour
 {
     public static KHHEditManager Instance;
-    public string videoName = "test video";
 
     public GameObject record;
     public GameObject edit;
@@ -52,6 +51,7 @@ public class KHHEditManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        KHHVideoData.Open("test video");
     }
 
     // Start is called before the first frame update
