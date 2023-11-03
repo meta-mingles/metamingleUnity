@@ -115,8 +115,18 @@ public class J_VideoReceiver : MonoBehaviour
         }
     }
 
+    //인터렉티브 비디오 열리는 함수
+    void CreateInteractiveMovie(ShortVideoInfoContainer info)
+    {
+        //인터렉티브 생성
+        GameObject video = Instantiate(interactivemovieFactory, trCtOFIMSV);
+        J_InteractiveMovieItem item = video.GetComponent<J_InteractiveMovieItem>();
+        //item.SetItem(info);
+    }
+
+
     //숏폼비디오 열리는 함수
-    void CreateShortVideo(ShortVideolInfo info)
+    void CreateShortVideo(ShortVideoInfo info)
     {
         //숏비디오 생성
         GameObject video = Instantiate(videoFactory, trCtOFVideoSV);

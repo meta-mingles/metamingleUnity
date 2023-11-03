@@ -23,7 +23,7 @@ public class InteractiveMovieInfo //비디오 정보
 }
 
 [System.Serializable] 
-public class ShortVideolInfo //비디오 정보
+public class ShortVideoInfo //비디오 정보
 {
     public int shortFormNo; //영상 순서
 
@@ -41,7 +41,7 @@ public class ShortVideolInfo //비디오 정보
 
     public bool isInteractive;//인터랙티브 여부
 
-    public InteractiveDTOS interactiveData;
+    public List<InteractiveDTOS> interactiveMovieDTOS;
 }
 
 [System.Serializable] 
@@ -55,12 +55,7 @@ public class InteractiveDTOS
 [System.Serializable] 
 public class ShortVideoInfoContainer
 {
-    public List<ShortVideolInfo> data;
-}
-[System.Serializable]
-public class InteractiveDTOSContainer
-{
-    public List<InteractiveDTOS> data;
+    public List<ShortVideoInfo> data;
 }
 
 
@@ -75,7 +70,7 @@ public class J_DataManager : MonoBehaviour
     public static J_DataManager instance;
 
     //숏비디오 정보
-    public List<ShortVideolInfo> shortVideoInfoList = new List<ShortVideolInfo>();
+    public List<ShortVideoInfo> shortVideoInfoList = new List<ShortVideoInfo>();
 
     //interactiveDTOS 리스트
     //public List<InteractiveDTOS> interactiveList = new List<InteractiveDTOS>();
@@ -124,6 +119,20 @@ public class J_DataManager : MonoBehaviour
     public void SetShortVideoInfoListByJSON(string data)
     {
         ShortVideoInfoContainer videoContainer = JsonUtility.FromJson<ShortVideoInfoContainer>(data);
+        Debug.Log(data);
+        //foreach (ShortVideoInfo videoInfo in videoContainer.data)
+        //{
+        //    if(videoInfo.isInteractive)
+        //    {
+        //        for(int i=0;i<videoInfo.interactiveMovieDTOS.Count;i++)
+        //        {
+        //            Debug.Log(i);
+        //            Debug.Log(videoInfo.interactiveMovieDTOS[i].url);
+        //            Debug.Log(videoInfo.interactiveMovieDTOS[i].choice);
+        //            Debug.Log(videoInfo.interactiveMovieDTOS[i].interactiveMovieNo);
+        //        }
+        //    }
+        //}
         shortVideoInfoList = videoContainer.data;
     }
     //public void SetInteractiveListByJSON(string data)

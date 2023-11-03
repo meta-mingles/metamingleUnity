@@ -144,6 +144,7 @@ public class HttpManager : MonoBehaviour
                 {
                     //print(req.downloadHandler.text);
                 }
+                //영상
                 if (httpInfo.onReceive != null)
                 {
                     httpInfo.onReceive(req.downloadHandler);

@@ -17,11 +17,11 @@ public class J_ThumItem : MonoBehaviour
 
     public bool isInteractive;
 
-    public ShortVideolInfo videoInfo;
+    public ShortVideoInfo videoInfo;
 
     public Image downloadImage;
 
-    public Action<ShortVideolInfo> onClickEvent;
+    public Action<ShortVideoInfo> onClickEvent;
     //public VideoPlayer videoPlayer;
     void Start()
     {
@@ -42,7 +42,7 @@ public class J_ThumItem : MonoBehaviour
     }
 
     //비디오 데이터 셋팅
-    public void SetItem(ShortVideolInfo Info)
+    public void SetItem(ShortVideoInfo Info)
     {
         videoInfo = Info;
 
