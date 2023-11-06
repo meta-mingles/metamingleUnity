@@ -3,25 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[System.Serializable] 
-public class InteractiveMovieInfo //비디오 정보
-{
-    public long interactiveMovieNo; //인터랙티브 무비 번호
-
-    public string title; //영상 제목
-
-    public string thumbnailUrl; //썸네일 url
-
-    public string description; //영상 설명
-
-    public string memberName; // 영상 제작자 이름
-
-    public DateTime date; //영상 제작 날짜
-
-    public int sequence; // 영상 순서 (연결되어있는 3개의 영상 중 순서)
-}
-
 [System.Serializable] 
 public class ShortVideoInfo //비디오 정보
 {
@@ -52,12 +33,6 @@ public class InteractiveDTOS
     public int interactiveMovieNo;
 
 }
-[System.Serializable] 
-public class ShortVideoInfoContainer
-{
-    public List<ShortVideoInfo> data;
-}
-
 
 [System.Serializable]
 public struct JsonArray<T>
@@ -71,13 +46,6 @@ public class J_DataManager : MonoBehaviour
 
     //숏비디오 정보
     public List<ShortVideoInfo> shortVideoInfoList = new List<ShortVideoInfo>();
-
-    //interactiveDTOS 리스트
-    //public List<InteractiveDTOS> interactiveList = new List<InteractiveDTOS>();
-
-
-    //인터렉티브 비디오 정보
-    public List<InteractiveMovieInfo> interactiveMovieInfoList = new List<InteractiveMovieInfo>();
 
 
     private void Awake()
@@ -101,52 +69,12 @@ public class J_DataManager : MonoBehaviour
     //{
     //    shortVideoInfoList = J_CSVLoader.instance.ParseString<ShortVideolInfo>(data);
     //}
-    ////JSON
-    //public void SetShortVideoInfoListByJSON(string data)
-    //{
-    //    JsonArray<ShortVideolInfo> arrayData = JsonUtility.FromJson<JsonArray<ShortVideolInfo>>(data);
-    //    shortVideoInfoList = arrayData.data;
-    //}
-
-    ////인터렉티브 무비일경우 리스트추가
-    //public void SetInteractiveListByJSON(string data)
-    //{
-    //    JsonArray<InteractiveDTOS> arrayData = JsonUtility.FromJson<JsonArray<InteractiveDTOS>>(data);
-    //    interactiveList = arrayData.data;
-    //}
-    #endregion
-
+    //JSON
     public void SetShortVideoInfoListByJSON(string data)
     {
-        ShortVideoInfoContainer videoContainer = JsonUtility.FromJson<ShortVideoInfoContainer>(data);
-        Debug.Log(data);
-        //foreach (ShortVideoInfo videoInfo in videoContainer.data)
-        //{
-        //    if(videoInfo.isInteractive)
-        //    {
-        //        for(int i=0;i<videoInfo.interactiveMovieDTOS.Count;i++)
-        //        {
-        //            Debug.Log(i);
-        //            Debug.Log(videoInfo.interactiveMovieDTOS[i].url);
-        //            Debug.Log(videoInfo.interactiveMovieDTOS[i].choice);
-        //            Debug.Log(videoInfo.interactiveMovieDTOS[i].interactiveMovieNo);
-        //        }
-        //    }
-        //}
-        shortVideoInfoList = videoContainer.data;
+        JsonArray<ShortVideoInfo> arrayData = JsonUtility.FromJson<JsonArray<ShortVideoInfo>>(data);
+        shortVideoInfoList = arrayData.data;
     }
-    //public void SetInteractiveListByJSON(string data)
-    //{
-    //    InteractiveDTOSContainer interactiveContainer = JsonUtility.FromJson<InteractiveDTOSContainer>(data);
-    //    interactiveList = interactiveContainer.data;
-    //}
-
-
-    //인터렉티브 무비 다운
-    public void SetInteractiveMovieInfoListByJSON(string data)
-    {
-        JsonArray<InteractiveMovieInfo> arrayData = JsonUtility.FromJson<JsonArray<InteractiveMovieInfo>>(data);
-        interactiveMovieInfoList = arrayData.data;
-    }
+    #endregion
 
 }

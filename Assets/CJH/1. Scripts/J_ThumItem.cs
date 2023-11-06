@@ -10,10 +10,19 @@ using UnityEngine.Networking;
 
 public class J_ThumItem : MonoBehaviour
 {
+    public static J_ThumItem Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+    [Header("Item Info")]
     public TMP_Text title;
     public TMP_Text date;
     public TMP_Text description;
     public TMP_Text memberName;
+
+    public RawImage profileColor;
 
     public bool isInteractive;
 
@@ -25,13 +34,15 @@ public class J_ThumItem : MonoBehaviour
     //public VideoPlayer videoPlayer;
     void Start()
     {
+        profileColor.GetComponentInChildren<RawImage>().color = UnityEngine.Random.ColorHSV(0, 1);
+        //처음 생성될 때 랜덤값으로 프로필컬러가 바뀌게 나온다.
+
     }
 
     void Update()
     {
-        
+
     }
- 
 
     public void OnClick()
     {

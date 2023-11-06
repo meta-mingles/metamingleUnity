@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4644323016296805991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4644323016296805977}
+  - component: {fileID: 4644323016296805990}
+  m_Layer: 0
+  m_Name: VideoReceiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4644323016296805977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4644323016296805991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 80, y: 15, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4644323016296805990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4644323016296805991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b19a9363c48e7641a4322bf4fe30d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thumbnailScrollView: {fileID: 0}
+  thumbnailFactory: {fileID: 5145114725179401781, guid: 9cba942cffb4c2249936ed08c63e77e9,
+    type: 3}
+  trCtOfSV: {fileID: 0}
+  videoFactory: {fileID: 8241539764084789306, guid: 541d46f32203f8144841168ae9d0367e,
+    type: 3}
+  trCtOFVideoSV: {fileID: 0}
+  interactivemovieFactory: {fileID: 8241539764084789306, guid: bd27df4ff0d1d6a4fbec085d0ae3c43f,
+    type: 3}
+  trCtOFIMSV: {fileID: 5145114725179401782, guid: 41ba4b3d0496bbd44946ecc960199a19,
+    type: 3}
+  nothingText: {fileID: 0}
