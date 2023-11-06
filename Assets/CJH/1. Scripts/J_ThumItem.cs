@@ -59,12 +59,11 @@ public class J_ThumItem : MonoBehaviour
 
         //제목
         title.text = videoInfo.title;
-        //인터렉티브 여부
-        isInteractive = videoInfo.isInteractive;
 
-        //날짜 빼기
-        string mydate= videoInfo.date.Substring(0, 10);
-        date.text = mydate;
+        //날짜 
+        string[] temp = videoInfo.date.Split('T');
+        date.text = temp[0];
+
         //영상 설명
         description.text = videoInfo.description;
         //크리에이터

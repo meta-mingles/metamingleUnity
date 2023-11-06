@@ -503,6 +503,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   videoPlayer: {fileID: 8241539764084789302, guid: bd27df4ff0d1d6a4fbec085d0ae3c43f,
     type: 3}
+  choice1: {fileID: 113244459233738517}
+  choice2: {fileID: 3206096220633504520}
+  videoInfo:
+    shortFormNo: 0
+    title: 
+    thumbnailUrl: 
+    url: 
+    description: 
+    memberName: 
+    date: 
+    isInteractive: 0
+    interactiveMovieDTOS: []
 --- !u!222 &1820235805024332673
 CanvasRenderer:
   m_ObjectHideFlags: 0

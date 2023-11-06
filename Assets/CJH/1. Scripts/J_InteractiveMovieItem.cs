@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Video;
+using UnityEngine.UI;
 
 public class J_InteractiveMovieItem : MonoBehaviour
 {
@@ -9,11 +10,13 @@ public class J_InteractiveMovieItem : MonoBehaviour
 
     public Action<int> onClickInteractive;
 
-    public TMP_Text choice;
+    public TMP_Text choice1;
+    public TMP_Text choice2;
     public ShortVideoInfo videoInfo;
 
     void Start()
     {
+
     }
 
     void Update()
@@ -27,14 +30,16 @@ public class J_InteractiveMovieItem : MonoBehaviour
         {
             onClickInteractive(btnIdx);
         }
+
+        
     }
     //인터렉티브 데이터 셋팅
     public void SetItem(ShortVideoInfo Info)
     {
         videoInfo = Info;
 
-        //제목
-        //choice.text = videoInfo.interactiveMovieDTOS[index].choice;
+        //choice1.text = videoInfo.interactiveMovieDTOS
+
     }
 
 }

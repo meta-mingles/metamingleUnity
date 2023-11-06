@@ -24,12 +24,9 @@ public class J_ShortVideoPlayer : MonoBehaviour
 
     public GameObject interactiveMovieListFactory;
 
-    public TMP_Text choiceText;
     void Start()
     {
-        //profilecolor.GetComponentInChildren<RawImage>().color = UnityEngine.Random.ColorHSV(0, 1);
-        profilecolor.GetComponentInChildren<RawImage>().color = J_ThumItem.Instance.profileColor.color;
-        ////처음 생성될 때 랜덤값으로 프로필컬러가 바뀌게 나온다.
+
     }
 
     void Update()
@@ -41,16 +38,9 @@ public class J_ShortVideoPlayer : MonoBehaviour
     public void SetItem(ShortVideoInfo Info)
     {
         videoInfo = Info;
-        //제목
-        title.text = videoInfo.title;
+        //thumItem의 정보와 똑같이 와야된다.
 
-        //날짜 빼기
-        string mydate = videoInfo.date.Substring(0, 10);
-        date.text = mydate;
-        //영상 설명
-        description.text = videoInfo.description;
-        //크리에이터
-        membername.text = videoInfo.memberName;
+
 
         // 영상 다운로드
         HttpInfo httpInfo = new HttpInfo();
@@ -88,6 +78,7 @@ public class J_ShortVideoPlayer : MonoBehaviour
             GameObject interactiveMovieList = Instantiate(interactiveMovieListFactory,transform.parent);
             J_InteractiveMovieItem item  = interactiveMovieList.GetComponent<J_InteractiveMovieItem>();
             item.onClickInteractive = ClickInteractiveMovieBt;
+            
         }
     }
     //인터렉티브 버튼
@@ -96,6 +87,8 @@ public class J_ShortVideoPlayer : MonoBehaviour
         ShortVideoInfo info = new ShortVideoInfo();
 
         info.title = videoInfo.interactiveMovieDTOS[index].choice;
+        title.text = info.title;
+        
 
         info.url = videoInfo.interactiveMovieDTOS[index].url;
 

@@ -17,7 +17,6 @@ public class ShortVideoInfo //비디오 정보
     public string description; //영상 설명
 
     public string memberName; // 닉네임
-
     public string date; //날짜
 
     public bool isInteractive;//인터랙티브 여부
