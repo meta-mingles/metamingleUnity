@@ -58,6 +58,12 @@ public class J_VideoReceiver : MonoBehaviour
             HttpManager.Get().SendRequest(httpInfo);
         }
     }
+    //정보 저장
+    void OnSaveItemInfo()
+    {
+
+    }
+
 
     //숏폼 다운
     void OnCompleteSearchVideo(DownloadHandler downloadHandler)
