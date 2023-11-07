@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -37,8 +33,6 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
        
     }
 
-
-
     //영상이 끝날때 인터렉티브 UI 생성
     protected override void OnFinishVideo(VideoPlayer source)
     {
@@ -47,8 +41,6 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         //interactiveMovieList.onClickInteractive = ClickInteractiveMovieBt;
         //interactiveMovieList.SetInteractiveItem(videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);
     }
-
-
 
     //인터렉티브 버튼
     void ClickInteractiveMovieBt(int index)
