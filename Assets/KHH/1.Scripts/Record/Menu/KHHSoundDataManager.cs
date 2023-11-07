@@ -1,9 +1,31 @@
 ﻿using System.Collections;
 using System.IO;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KHHSoundDataManager : KHHDataManager
 {
+    [Header("Volume")]
+    [SerializeField] TextMeshProUGUI nameText;
+    [SerializeField] TextMeshProUGUI volumeText;
+    [SerializeField] Slider volumeSlider;
+
+    KHHEditItemSound soundItem;
+
+    protected override void Start()
+    {
+        base.Start();
+        volumeSlider.onValueChanged.AddListener((value) =>
+        {
+            if (soundItem != null)
+            {
+                soundItem.Volume = value;
+                volumeText.text = string.Format("볼륨:{0}", (int)(value * 100));
+            }
+        });
+    }
+
     public override void Refresh()
     {
         base.Refresh();
@@ -31,5 +53,13 @@ public class KHHSoundDataManager : KHHDataManager
         khhDatas.Add(soundData);
 
         yield return StartCoroutine(SaveLoadWav.Load(fileInfo.FullName, soundData.AudioSource));
+    }
+
+    public void SetSelectedData(KHHEditItemSound item)
+    {
+        soundItem = item;
+        nameText.text = item.FileName;
+        volumeText.text = string.Format("볼륨:{0}", (int)(item.Volume * 100));
+        volumeSlider.value = item.Volume;
     }
 }

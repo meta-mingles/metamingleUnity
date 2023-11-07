@@ -22,6 +22,14 @@ public class KHHEditItemBackground : KHHEditItem
                 return;
             }
         }
+
+        if (isSelected)
+        {
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                Remove();
+            }
+        }
     }
 
     public override void PlayStart()
@@ -42,9 +50,19 @@ public class KHHEditItemBackground : KHHEditItem
         screenEditor.backgroundImage.texture = null;
     }
 
-    public override void LoadItemData(KHHScreenEditor editor, string filePath, UnityAction action)
+    public override void Remove()
     {
-        base.LoadItemData(editor, filePath, action);
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}I");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}ICX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}ICLX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}ICRX");
+        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
+        Destroy(gameObject);
+    }
+
+    public override void LoadItemData(KHHScreenEditor editor, string filePath, string fileName, UnityAction action)
+    {
+        base.LoadItemData(editor, filePath, fileName, action);
 
         //이미지를 불러온다
         byte[] bytes = File.ReadAllBytes(filePath);

@@ -1,20 +1,21 @@
-﻿using ExitGames.Demos.DemoPunVoice;
-using System.Collections;
-using System.Collections.Generic;
-using UniHumanoid;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class KHHEditItem : MonoBehaviour
+public class KHHEditItem : Selectable
 {
     public bool isLoad = false;
     public KHHData.DataType type;
 
     protected KHHScreenEditor screenEditor;
 
+    protected bool isSelected = false;
+    public bool IsSelected { get { return isSelected; } set { isSelected = value; outline.enabled = value; } }
     RectTransform rt;
     RectTransform item;
+    protected Outline outline;
 
     //재생
     protected float itemCorrectTime = 0.0f;
@@ -22,11 +23,11 @@ public class KHHEditItem : MonoBehaviour
 
     public float EndTime { get { return (endX + changeRightX) / lengthScale; } }
 
-    public float curLength;
-    public float maxLength;
+    protected float curLength;
+    protected float maxLength;
 
-    public float startX;
-    public float endX;
+    protected float startX;
+    protected float endX;
 
     protected float changePosX = 0;
     protected float changeLeftX = 0;
@@ -38,7 +39,15 @@ public class KHHEditItem : MonoBehaviour
     EditItemSelect middle;
     EditItemSelect right;
 
+    public TextMeshProUGUI nameText;
+
     //KHHModelRecorder recorder;
+    protected override void Awake()
+    {
+        base.Awake();
+        outline = GetComponentInChildren<Outline>();
+        outline.enabled = false;
+    }
 
     public void Init(float cpx = 0f, float clx = 0f, float crx = 0f)
     {
@@ -139,9 +148,15 @@ public class KHHEditItem : MonoBehaviour
 
     }
 
-    public virtual void LoadItemData(KHHScreenEditor editor, string fileName, UnityAction action)
+    public virtual void Remove()
+    {
+
+    }
+
+    public virtual void LoadItemData(KHHScreenEditor editor, string filePath, string fileName, UnityAction action)
     {
         screenEditor = editor;
+        nameText.text = fileName;
     }
 
     protected virtual void DragEndLeft()
@@ -154,5 +169,17 @@ public class KHHEditItem : MonoBehaviour
 
     protected virtual void DragEndRight()
     {
+    }
+
+    public override void OnSelect(BaseEventData eventData)
+    {
+        isSelected = true;
+        outline.enabled = true;
+    }
+
+    public override void OnDeselect(BaseEventData eventData)
+    {
+        isSelected = false;
+        outline.enabled = false;
     }
 }

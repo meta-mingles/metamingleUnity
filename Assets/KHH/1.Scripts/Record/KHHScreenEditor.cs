@@ -16,6 +16,7 @@ public class KHHScreenEditor : MonoBehaviour
     public bool IsPlaying { get { return isPlaying; } set { isPlaying = value; } }
 
     List<KHHEditItem> editItemList;
+    public List<KHHEditItem> EditItemList { get { return editItemList; } }
     public GameObject[] editItemPrefabs;
 
     public Transform editItemParent;
@@ -58,7 +59,7 @@ public class KHHScreenEditor : MonoBehaviour
             GameObject go1 = Instantiate(editItemPrefabs[0], editItemParent);
             KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
             editItemMotion.Init(KHHEditVideoState.MotionChangeX, KHHEditVideoState.MotionChangeLeftX, KHHEditVideoState.MotionChangeRightX);
-            editItemMotion.LoadItemData(this, filePathMotion + ".csv", () => { initCount++; if (initCount == 4) fileLoaded = true; });
+            editItemMotion.LoadItemData(this, filePathMotion + ".csv", KHHEditVideoState.MotionName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
             editItemMotion.Model = model;
             editItemList.Add(editItemMotion);
 
@@ -67,8 +68,12 @@ public class KHHScreenEditor : MonoBehaviour
             KHHEditItemSound editItemVoice = go2.GetComponent<KHHEditItemSound>();
             editItemVoice.IsVoice = true;
             editItemVoice.Init(KHHEditVideoState.MotionVChangeX, KHHEditVideoState.MotionVChangeLeftX, KHHEditVideoState.MotionVChangeRightX);
-            editItemVoice.LoadItemData(this, filePathMotion + ".wav", () => { initCount++; if (initCount == 4) fileLoaded = true; });
+            editItemVoice.LoadItemData(this, filePathMotion + ".wav", KHHEditVideoState.MotionName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
             editItemList.Add(editItemVoice);
+
+            //페어간 정보 획득
+            editItemMotion.PairSound = editItemVoice;
+            editItemVoice.PairMotion = editItemMotion;
         }
 
         if (KHHEditVideoState.SoundName != string.Empty)
@@ -78,7 +83,7 @@ public class KHHScreenEditor : MonoBehaviour
             GameObject go3 = Instantiate(editItemPrefabs[1], editItemParent);
             KHHEditItemSound editItemSound = go3.GetComponent<KHHEditItemSound>();
             editItemSound.Init(KHHEditVideoState.SoundChangeX, KHHEditVideoState.SoundChangeLeftX, KHHEditVideoState.SoundChangeRightX);
-            editItemSound.LoadItemData(this, filePathSound, () => { initCount++; if (initCount == 4) fileLoaded = true; });
+            editItemSound.LoadItemData(this, filePathSound, KHHEditVideoState.SoundName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
             editItemList.Add(editItemSound);
         }
 
@@ -89,7 +94,7 @@ public class KHHScreenEditor : MonoBehaviour
             GameObject go4 = Instantiate(editItemPrefabs[2], editItemParent);
             KHHEditItemBackground editItemImage = go4.GetComponent<KHHEditItemBackground>();
             editItemImage.Init(KHHEditVideoState.ImageChangeX, KHHEditVideoState.ImageChangeLeftX, KHHEditVideoState.ImageChangeRightX);
-            editItemImage.LoadItemData(this, filePathBackground, () => { initCount++; if (initCount == 4) fileLoaded = true; });
+            editItemImage.LoadItemData(this, filePathBackground, KHHEditVideoState.ImageName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
             editItemList.Add(editItemImage);
         }
     }
@@ -108,20 +113,36 @@ public class KHHScreenEditor : MonoBehaviour
             case KHHData.DataType.None:
                 break;
             case KHHData.DataType.MotionData:
+                RemoveCurMotion();
                 KHHEditVideoState.MotionName = data.FileName;
                 LoadFileMotion(data.FileName);
                 break;
             case KHHData.DataType.SoundData:
+                RemoveCurSound();
                 KHHEditVideoState.SoundName = fileName;
                 LoadFileSound(fileName);
                 break;
             case KHHData.DataType.BackgroundData:
+                RemoveCurBackground();
                 KHHEditVideoState.ImageName = fileName;
                 LoadFileBackground(fileName);
                 break;
             case KHHData.DataType.CaptionData:
                 break;
         }
+
+        //순서 조절
+        foreach (var item in editItemList)
+        {
+            if (item is KHHEditItemMotion) item.transform.SetAsFirstSibling();
+            if (item is KHHEditItemSound) if (((KHHEditItemSound)item).IsVoice) item.transform.SetSiblingIndex(1);
+            if (item is KHHEditItemBackground) item.transform.SetAsLastSibling();
+        }
+    }
+
+    void RemoveCurMotion()
+    {
+        editItemList.Find(x => x is KHHEditItemMotion)?.Remove();
     }
 
     public void LoadFileMotion(string fileName)
@@ -133,7 +154,7 @@ public class KHHScreenEditor : MonoBehaviour
         GameObject go1 = Instantiate(editItemPrefabs[0], editItemParent);
         KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
         editItemMotion.Init();
-        editItemMotion.LoadItemData(this, filePath + ".csv", null);
+        editItemMotion.LoadItemData(this, filePath + ".csv", fileName, null);
         editItemMotion.Model = model;
         editItemList.Add(editItemMotion);
 
@@ -142,8 +163,18 @@ public class KHHScreenEditor : MonoBehaviour
         KHHEditItemSound editItemVoice = go2.GetComponent<KHHEditItemSound>();
         editItemVoice.Init();
         editItemVoice.IsVoice = true;
-        editItemVoice.LoadItemData(this, filePath + ".wav", () => fileLoaded = true);
+        editItemVoice.LoadItemData(this, filePath + ".wav", fileName, () => fileLoaded = true);
         editItemList.Add(editItemVoice);
+
+        //페어간 정보 획득
+        editItemMotion.PairSound = editItemVoice;
+        editItemVoice.PairMotion = editItemMotion;
+    }
+
+    void RemoveCurSound()
+    {
+        foreach (var item in editItemList.FindAll(x => x is KHHEditItemSound))
+            if (((KHHEditItemSound)item).IsVoice == false) { item.Remove(); break; }
     }
 
     public void LoadFileSound(string fileName)
@@ -155,8 +186,13 @@ public class KHHScreenEditor : MonoBehaviour
         GameObject go = Instantiate(editItemPrefabs[1], editItemParent);
         KHHEditItemSound editItem = go.GetComponent<KHHEditItemSound>();
         editItem.Init();
-        editItem.LoadItemData(this, filePath, () => fileLoaded = true);
+        editItem.LoadItemData(this, filePath, fileName, () => fileLoaded = true);
         editItemList.Add(editItem);
+    }
+
+    void RemoveCurBackground()
+    {
+        editItemList.Find(x => x is KHHEditItemBackground)?.Remove();
     }
 
     public void LoadFileBackground(string fileName)
@@ -168,7 +204,7 @@ public class KHHScreenEditor : MonoBehaviour
         GameObject go = Instantiate(editItemPrefabs[2], editItemParent);
         KHHEditItemBackground editItem = go.GetComponent<KHHEditItemBackground>();
         editItem.Init();
-        editItem.LoadItemData(this, filePath, () => fileLoaded = true);
+        editItem.LoadItemData(this, filePath, fileName, () => fileLoaded = true);
         editItemList.Add(editItem);
     }
 

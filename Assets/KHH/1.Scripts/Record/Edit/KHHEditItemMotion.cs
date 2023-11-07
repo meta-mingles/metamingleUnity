@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class KHHEditItemMotion : KHHEditItem
 {
@@ -18,6 +20,8 @@ public class KHHEditItemMotion : KHHEditItem
     Dictionary<float, List<(Vector3, Quaternion)>> recordDic;
     public Dictionary<float, List<(Vector3, Quaternion)>> RecordDic { get { return recordDic; } }
 
+    KHHEditItemSound pairSound;
+    public KHHEditItemSound PairSound { set { pairSound = value; } }
     //private void Awake()
     //{
     //    audioSource = GetComponent<AudioSource>();
@@ -57,6 +61,14 @@ public class KHHEditItemMotion : KHHEditItem
                 else rot = Quaternion.Lerp(recordDic[timeList[curIdx]][i].Item2, recordDic[timeList[curIdx + 1]][i].Item2, ratio);
                 model.JointPoints[i].Pos3D = pos;
                 model.JointPoints[i].InverseRotation = rot;
+            }
+        }
+
+        if (isSelected)
+        {
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                Remove();
             }
         }
     }
@@ -104,9 +116,25 @@ public class KHHEditItemMotion : KHHEditItem
         //audioSource.Stop();
     }
 
-    public override void LoadItemData(KHHScreenEditor editor, string filePath, UnityAction action)
+    public override void Remove()
     {
-        base.LoadItemData(editor, filePath, action);
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}M");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MCX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MCLX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MCRX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVCX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVCLX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVCRX");
+        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVV");
+        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
+        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == pairSound));
+        Destroy(gameObject);
+        Destroy(pairSound.gameObject);
+    }
+
+    public override void LoadItemData(KHHScreenEditor editor, string filePath, string fileName, UnityAction action)
+    {
+        base.LoadItemData(editor, filePath, fileName, action);
         string[,] motionData = CSVManager.Instance.ReadCsv(filePath);
 
         timeList = new List<float>();
@@ -163,5 +191,19 @@ public class KHHEditItemMotion : KHHEditItem
     protected override void DragEndRight()
     {
         KHHEditVideoState.MotionChangeRightX = changeRightX;
+    }
+
+    public override void OnSelect(BaseEventData eventData)
+    {
+        isSelected = true;
+        outline.enabled = true;
+        if(pairSound!=null) pairSound.IsSelected = true;
+    }
+
+    public override void OnDeselect(BaseEventData eventData)
+    {
+        isSelected = false;
+        outline.enabled = false;
+        if (pairSound != null) pairSound.IsSelected = false;
     }
 }

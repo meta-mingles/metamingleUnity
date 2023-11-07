@@ -39,6 +39,11 @@ public static class KHHEditVideoState
         get { return PlayerPrefs.GetFloat($"{KHHVideoData.VideoName}MVCRX", 0f); }
         set { PlayerPrefs.SetFloat($"{KHHVideoData.VideoName}MVCRX", value); }
     }
+    public static float MotionVVolume
+    {
+        get { return PlayerPrefs.GetFloat($"{KHHVideoData.VideoName}MVV", 1f); }
+        set { PlayerPrefs.SetFloat($"{KHHVideoData.VideoName}MVV", value); }
+    }
 
     public static string SoundName  //사운드 이름
     {
@@ -59,6 +64,11 @@ public static class KHHEditVideoState
     {
         get { return PlayerPrefs.GetFloat($"{KHHVideoData.VideoName}SCRX", 0f); }
         set { PlayerPrefs.SetFloat($"{KHHVideoData.VideoName}SCRX", value); }
+    }
+    public static float SoundVolume
+    {
+        get { return PlayerPrefs.GetFloat($"{KHHVideoData.VideoName}SV", 1f); }
+        set { PlayerPrefs.SetFloat($"{KHHVideoData.VideoName}SV", value); }
     }
 
     public static string ImageName  //이미지 이름
