@@ -1,16 +1,5 @@
-﻿using ExitGames.Client.Photon.StructWrapping;
-using RootMotion.Demos;
-using System;
-using System.Collections;
-using System.IO;
-using System.Text;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
-using UnityEngine.Video;
 
 public class J_VideoReceiver : MonoBehaviour
 {
@@ -77,11 +66,6 @@ public class J_VideoReceiver : MonoBehaviour
             // 항목 설정 - 각 섬네일에 대한 정보를 설정합니다.
             item.SetItem(J_DataManager.instance.shortVideoInfoList[i]);
 
-            
-
-            //정보를 가져와야될듯
-
-
             //썸네일 클릭 시, 숏폼(짧은 형식의) 영상 창을 만듭니다.
             item.onClickEvent = CreateShortVideo;
 
@@ -91,7 +75,6 @@ public class J_VideoReceiver : MonoBehaviour
     //인터렉티브 비디오 열리는 함수
     public void CreateInteractiveMovie(ShortVideoInfo info)
     {
-        Debug.Log("111");
         //인터렉티브 비디오 생성
         GameObject video = Instantiate(interactiveVideoFactory, trCtOFVideoSV);
         J_InteractiveVideoPlayer item = video.GetComponent<J_InteractiveVideoPlayer>();

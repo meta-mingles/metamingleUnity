@@ -1,8 +1,6 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Video;
-using UnityEngine.UI;
 
 public class J_InteractiveMovieItem : MonoBehaviour
 {
@@ -10,16 +8,6 @@ public class J_InteractiveMovieItem : MonoBehaviour
 
     public TMP_Text choice1;
     public TMP_Text choice2;
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
 
     //인터렉티브버튼으로 여는 함수
     public void OnClickInteractiveButton(int btnIdx)

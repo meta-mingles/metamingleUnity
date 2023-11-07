@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -38.682373, y: 0}
+  m_SizeDelta: {x: -77.3646, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7653956676520643170
 CanvasRenderer:
@@ -94,8 +94,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -173,8 +173,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -421.4823, y: -1}
-  m_SizeDelta: {x: 406.9168, y: 119.3409}
+  m_AnchoredPosition: {x: -356, y: -1}
+  m_SizeDelta: {x: 500, y: 119.3409}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2647785874798468842
 CanvasRenderer:
@@ -305,8 +305,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -45.129333, y: 0}
+  m_SizeDelta: {x: -90.2587, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8700749359388038681
 CanvasRenderer:
@@ -364,8 +364,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -460,20 +460,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 328864cea27b6564bbf5729940e527a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 8241539764084789302, guid: 541d46f32203f8144841168ae9d0367e,
-    type: 3}
   choice1: {fileID: 113244459233738517}
   choice2: {fileID: 3206096220633504520}
-  videoInfo:
-    shortFormNo: 0
-    title: 
-    thumbnailUrl: 
-    url: 
-    description: 
-    memberName: 
-    date: 
-    isInteractive: 0
-    interactiveMovieDTOS: []
 --- !u!222 &1820235805024332673
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -593,8 +581,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 405, y: -1}
-  m_SizeDelta: {x: 406.9168, y: 119.3409}
+  m_AnchoredPosition: {x: 418, y: -1}
+  m_SizeDelta: {x: 500, y: 119.3409}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3079968030095839825
 CanvasRenderer:
