@@ -1,18 +1,40 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MicrophoneRecorder : MonoBehaviour
 {
-    AudioClip recordClip;
-    public string[] microphoneNames;
-    public string microphoneName;
+    public static MicrophoneRecorder Instance;
 
-    // Start is called before the first frame update
+    public bool IsRecording { get { return Microphone.IsRecording(microphoneName); } }
+
+    AudioClip recordClip;
+
+    string microphoneName;
+    public string MicrophoneName { get { return microphoneName; } set { microphoneName = value; } }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
-        microphoneNames = Microphone.devices;
+        SetMicrophone();
+    }
+
+    void SetMicrophone()
+    {
+        if (Microphone.devices.Length == 0)
+        {
+            microphoneName = null;
+            return;
+        }
+
+        microphoneName = PlayerPrefs.GetString("MicrophoneName", Microphone.devices[0]);
+        for (int i = 0; i < Microphone.devices.Length; i++)
+            if (Microphone.devices[i] == microphoneName)
+                return;
+        microphoneName = Microphone.devices[0];
     }
 
     public void StartRecordMicrophone()
@@ -42,7 +64,7 @@ public class MicrophoneRecorder : MonoBehaviour
 
             recordClip.SetData(cutSamples, 0);
 
-            SaveLoadWav.Save(fileName, recordClip);
+            SaveLoadWav.Save(KHHVideoData.FileMotionPath + "/" + fileName + ".wav", recordClip);
         }
     }
 }

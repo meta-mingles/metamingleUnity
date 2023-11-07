@@ -28,9 +28,9 @@ public class KHHEditItem : MonoBehaviour
     public float startX;
     public float endX;
 
-    protected float changePosX;
-    protected float changeLeftX;
-    protected float changeRightX;
+    protected float changePosX = 0;
+    protected float changeLeftX = 0;
+    protected float changeRightX = 0;
 
     protected float lengthScale = 10f;
 
@@ -40,7 +40,7 @@ public class KHHEditItem : MonoBehaviour
 
     //KHHModelRecorder recorder;
 
-    public void Set()
+    public void Init(float cpx = 0f, float clx = 0f, float crx = 0f)
     {
         rt = GetComponent<RectTransform>();
         item = transform.Find("Item").GetComponent<RectTransform>();
@@ -48,14 +48,22 @@ public class KHHEditItem : MonoBehaviour
         middle = item.Find("Middle").GetComponent<EditItemSelect>();
         right = item.Find("Right").GetComponent<EditItemSelect>();
 
-        curLength = endX - startX;
+        left.OnDragEndEvent += DragEndLeft;
+        middle.OnDragEndEvent += DragEndMiddle;
+        right.OnDragEndEvent += DragEndRight;
 
-        changePosX = 0;
-        changeLeftX = 0;
-        changeRightX = 0;
+        changePosX = cpx;
+        changeLeftX = clx;
+        changeRightX = crx;
+    }
 
-        rt.sizeDelta = new Vector2(curLength, 60);
+    protected void Set()
+    {
+        curLength = (endX + changeRightX) - (startX + changeLeftX);
+
         item.sizeDelta = new Vector2(curLength, 60);
+        item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
+        rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>());
         isLoad = true;
@@ -82,6 +90,7 @@ public class KHHEditItem : MonoBehaviour
             curLength = (endX + changeRightX) - (startX + changeLeftX);
             item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
             item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
+            rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
         }
 
         if (middle.isDrag)
@@ -93,6 +102,7 @@ public class KHHEditItem : MonoBehaviour
             }
 
             item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
+            rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
         }
 
         if (right.isDrag)
@@ -109,6 +119,7 @@ public class KHHEditItem : MonoBehaviour
 
             curLength = (endX + changeRightX) - (startX + changeLeftX);
             item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
+            rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
         }
     }
 
@@ -133,23 +144,15 @@ public class KHHEditItem : MonoBehaviour
         screenEditor = editor;
     }
 
-    //public virtual void LoadRecordData(KHHScreenEditor editor, string fileName, UnityAction action)
-    //{
-    //    screenEditor = editor;
-    //}
-
-    protected virtual void EditTimeLeft()
+    protected virtual void DragEndLeft()
     {
-
     }
 
-    protected virtual void EditTimeRight()
+    protected virtual void DragEndMiddle()
     {
-
     }
 
-    protected virtual void EditTimeMove()
+    protected virtual void DragEndRight()
     {
-
     }
 }

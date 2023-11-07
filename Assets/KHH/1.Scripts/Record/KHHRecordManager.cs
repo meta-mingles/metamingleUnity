@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class KHHRecordManager : MonoBehaviour
 {
     public static KHHRecordManager Instance;
+    bool isActive = false;
 
     public GameObject record;
     public GameObject edit;
@@ -23,10 +24,13 @@ public class KHHRecordManager : MonoBehaviour
     //public MovieSender movieSender;
 
     public KHHModelRecorder modelRecorder;
-    public MicrophoneRecorder microphoneRecorder;
     public KHHMotionDataManager motionDataManager;
     public VideoCapture videoCapture;
-    public GameObject barracudaRunner;
+    public VNectBarracudaRunner barracudaRunner;
+
+    bool isRecording = false;
+    bool startRecord = false;
+    public bool StartRecord { get { return startRecord; } set { startRecord = value; } }
 
     private void Awake()
     {
@@ -38,28 +42,33 @@ public class KHHRecordManager : MonoBehaviour
     {
         recordExitButton.onClick.AddListener(() =>
         {
+            isActive = false;
             record.SetActive(false);
             edit.SetActive(true);
             captureScreen.gameObject.SetActive(false);
             captureCamera.targetTexture = captureRenderTexture;
             motionDataManager.Refresh();
             videoCapture.CameraPlayStop();
-            barracudaRunner.SetActive(false);
+            barracudaRunner.gameObject.SetActive(false);
+            barracudaRunner.IsTracking = false;
         });
 
         recordStartButton.onClick.AddListener(() =>
         {
+            isRecording = true;
+            KHHCanvasShield.Instance.Show();
             modelRecorder.StartRecord();
-            microphoneRecorder.StartRecordMicrophone();
+            MicrophoneRecorder.Instance.StartRecordMicrophone();
             recordStartButton.gameObject.SetActive(false);
             recordStopButton.gameObject.SetActive(true);
         });
 
         recordStopButton.onClick.AddListener(() =>
         {
-            string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
-            modelRecorder.StopRecord(fileName);
-            microphoneRecorder.StopRecordMicrophone(fileName);
+            isRecording = false;
+            string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+            modelRecorder.StopRecord(KHHVideoData.FileMotionPath + "/" + fileName + ".csv");
+            MicrophoneRecorder.Instance.StopRecordMicrophone(fileName);
             recordStartButton.gameObject.SetActive(true);
             recordStopButton.gameObject.SetActive(false);
         });
@@ -73,13 +82,29 @@ public class KHHRecordManager : MonoBehaviour
         {
             captureScreen.gameObject.SetActive(true);
             videoCapture.CameraPlayStart();
+            isActive = true;
         }
         return videoCapture.SetEnd;
     }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
+    // Update is called once per frame
+    void Update()
+    {
+        if (!isActive) return;
 
-    //}
+        if (isRecording && startRecord == false)
+        {
+            if (modelRecorder.IsRecording && MicrophoneRecorder.Instance.IsRecording)
+            {
+                startRecord = true;
+                //대기
+                KHHCanvasShield.Instance.Close();
+            }
+        }
+
+        if (!barracudaRunner.IsTracking)
+            KHHCanvasShield.Instance.Show();
+        else
+            KHHCanvasShield.Instance.Close();
+    }
 }

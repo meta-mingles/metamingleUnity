@@ -24,7 +24,7 @@ public class CSVManager : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public void WriteCsv(string fileName, List<string[]> rowData)
+    public void WriteCsv(string filePath, List<string[]> rowData)
     {
         string[][] output = new string[rowData.Count][];
 
@@ -41,7 +41,7 @@ public class CSVManager : MonoBehaviour
         for (int index = 0; index < length; index++)
             stringBuilder.AppendLine(string.Join(delimiter, output[index]));
 
-        Stream fileStream = new FileStream(Application.persistentDataPath + "/" + fileName, FileMode.CreateNew, FileAccess.Write);
+        Stream fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write);
         StreamWriter outStream = new StreamWriter(fileStream, Encoding.UTF8);
         outStream.WriteLine(stringBuilder);
         outStream.Close();

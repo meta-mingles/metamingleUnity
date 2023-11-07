@@ -30,6 +30,9 @@ public class KHHEditManager : MonoBehaviour
     public Button captionButton;
     public Button interactiveButton;
 
+    public Button settingButton;
+    public Button exitButton;
+
     public CanvasGroup recordWaitCG;
     public GameObject motionPanel;
     public GameObject soundPanel;
@@ -37,6 +40,8 @@ public class KHHEditManager : MonoBehaviour
     public GameObject interactive;
     public KHHInteractiveButton interactiveButtonLeft;
     public KHHInteractiveButton interactiveButtonRight;
+
+    public KHHEditSetting editSetting;
 
     [Header("Middle")]
     public Button playButton;
@@ -62,6 +67,8 @@ public class KHHEditManager : MonoBehaviour
         if (soundButton != null) soundButton.onClick.AddListener(SoundButtonEvent);
         if (backgroundButton != null) backgroundButton.onClick.AddListener(BackgroundButtonEvent);
         if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
+
+        if(settingButton != null) settingButton.onClick.AddListener(SettingButtonEvent);
 
         if (playButton != null) playButton.onClick.AddListener(PlayButtonEvent);
         if (stopButton != null) stopButton.onClick.AddListener(StopButtonEvent);
@@ -134,6 +141,11 @@ public class KHHEditManager : MonoBehaviour
         KHHVideoCapture.instance.IsInteractive = isInterActive;
         interactive.SetActive(isInterActive);
         interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
+    }
+
+    void SettingButtonEvent()
+    {
+        editSetting.Open();
     }
 
     void PlayButtonEvent()

@@ -5,10 +5,9 @@ using UnityEngine.Events;
 
 public class KHHEditItemMotion : KHHEditItem
 {
-    public VNectModel model;
-    AudioSource audioSource;
-
-    float audioSinkTime = 0.0f; //오디오 싱크 보정
+    VNectModel model;
+    public VNectModel Model { set { model = value; } }
+    //AudioSource audioSource;
 
     protected int curIdx = 0;
     protected int startIdx = 0;
@@ -19,10 +18,10 @@ public class KHHEditItemMotion : KHHEditItem
     Dictionary<float, List<(Vector3, Quaternion)>> recordDic;
     public Dictionary<float, List<(Vector3, Quaternion)>> RecordDic { get { return recordDic; } }
 
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
+    //private void Awake()
+    //{
+    //    audioSource = GetComponent<AudioSource>();
+    //}
 
     // Update is called once per frame
     protected override void Update()
@@ -34,7 +33,7 @@ public class KHHEditItemMotion : KHHEditItem
             float actionTime = screenEditor.playTime - delayTime;
             if (actionTime > timeList[endIdx] - itemCorrectTime)
             {
-                audioSource.Stop();
+                //audioSource.Stop();
                 return;
             }
 
@@ -60,12 +59,6 @@ public class KHHEditItemMotion : KHHEditItem
                 model.JointPoints[i].InverseRotation = rot;
             }
         }
-    }
-
-    public void Init(VNectModel model)
-    {
-        this.model = model;
-        //type = KHHData.DataType.MotionData;
     }
 
     //public void Load(KHHEditItemMotion motion)
@@ -95,26 +88,26 @@ public class KHHEditItemMotion : KHHEditItem
 
         curIdx = startIdx;
         //사운드 시작 지점 설정
-        audioSource.time = itemCorrectTime;
-        audioSource.PlayDelayed(delayTime);
+        //audioSource.time = itemCorrectTime;
+        //audioSource.PlayDelayed(delayTime);
     }
 
     public override void PlayStop()
     {
         base.PlayStop();
-        audioSource.Stop();
+        //audioSource.Stop();
     }
 
     public override void PlayEnd()
     {
         base.PlayEnd();
-        audioSource.Stop();
+        //audioSource.Stop();
     }
 
-    public override void LoadItemData(KHHScreenEditor editor, string fileName, UnityAction action)
+    public override void LoadItemData(KHHScreenEditor editor, string filePath, UnityAction action)
     {
-        base.LoadItemData(editor, fileName, action);
-        string[,] motionData = CSVManager.Instance.ReadCsv(KHHVideoData.FileMotionPath + "/" + fileName + ".csv");
+        base.LoadItemData(editor, filePath, action);
+        string[,] motionData = CSVManager.Instance.ReadCsv(filePath);
 
         timeList = new List<float>();
         recordDic = new Dictionary<float, List<(Vector3, Quaternion)>>();
@@ -144,14 +137,31 @@ public class KHHEditItemMotion : KHHEditItem
         endX = timeList[timeList.Count - 1] * lengthScale;
         maxLength = endX - startX;
 
-        //오디오 로드
-        StartCoroutine(CoLoadAudioData(fileName, action));
-    }
-
-    IEnumerator CoLoadAudioData(string fileName, UnityAction action)
-    {
-        yield return StartCoroutine(SaveLoadWav.Load(KHHVideoData.FileMotionPath + "/" + fileName + ".wav", audioSource));
         action?.Invoke();
         Set();
+        //오디오 로드
+        //StartCoroutine(CoLoadAudioData(fileName, action));
+    }
+
+    //IEnumerator CoLoadAudioData(string fileName, UnityAction action)
+    //{
+    //    yield return StartCoroutine(SaveLoadWav.Load(KHHVideoData.FileMotionPath + "/" + fileName + ".wav", audioSource));
+    //    action?.Invoke();
+    //    Set();
+    //}
+
+    protected override void DragEndLeft()
+    {
+        KHHEditVideoState.MotionChangeLeftX = changeLeftX;
+    }
+
+    protected override void DragEndMiddle()
+    {
+        KHHEditVideoState.MotionChangeX = changePosX;
+    }
+
+    protected override void DragEndRight()
+    {
+        KHHEditVideoState.MotionChangeRightX = changeRightX;
     }
 }

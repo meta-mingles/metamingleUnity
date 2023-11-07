@@ -396,7 +396,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 60}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &-225394867881140503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,12 +409,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09dd59c36f3bc86419a72939ef8af9b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLoad: 0
   type: 1
   curLength: 0
   maxLength: 0
   startX: 0
   endX: 0
-  model: {fileID: 0}
 --- !u!82 &1177782997065441395
 AudioSource:
   m_ObjectHideFlags: 0

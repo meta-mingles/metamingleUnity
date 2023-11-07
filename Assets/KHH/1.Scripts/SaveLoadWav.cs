@@ -37,17 +37,16 @@ public static class SaveLoadWav
     const int HEADER_SIZE = 44;
 
     // Saves the audio clip as .wav file in the Application.persistentDataPath
-    public static void Save(string filename, AudioClip clip, bool makeClipShort = true)
+    public static void Save(string filePath, AudioClip clip, bool makeClipShort = true)
     {
-        if (!String.IsNullOrEmpty(filename) && clip != null)
+        if (!String.IsNullOrEmpty(filePath) && clip != null)
         {
-            string filepath = GetPath(filename);
-            Directory.CreateDirectory(Path.GetDirectoryName(filepath)); // Make sure directory exists if user is saving to sub dir.
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)); // Make sure directory exists if user is saving to sub dir.
 
             if (makeClipShort)
                 clip = TrimSilence(clip, 0);
 
-            using (var fileStream = CreateEmpty(filepath))
+            using (var fileStream = CreateEmpty(filePath))
             {
                 ConvertAndWrite(fileStream, clip);
                 WriteHeader(fileStream, clip);

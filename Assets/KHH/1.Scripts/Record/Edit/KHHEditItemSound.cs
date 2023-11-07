@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class KHHEditItemSound : KHHEditItem
 {
+    bool isVoice = false;
+    public bool IsVoice { set { isVoice = value; } }
     AudioSource audioSource;
 
     private void Awake()
@@ -18,7 +20,7 @@ public class KHHEditItemSound : KHHEditItem
     {
         base.Update();
 
-        if (audioSource!=null && screenEditor.IsPlaying)
+        if (audioSource != null && screenEditor.IsPlaying)
         {
             float actionTime = screenEditor.playTime - delayTime;
             if (actionTime > EndTime)
@@ -48,17 +50,16 @@ public class KHHEditItemSound : KHHEditItem
         audioSource.Stop();
     }
 
-    public override void LoadItemData(KHHScreenEditor editor, string fileName, UnityAction action)
+    public override void LoadItemData(KHHScreenEditor editor, string filePath, UnityAction action)
     {
-        base.LoadItemData(editor, fileName, action);
+        base.LoadItemData(editor, filePath, action);
 
         //오디오 로드
-        StartCoroutine(CoLoadAudioData(fileName, action));
+        StartCoroutine(CoLoadAudioData(filePath, action));
     }
 
-    IEnumerator CoLoadAudioData(string fileName, UnityAction action)
+    IEnumerator CoLoadAudioData(string filePath, UnityAction action)
     {
-        string filePath = KHHVideoData.FileSoundPath + "/" + fileName;
         yield return StartCoroutine(SaveLoadWav.Load(filePath, audioSource));
 
         startX = 0f;
@@ -67,5 +68,23 @@ public class KHHEditItemSound : KHHEditItem
 
         action?.Invoke();
         Set();
+    }
+
+    protected override void DragEndLeft()
+    {
+        if (isVoice) KHHEditVideoState.MotionVChangeLeftX = changeLeftX;
+        else KHHEditVideoState.SoundChangeLeftX = changeLeftX;
+    }
+
+    protected override void DragEndMiddle()
+    {
+        if (isVoice) KHHEditVideoState.MotionVChangeX = changePosX;
+        else KHHEditVideoState.SoundChangeX = changePosX;
+    }
+
+    protected override void DragEndRight()
+    {
+        if (isVoice) KHHEditVideoState.MotionVChangeRightX = changeRightX;
+        else KHHEditVideoState.SoundChangeRightX = changeRightX;
     }
 }

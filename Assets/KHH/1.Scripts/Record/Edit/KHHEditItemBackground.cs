@@ -42,12 +42,12 @@ public class KHHEditItemBackground : KHHEditItem
         screenEditor.backgroundImage.texture = null;
     }
 
-    public override void LoadItemData(KHHScreenEditor editor, string fileName, UnityAction action)
+    public override void LoadItemData(KHHScreenEditor editor, string filePath, UnityAction action)
     {
-        base.LoadItemData(editor, fileName, action);
+        base.LoadItemData(editor, filePath, action);
 
         //이미지를 불러온다
-        byte[] bytes = File.ReadAllBytes(KHHVideoData.FileImagePath + "/" + fileName);
+        byte[] bytes = File.ReadAllBytes(filePath);
         texture = new Texture2D(1, 1);
         texture.LoadImage(bytes);
 
@@ -57,5 +57,20 @@ public class KHHEditItemBackground : KHHEditItem
 
         action?.Invoke();
         Set();
+    }
+
+    protected override void DragEndLeft()
+    {
+        KHHEditVideoState.ImageChangeLeftX = changeLeftX;
+    }
+
+    protected override void DragEndMiddle()
+    {
+        KHHEditVideoState.ImageChangeX = changePosX;
+    }
+
+    protected override void DragEndRight()
+    {
+        KHHEditVideoState.ImageChangeRightX = changeRightX;
     }
 }

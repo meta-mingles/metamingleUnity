@@ -9,6 +9,7 @@ public class KHHModelRecorder : MonoBehaviour
     public KHHScreenEditor screenEditor;
 
     bool isRecording = false;
+    public bool IsRecording { get { return isRecording; } }
 
     //녹화
     List<string[]> recordData;
@@ -16,7 +17,7 @@ public class KHHModelRecorder : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (model != null && isRecording)
+        if (model != null && KHHRecordManager.Instance.StartRecord)
         {
             recordTime += Time.deltaTime;
 
@@ -41,18 +42,19 @@ public class KHHModelRecorder : MonoBehaviour
             datas[i] = ((PositionIndex)(i - 1)).ToString();
         recordData.Add(datas);
 
-        //현재의 위치 저장
-        string[] curJointData = new string[PositionIndex.Count.Int() + 1];
-        curJointData[0] = recordTime.ToString();
-        for (int i = 1; i < curJointData.Length; i++)
-            curJointData[i] = $"{model.JointPoints[i - 1].Pos3D.x}_{model.JointPoints[i - 1].Pos3D.y}_{model.JointPoints[i - 1].Pos3D.z}_{model.JointPoints[i - 1].InverseRotation.x}_{model.JointPoints[i - 1].InverseRotation.y}_{model.JointPoints[i - 1].InverseRotation.z}_{model.JointPoints[i - 1].InverseRotation.w}";
-        recordData.Add(curJointData);
+        ////현재의 위치 저장
+        //string[] curJointData = new string[PositionIndex.Count.Int() + 1];
+        //curJointData[0] = recordTime.ToString();
+        //for (int i = 1; i < curJointData.Length; i++)
+        //    curJointData[i] = $"{model.JointPoints[i - 1].Pos3D.x}_{model.JointPoints[i - 1].Pos3D.y}_{model.JointPoints[i - 1].Pos3D.z}_{model.JointPoints[i - 1].InverseRotation.x}_{model.JointPoints[i - 1].InverseRotation.y}_{model.JointPoints[i - 1].InverseRotation.z}_{model.JointPoints[i - 1].InverseRotation.w}";
+        //recordData.Add(curJointData);
     }
 
-    public void StopRecord(string fileName)
+    public void StopRecord(string filePath)
     {
         isRecording = false;
+
         //TestFileName = fileName;
-        CSVManager.Instance.WriteCsv(fileName, recordData);
+        CSVManager.Instance.WriteCsv(filePath, recordData);
     }
 }

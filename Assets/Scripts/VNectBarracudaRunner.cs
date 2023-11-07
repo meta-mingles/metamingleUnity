@@ -9,6 +9,8 @@ using Unity.Barracuda;
 /// </summary>
 public class VNectBarracudaRunner : MonoBehaviour
 {
+    public bool IsTracking { get; set; }
+
     /// <summary>
     /// Neural network model
     /// </summary>
@@ -28,7 +30,7 @@ public class VNectBarracudaRunner : MonoBehaviour
     /// Coordinates of joint points
     /// </summary>
     private VNectModel.JointPoint[] jointPoints;
-    
+
     /// <summary>
     /// Number of joint points
     /// </summary>
@@ -54,7 +56,7 @@ public class VNectBarracudaRunner : MonoBehaviour
     /// Column number of heatmap in 2D image
     /// </summary>
     private int HeatMapCol_Squared;
-    
+
     /// <summary>
     /// Column nuber of heatmap in 3D model
     /// </summary>
@@ -70,23 +72,23 @@ public class VNectBarracudaRunner : MonoBehaviour
     /// Buffer memory has offset 2D
     /// </summary>
     private float[] offset2D;
-    
+
     /// <summary>
     /// Buffer memory has 3D heat map
     /// </summary>
     private float[] heatMap3D;
-    
+
     /// <summary>
     /// Buffer memory hash 3D offset
     /// </summary>
     private float[] offset3D;
     private float unit;
-    
+
     /// <summary>
     /// Number of joints in 2D image
     /// </summary>
     private int JointNum_Squared = JointNum * 2;
-    
+
     /// <summary>
     /// Number of joints in 3D model
     /// </summary>
@@ -139,6 +141,8 @@ public class VNectBarracudaRunner : MonoBehaviour
 
     private void Start()
     {
+        IsTracking = false;
+
         // Initialize 
         HeatMapCol_Squared = HeatMapCol * HeatMapCol;
         HeatMapCol_Cube = HeatMapCol * HeatMapCol * HeatMapCol;
@@ -256,6 +260,8 @@ public class VNectBarracudaRunner : MonoBehaviour
         // Create input and Execute model
         yield return _worker.StartManualSchedule(inputs);
 
+        IsTracking = true;
+
         // Get outputs
         for (var i = 2; i < _model.outputs.Count; i++)
         {
@@ -265,7 +271,7 @@ public class VNectBarracudaRunner : MonoBehaviour
         // Get data from outputs
         offset3D = b_outputs[2].data.Download(b_outputs[2].shape);
         heatMap3D = b_outputs[3].data.Download(b_outputs[3].shape);
-        
+
         // Release outputs
         for (var i = 2; i < b_outputs.Length; i++)
         {
@@ -306,7 +312,7 @@ public class VNectBarracudaRunner : MonoBehaviour
                     }
                 }
             }
-           
+
             jointPoints[j].Now3D.x = (offset3D[maxYIndex * CubeOffsetSquared + maxXIndex * CubeOffsetLinear + j * HeatMapCol + maxZIndex] + 0.5f + (float)maxXIndex) * ImageScale - InputImageSizeHalf;
             jointPoints[j].Now3D.y = InputImageSizeHalf - (offset3D[maxYIndex * CubeOffsetSquared + maxXIndex * CubeOffsetLinear + (j + JointNum) * HeatMapCol + maxZIndex] + 0.5f + (float)maxYIndex) * ImageScale;
             jointPoints[j].Now3D.z = (offset3D[maxYIndex * CubeOffsetSquared + maxXIndex * CubeOffsetLinear + (j + JointNum_Squared) * HeatMapCol + maxZIndex] + 0.5f + (float)(maxZIndex - 14)) * ImageScale;
@@ -363,7 +369,7 @@ public class VNectBarracudaRunner : MonoBehaviour
         measurement.X = measurement.Pos3D;
     }
 
-	void measurementUpdate(VNectModel.JointPoint measurement)
+    void measurementUpdate(VNectModel.JointPoint measurement)
     {
         measurement.K.x = (measurement.P.x + KalmanParamQ) / (measurement.P.x + KalmanParamQ + KalmanParamR);
         measurement.K.y = (measurement.P.y + KalmanParamQ) / (measurement.P.y + KalmanParamQ + KalmanParamR);

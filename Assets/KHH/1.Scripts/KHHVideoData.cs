@@ -8,6 +8,7 @@ public static class KHHVideoData
     static List<string> soundDatas = new List<string>();
     static List<string> ImageDatas = new List<string>();
 
+    public static string VideoName { get; set; }
     public static string FilePath { get; set; }
     public static string FileMotionPath { get; set; }
     public static string FileSoundPath { get; set; }
@@ -15,6 +16,7 @@ public static class KHHVideoData
 
     public static void Open(string videoName)
     {
+        VideoName = videoName;
         FilePath = Application.persistentDataPath + "/" + videoName;
         FileMotionPath = FilePath + "/Motions";
         FileSoundPath = FilePath + "/Sounds";

@@ -21,6 +21,8 @@ public class VideoCapture : MonoBehaviour
     private int videoScreenWidth = 1920;//2560;
     private int bgWidth, bgHeight;
 
+    public bool IsCapturing { get { return webCamTexture == null ? false : webCamTexture.isPlaying; } }
+
     public RenderTexture MainTexture { get; private set; }
 
     /// <summary>
