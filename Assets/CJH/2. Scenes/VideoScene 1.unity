@@ -5603,6 +5603,12 @@ PrefabInstance:
       propertyPath: thumbnailScrollView
       value: 
       objectReference: {fileID: 957413485}
+    - target: {fileID: 4644323016296805990, guid: 5fa4cf530de822f41a4c2cbe8c22635a,
+        type: 3}
+      propertyPath: interactiveVideoFactory
+      value: 
+      objectReference: {fileID: 8241539764084789306, guid: 2e359f821a2ccec409334697791a909c,
+        type: 3}
     - target: {fileID: 4644323016296805991, guid: 5fa4cf530de822f41a4c2cbe8c22635a,
         type: 3}
       propertyPath: m_Name

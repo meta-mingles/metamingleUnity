@@ -46,10 +46,11 @@ public class J_ThumItem : MonoBehaviour
 
     public void OnClick()
     {
-        if(onClickEvent != null)
-        {
-            onClickEvent(videoInfo);
-        }
+        //if (onClickEvent != null)
+        //{
+        //    onClickEvent(videoInfo);
+        //}
+        onClickEvent?.Invoke(videoInfo);
     }
 
     //비디오 데이터 셋팅

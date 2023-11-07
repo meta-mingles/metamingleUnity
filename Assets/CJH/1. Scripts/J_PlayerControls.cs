@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,31 +8,31 @@ using Photon.Pun;
 public class J_PlayerControls : MonoBehaviourPun
 {
     [SerializeField]
-    private float playerSpeed = 2.0f; // ÇÃ·¹ÀÌ¾î ÀÌµ¿ ¼Óµµ
+    private float playerSpeed = 2.0f; // í”Œë ˆì´ì–´ ì´ë™ ì†ë„
 
     [SerializeField]
     private float runSpeed = 10f;
 
     [SerializeField]
-    private float jumpHeight = 1.0f; // Á¡ÇÁ ³ôÀÌ
+    private float jumpHeight = 1.0f; // ì í”„ ë†’ì´
 
     [SerializeField]
-    private float gravityValue = -9.81f; // Áß·Â °¡¼Óµµ
+    private float gravityValue = -9.81f; // ì¤‘ë ¥ ê°€ì†ë„
 
     [SerializeField]
-    private float rotationSpeed = 2f; // ÇÃ·¹ÀÌ¾î È¸Àü ¼Óµµ
+    private float rotationSpeed = 2f; // í”Œë ˆì´ì–´ íšŒì „ ì†ë„
 
-    private CharacterController cc; // CharacterController ÄÄÆ÷³ÍÆ®
-    private Vector3 playerVelocity; // ÇÃ·¹ÀÌ¾îÀÇ ÇöÀç ¼Óµµ
-    private bool groundedPlayer; // ÇÃ·¹ÀÌ¾î°¡ Áö¸é¿¡ ÀÖ´ÂÁö ¿©ºÎ
+    private CharacterController cc; // CharacterController ì»´í¬ë„ŒíŠ¸
+    private Vector3 playerVelocity; // í”Œë ˆì´ì–´ì˜ í˜„ì¬ ì†ë„
+    private bool groundedPlayer; // í”Œë ˆì´ì–´ê°€ ì§€ë©´ì— ìˆëŠ”ì§€ ì—¬ë¶€
 
-    private Transform trCam; // ¸ŞÀÎ Ä«¸Ş¶óÀÇ Transform
+    private Transform trCam; // ë©”ì¸ ì¹´ë©”ë¼ì˜ Transform
 
-    Animator anim; //¾Ö´Ï¸ŞÀÌÅÍ
+    Animator anim; //ì• ë‹ˆë©”ì´í„°
 
-    public GameObject voice; //º¸ÀÌ½º
+    public GameObject voice; //ë³´ì´ìŠ¤
 
-    public GameObject chair; //ÀÇÀÚ
+    public GameObject chair; //ì˜ì
 
 
     private float horizontalInput;
@@ -40,16 +40,16 @@ public class J_PlayerControls : MonoBehaviourPun
 
     private void Awake()
     {
-        cc = gameObject.GetComponent<CharacterController>(); // CharacterController ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
-        trCam = Camera.main.transform; // ¸ŞÀÎ Ä«¸Ş¶óÀÇ Transform °¡Á®¿À±â
-        anim = GetComponent<Animator>(); //¾Ö´Ï¸ŞÀÌÅÍ
+        cc = gameObject.GetComponent<CharacterController>(); // CharacterController ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
+        trCam = Camera.main.transform; // ë©”ì¸ ì¹´ë©”ë¼ì˜ Transform ê°€ì ¸ì˜¤ê¸°
+        anim = GetComponent<Animator>(); //ì• ë‹ˆë©”ì´í„°
 
     }
     private void Start()
     {
         UpdateIdle();
 
-        //³»°¡ »ı¼ºÇÑ ÇÃ·¹ÀÌ¾îÀÏ¶§¸¸ Ä«¸Ş¶ó È°¼ºÈ­
+        //ë‚´ê°€ ìƒì„±í•œ í”Œë ˆì´ì–´ì¼ë•Œë§Œ ì¹´ë©”ë¼ í™œì„±í™”
         if (photonView.IsMine)
         {
             trCam.gameObject.SetActive(true);
@@ -57,25 +57,25 @@ public class J_PlayerControls : MonoBehaviourPun
     }
     void Update()
     {
-        //³»°¡ ¸¸µç ÇÃ·¹ÀÌ¾î¶ó¸é
+        //ë‚´ê°€ ë§Œë“  í”Œë ˆì´ì–´ë¼ë©´
         if (photonView.IsMine)
         {
-            //¸¸¾à¿¡ ¸¶¿ì½º Ä¿¼­°¡ È°¼ºÈ­µÇ¾îÀÖÀ¸¸é ÇÔ¼ö¸¦ ³ª°¡ÀÚ
+            //ë§Œì•½ì— ë§ˆìš°ìŠ¤ ì»¤ì„œê°€ í™œì„±í™”ë˜ì–´ìˆìœ¼ë©´ í•¨ìˆ˜ë¥¼ ë‚˜ê°€ì
             if (Cursor.visible == true) return;
 
-            horizontalInput = Input.GetAxis("Horizontal"); // ¼öÆò ÀÌµ¿ ÀÔ·Â°ª
-            verticalInput = Input.GetAxis("Vertical"); // ¼öÁ÷ ÀÌµ¿ ÀÔ·Â°ª
+            horizontalInput = Input.GetAxis("Horizontal"); // ìˆ˜í‰ ì´ë™ ì…ë ¥ê°’
+            verticalInput = Input.GetAxis("Vertical"); // ìˆ˜ì§ ì´ë™ ì…ë ¥ê°’
             Vector3 move = trCam.forward * verticalInput + trCam.right * horizontalInput;
             move.y = 0;
 
-            groundedPlayer = cc.isGrounded; // ÇÃ·¹ÀÌ¾î°¡ Áö¸é¿¡ ÀÖ´ÂÁö È®ÀÎ
+            groundedPlayer = cc.isGrounded; // í”Œë ˆì´ì–´ê°€ ì§€ë©´ì— ìˆëŠ”ì§€ í™•ì¸
 
             if (groundedPlayer && playerVelocity.y < 0)
             {
-                playerVelocity.y = 0f; // ÇÃ·¹ÀÌ¾î°¡ ¶¥¿¡ ´êÀº °æ¿ì ¼öÁ÷ ¼Óµµ¸¦ 0À¸·Î ÃÊ±âÈ­
+                playerVelocity.y = 0f; // í”Œë ˆì´ì–´ê°€ ë•…ì— ë‹¿ì€ ê²½ìš° ìˆ˜ì§ ì†ë„ë¥¼ 0ìœ¼ë¡œ ì´ˆê¸°í™”
             }
 
-            if (!groundedPlayer && Input.GetButtonDown("Jump")) // Á¡ÇÁ ÀÔ·ÂÀÌ È°¼ºÈ­µÇ°í ÇÃ·¹ÀÌ¾î°¡ Áö¸é¿¡ ÀÖ´Â °æ¿ì
+            if (!groundedPlayer && Input.GetButtonDown("Jump")) // ì í”„ ì…ë ¥ì´ í™œì„±í™”ë˜ê³  í”Œë ˆì´ì–´ê°€ ì§€ë©´ì— ìˆëŠ” ê²½ìš°
             {
                 UpdateJump();
             }
@@ -84,38 +84,46 @@ public class J_PlayerControls : MonoBehaviourPun
                 UpdateIdle();
             }
 
-            if (horizontalInput != 0 || verticalInput != 0) // ÀÌµ¿ ÀÔ·ÂÀÌ ÀÖ´Â °æ¿ì
+            if (horizontalInput != 0 || verticalInput != 0) // ì´ë™ ì…ë ¥ì´ ìˆëŠ” ê²½ìš°
             {
-
                 if (move != Vector3.zero)
                 {
-                    float targetAngle = Mathf.Atan2(horizontalInput, verticalInput) * Mathf.Rad2Deg + trCam.eulerAngles.y;
-                    Quaternion rotation = Quaternion.Euler(0f, targetAngle, 0f);
-                    transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
+                    Rotate(horizontalInput, verticalInput);
                 }
+
                 UpdateMove(move);
-                //Debug.Log("°È±â ¾Ö´Ï ½ÇÇà");
+                //UpdateMove(move, playerSpeed, "Walk");
+                //Debug.Log("ê±·ê¸° ì• ë‹ˆ ì‹¤í–‰");
 
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     UpdateRun(move);
+                    ///UpdateMove(move, runSpeed, "Run");
                 }
             }
             else
             {
                 anim.SetTrigger("Idle");
-                //Debug.Log("°È±â ¾Ö´Ï ½ÇÇà ³¡");
+                //Debug.Log("ê±·ê¸° ì• ë‹ˆ ì‹¤í–‰ ë");
             }
-            playerVelocity.y += gravityValue * Time.deltaTime; // Áß·ÂÀ» Àû¿ëÇÏ¿© ¼öÁ÷ ¼Óµµ ¾÷µ¥ÀÌÆ®
-            cc.Move(playerVelocity * Time.deltaTime); // ÇÃ·¹ÀÌ¾îÀÇ ¼öÁ÷ ÀÌµ¿ ¾÷µ¥ÀÌÆ®
+            playerVelocity.y += gravityValue * Time.deltaTime; // ì¤‘ë ¥ì„ ì ìš©í•˜ì—¬ ìˆ˜ì§ ì†ë„ ì—…ë°ì´íŠ¸
+            cc.Move(playerVelocity * Time.deltaTime); // í”Œë ˆì´ì–´ì˜ ìˆ˜ì§ ì´ë™ ì—…ë°ì´íŠ¸
         }
-        //³ªÀÇ ÇÃ·¹ÀÌ¾î°¡ ¾Æ´Ï¶ó¸é
+        //ë‚˜ì˜ í”Œë ˆì´ì–´ê°€ ì•„ë‹ˆë¼ë©´
         else
         {
 
         }
 
     }
+
+    void Rotate(float m, float n)
+    {
+        float targetAngle = Mathf.Atan2(m, n) * Mathf.Rad2Deg + trCam.eulerAngles.y;
+        Quaternion rotation = Quaternion.Euler(0f, targetAngle, 0f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
+    }
+
 
     void UpdateIdle()
     {
@@ -132,9 +140,16 @@ public class J_PlayerControls : MonoBehaviourPun
         cc.Move(move * Time.deltaTime * runSpeed);
         anim.SetTrigger("Run");
     }
+
+    //void UpdateMove(Vector3 move, float speed, string s)
+    //{
+    //    cc.Move(move * Time.deltaTime * speed);
+    //    anim.SetTrigger(s);
+    //}
+
     void UpdateJump()
     {
-        playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue); // Á¡ÇÁ ³ôÀÌ¿¡ µû¸¥ ¼öÁ÷ ¼Óµµ ¼³Á¤
+        playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue); // ì í”„ ë†’ì´ì— ë”°ë¥¸ ìˆ˜ì§ ì†ë„ ì„¤ì •
         Debug.Log("Jump");
         anim.SetTrigger("Jump");
        

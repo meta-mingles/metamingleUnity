@@ -24,8 +24,9 @@ public class J_VideoReceiver : MonoBehaviour
 
     [Header("ShortVideo")]
     public GameObject videoFactory;
+    public GameObject interactiveVideoFactory;
     public Transform trCtOFVideoSV; //비디오 스크롤뷰 생성장소
-
+    public GameObject videoInfo; //비디오 정보
     //public GameObject errorVideoFactory; //조회실패 팝업창
     private void Awake()
     {
@@ -55,6 +56,8 @@ public class J_VideoReceiver : MonoBehaviour
             httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
             
             HttpManager.Get().SendRequest(httpInfo);
+
+
         }
     }
     //숏폼 다운
@@ -74,12 +77,14 @@ public class J_VideoReceiver : MonoBehaviour
             // 항목 설정 - 각 섬네일에 대한 정보를 설정합니다.
             item.SetItem(J_DataManager.instance.shortVideoInfoList[i]);
 
+            
 
             //정보를 가져와야될듯
 
 
             //썸네일 클릭 시, 숏폼(짧은 형식의) 영상 창을 만듭니다.
             item.onClickEvent = CreateShortVideo;
+
         }
     }
 
@@ -88,8 +93,8 @@ public class J_VideoReceiver : MonoBehaviour
     {
         Debug.Log("111");
         //인터렉티브 비디오 생성
-        GameObject video = Instantiate(videoFactory, trCtOFVideoSV);
-        J_ShortVideoPlayer item = video.GetComponent<J_ShortVideoPlayer>();
+        GameObject video = Instantiate(interactiveVideoFactory, trCtOFVideoSV);
+        J_InteractiveVideoPlayer item = video.GetComponent<J_InteractiveVideoPlayer>();
         item.SetItem(info);
     }
     //숏폼비디오 열리는 함수
