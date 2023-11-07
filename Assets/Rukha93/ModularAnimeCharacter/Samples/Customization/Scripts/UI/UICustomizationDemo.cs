@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,7 +54,7 @@ namespace Rukha93.ModularAnimeCharacter.Customization.UI
 
         public void SetCategories(string[] categories)
         {
-            for(int i = 0; i < categories.Length; i++)
+            for (int i = 0; i < categories.Length; i++)
             {
                 UICategoryItem item;
                 if (i < m_CategoryItems.Count)
@@ -112,7 +112,7 @@ namespace Rukha93.ModularAnimeCharacter.Customization.UI
             m_CustomizationTitle.text = category;
 
             //item swapping
-            if( m_CurrentItemIndex >= m_ItemOptions.Count)
+            if (m_CurrentItemIndex >= m_ItemOptions.Count)
             {
                 m_SwapperItem.gameObject.SetActive(false);
                 return;
@@ -133,7 +133,7 @@ namespace Rukha93.ModularAnimeCharacter.Customization.UI
             List<int> rendererMaterialIndex = new List<int>();
             List<MaterialPropertyBlock> propertyBlock = new List<MaterialPropertyBlock>();
 
-            for(int i = 0; i < renderers.Length; i++)
+            for (int i = 0; i < renderers.Length; i++)
             {
                 var renderer = renderers[i];
                 var sharedMaterials = renderer.sharedMaterials;
