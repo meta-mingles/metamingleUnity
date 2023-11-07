@@ -1,10 +1,11 @@
-using ExitGames.Client.Photon.StructWrapping;
+ï»¿using ExitGames.Client.Photon.StructWrapping;
 using RootMotion.Demos;
 using System;
 using System.Collections;
 using System.IO;
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,22 +14,37 @@ using UnityEngine.Video;
 
 public class J_VideoReceiver : MonoBehaviour
 {
+    public static J_VideoReceiver instance;
+
+    [Header("ThumNailList")]
     public GameObject thumbnailScrollView;
 
     public GameObject thumbnailFactory;
-    public Transform trCtOfSV; //½æ³×ÀÏ ½ºÅ©·Ñºä »ı¼ºÀå¼Ò
+    public Transform trCtOfSV; //ì¸ë„¤ì¼ ìŠ¤í¬ë¡¤ë·° ìƒì„±ì¥ì†Œ
 
-
+    [Header("ShortVideo")]
     public GameObject videoFactory;
-    public Transform trCtOFVideoSC; //ºñµğ¿À ½ºÅ©·Ñºä »ı¼ºÀå¼Ò
+    public GameObject interactiveVideoFactory;
+    public Transform trCtOFVideoSV; //ë¹„ë””ì˜¤ ìŠ¤í¬ë¡¤ë·° ìƒì„±ì¥ì†Œ
+    public GameObject videoInfo; //ë¹„ë””ì˜¤ ì •ë³´
+    //public GameObject errorVideoFactory; //ì¡°íšŒì‹¤íŒ¨ íŒì—…ì°½
+    private void Awake()
+    {
+        instance = this;
+    }
 
-    public TextMeshProUGUI nothingText;
+    private void Start()
+    {
+
+    }
+
     private void Update()
     {
-        //tumbnail ¸®½ºÆ®
+        //ì”¬ì´ ë„˜ì–´ì˜¬ ë•Œ 
+        //tumbnail ë¦¬ìŠ¤íŠ¸
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            // ¼­¹öÇÑÅ× ¿µ»ó Á¤º¸ ¿äÃ»
+            // ì„œë²„í•œí…Œ ì˜ìƒ ì •ë³´ ìš”ì²­
             HttpInfo httpInfo = new HttpInfo();
 
             //Debug.Log(httpInfo.url);
@@ -38,63 +54,63 @@ public class J_VideoReceiver : MonoBehaviour
             //CSV
             //httpInfo.Set(RequestType.GET, uri.AbsoluteUri, OnCompleteSearchVideo, false);
             httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
-            Debug.Log("¿µ»óÀÌ ³ª¿É´Ï´Ù");
-            HttpManager.Get().SendRequest(httpInfo);        
-        }
-
-        #region ¿¹½Ã
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-
-            Uri uri = new Uri(Application.streamingAssetsPath + "/TestData/" + "ShopInfo.csv");
-
-            // ¼­¹öÇÑÅ× ¿µ»ó Á¤º¸ ¿äÃ»
-            HttpInfo httpInfo = new HttpInfo();
-            httpInfo.Set(RequestType.GET, uri.AbsoluteUri, (downloadHandler) => {
-
-                //µ¥ÀÌÅÍ ¼ÂÆÃ
-                J_DataManager.instance.SetShopInfoList(downloadHandler.text);
-            }, false);
-
+            
             HttpManager.Get().SendRequest(httpInfo);
+
+
         }
-        #endregion
     }
-
-
+    //ìˆí¼ ë‹¤ìš´
     void OnCompleteSearchVideo(DownloadHandler downloadHandler)
     {
-        //µ¥ÀÌÅÍ ¼ÂÆÃ
-        //J_DataManager.instance.SetRealVideoInfoListByCSV(downloadHandler.text);
-        J_DataManager.instance.SetRealVideoInfoListByJSON(downloadHandler.text);
+        //ë°ì´í„° ì…‹íŒ…
+        //J_DataManager.instance.SetShortVideoInfoListByCSV(downloadHandler.text);
+        J_DataManager.instance.SetShortVideoInfoListByJSON(downloadHandler.text);
 
-        //UI ¸¸µéÀÚ
-        for (int i = 0; i < J_DataManager.instance.videoInfoList.Count; i++)
+        //UI ë§Œë“¤ì
+        for (int i = 0; i < J_DataManager.instance.shortVideoInfoList.Count; i++)
         {
-            // ¼¶³×ÀÏ(ºñµğ¿À ½æ³×ÀÏ)À» ¸¸µì´Ï´Ù.
+            // ì„¬ë„¤ì¼(ë¹„ë””ì˜¤ ì¸ë„¤ì¼)ì„ ë§Œë“­ë‹ˆë‹¤.
             GameObject video = Instantiate(thumbnailFactory, trCtOfSV);
             J_ThumItem item = video.GetComponent<J_ThumItem>();
 
-            // Ç×¸ñ ¼³Á¤ - °¢ ¼¶³×ÀÏ¿¡ ´ëÇÑ Á¤º¸¸¦ ¼³Á¤ÇÕ´Ï´Ù.
-            item.SetItem(J_DataManager.instance.videoInfoList[i]);
-            //½æ³×ÀÏ Å¬¸¯ ½Ã, ¼ôÆû(ÂªÀº Çü½ÄÀÇ) ¿µ»ó Ã¢À» ¸¸µì´Ï´Ù.
+            // í•­ëª© ì„¤ì • - ê° ì„¬ë„¤ì¼ì— ëŒ€í•œ ì •ë³´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
+            item.SetItem(J_DataManager.instance.shortVideoInfoList[i]);
+
+            
+
+            //ì •ë³´ë¥¼ ê°€ì ¸ì™€ì•¼ë ë“¯
+
+
+            //ì¸ë„¤ì¼ í´ë¦­ ì‹œ, ìˆí¼(ì§§ì€ í˜•ì‹ì˜) ì˜ìƒ ì°½ì„ ë§Œë“­ë‹ˆë‹¤.
             item.onClickEvent = CreateShortVideo;
+
         }
     }
 
-    //¼ôÆûºñµğ¿À ¿­¸®´Â ÇÔ¼ö
-    void CreateShortVideo(VideolInfo info)
+    //ì¸í„°ë ‰í‹°ë¸Œ ë¹„ë””ì˜¤ ì—´ë¦¬ëŠ” í•¨ìˆ˜
+    public void CreateInteractiveMovie(ShortVideoInfo info)
     {
-        GameObject video = Instantiate(videoFactory, trCtOFVideoSC);
+        Debug.Log("111");
+        //ì¸í„°ë ‰í‹°ë¸Œ ë¹„ë””ì˜¤ ìƒì„±
+        GameObject video = Instantiate(interactiveVideoFactory, trCtOFVideoSV);
+        J_InteractiveVideoPlayer item = video.GetComponent<J_InteractiveVideoPlayer>();
+        item.SetItem(info);
+    }
+    //ìˆí¼ë¹„ë””ì˜¤ ì—´ë¦¬ëŠ” í•¨ìˆ˜
+    public void CreateShortVideo(ShortVideoInfo info)
+    {
+        //ìˆë¹„ë””ì˜¤ ìƒì„±
+        GameObject video = Instantiate(videoFactory, trCtOFVideoSV);
+        //
         J_ShortVideoPlayer item = video.GetComponent<J_ShortVideoPlayer>();
         item.SetItem(info);
 
         thumbnailScrollView.SetActive(false);
-
         item.onClickEvent = CloseShortVideo;
     }
 
-    //¼ôÆûºñµğ¿À ´İ´Â ÇÔ¼ö
+    //ìˆí¼ë¹„ë””ì˜¤ ë‹«ëŠ” í•¨ìˆ˜
     void CloseShortVideo()
     {
         thumbnailScrollView.SetActive(true);

@@ -1,45 +1,36 @@
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable] 
-public class ShopInfo
+public class ShortVideoInfo //ë¹„ë””ì˜¤ ì •ë³´
 {
-    public string name;
-    public int price;
-    public bool sale;
-    public string thumbnail;
-}
+    public int shortFormNo; //ì˜ìƒ ìˆœì„œ
 
+    public string title; //ì œëª©
 
-[System.Serializable] // Á÷·ÄÈ­
-public struct UserInfo //³ªÀÇ Á¤º¸
-{
-    //id
-    public string name;
-
-    //Å©¸®¿¡ÀÌÅÍ
-    public string Creator;
-}
-
-[System.Serializable] // Á÷·ÄÈ­
-public class VideolInfo //ºñµğ¿À Á¤º¸
-{
-    public int shortFormNo; //¿µ»ó ¼ø¼­
-
-    public string title; //Á¦¸ñ
-
-    public string thumbnailUrl; //½æ³×ÀÏ url
+    public string thumbnailUrl; //ì¸ë„¤ì¼ url
 
     public string url; //url
 
-    public string description; //¿µ»ó ¼³¸í
+    public string description; //ì˜ìƒ ì„¤ëª…
 
-    public string memberName; // ´Ğ³×ÀÓ
+    public string memberName; // ë‹‰ë„¤ì„
+    public string date; //ë‚ ì§œ
 
-    public string date; //³¯Â¥
+    public bool isInteractive;//ì¸í„°ë™í‹°ë¸Œ ì—¬ë¶€
 
-    public bool isInteractive; //ÀÎÅÍ·¢Æ¼ºê ¿©ºÎ
+    public List<InteractiveDTOS> interactiveMovieDTOS;
+}
+
+[System.Serializable] 
+public class InteractiveDTOS
+{
+    public string url;
+    public string choice;
+    public int interactiveMovieNo;
+
 }
 
 [System.Serializable]
@@ -52,11 +43,9 @@ public class J_DataManager : MonoBehaviour
 {
     public static J_DataManager instance;
 
-    //½æ³×ÀÏ ¸®½ºÆ® Á¤º¸
-    public List<VideolInfo> videoInfoList = new List<VideolInfo>();
+    //ìˆë¹„ë””ì˜¤ ì •ë³´
+    public List<ShortVideoInfo> shortVideoInfoList = new List<ShortVideoInfo>();
 
-    //¼¥ Á¤º¸
-    public List<ShopInfo> shopInfoList = new List<ShopInfo>();
 
     private void Awake()
     {
@@ -72,20 +61,19 @@ public class J_DataManager : MonoBehaviour
     {
         
     }
-    public void SetRealVideoInfoListByCSV(string data)
-    {
-        videoInfoList = J_CSVLoader.instance.ParseString<VideolInfo>(data);
-    }
 
-    public void SetRealVideoInfoListByJSON(string data)
+    #region ì˜ë˜ëŠ”ê±° ì ê¹ ì£¼ì„ì²˜ë¦¬
+    //CSV
+    //public void SetShortVideoInfoListByCSV(string data)
+    //{
+    //    shortVideoInfoList = J_CSVLoader.instance.ParseString<ShortVideolInfo>(data);
+    //}
+    //JSON
+    public void SetShortVideoInfoListByJSON(string data)
     {
-        JsonArray<VideolInfo> arrayData = JsonUtility.FromJson<JsonArray<VideolInfo>>(data);
-        videoInfoList = arrayData.data;
+        JsonArray<ShortVideoInfo> arrayData = JsonUtility.FromJson<JsonArray<ShortVideoInfo>>(data);
+        shortVideoInfoList = arrayData.data;
     }
+    #endregion
 
-
-    public void SetShopInfoList(string data)
-    {
-        shopInfoList = J_CSVLoader.instance.ParseString<ShopInfo>(data);
-    }
 }

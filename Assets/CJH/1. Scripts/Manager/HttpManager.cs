@@ -110,14 +110,11 @@ public class HttpManager : MonoBehaviour
                 req = UnityWebRequest.Get(httpInfo.url);
                 break;
             case RequestType.POST:
-
                 string str = JsonUtility.ToJson(httpInfo.body);
                 req = UnityWebRequest.Post(httpInfo.url, str);
-
                 byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
                 req.uploadHandler = new UploadHandlerRaw(byteBody);
                 req.SetRequestHeader("Content-Type", "application/json");
-
                 break;
             case RequestType.PUT:
                 req = UnityWebRequest.Put(httpInfo.url, httpInfo.body);
@@ -134,8 +131,6 @@ public class HttpManager : MonoBehaviour
 
         if (req.result == UnityWebRequest.Result.Success)
         {
-
-
             if (httpInfo.requestType == RequestType.TEXTURE)
             {
                 if (httpInfo.onReceiveImage != null)
@@ -149,6 +144,7 @@ public class HttpManager : MonoBehaviour
                 {
                     //print(req.downloadHandler.text);
                 }
+                //영상
                 if (httpInfo.onReceive != null)
                 {
                     httpInfo.onReceive(req.downloadHandler);

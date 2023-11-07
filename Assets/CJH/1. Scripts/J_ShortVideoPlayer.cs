@@ -1,79 +1,64 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using UnityEngine.Video;
 
-public class J_ShortVideoPlayer : MonoBehaviour
+
+public class J_ShortVideoPlayer : J_VideoPlayerBase
 {
+    [Header("ShortVideo info")]
+    public TMP_Text title;
+    public TMP_Text date;
+    public TMP_Text description;
+    public TMP_Text membername;
+    public RawImage profilecolor;
 
-    public VideoPlayer videoPlayer;
+    public J_InteractiveMovieItem interactiveMovieList;
 
-    public VideolInfo videoInfo;
-
-    public Action onClickEvent;
-
-    public Action onPlayEvent;
-
-    void Start()
+    //ìˆí¼ ë¹„ë””ì˜¤ ì„œë²„ 
+    public override void SetItem(ShortVideoInfo info)
     {
+        base.SetItem(info); 
         
+        //ì œëª©
+        title.text = videoInfo.title;
+        //ë‚ ì§œ 
+        string[] temp = videoInfo.date.Split('T');
+        date.text = temp[0];
+
+        //ì˜ìƒ ì„¤ëª…
+        description.text = videoInfo.description;
+        //í¬ë¦¬ì—ì´í„°
+        membername.text = videoInfo.memberName;
+       
     }
 
-    void Update()
+
+
+    //ì˜ìƒì´ ëë‚ ë•Œ ì¸í„°ë ‰í‹°ë¸Œ UI ìƒì„±
+    protected override void OnFinishVideo(VideoPlayer source)
     {
-        
+        interactiveMovieList.SetInteractiveInfo(ClickInteractiveMovieBt, videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);
+        //interactiveMovieList.gameObject.SetActive(true);
+        //interactiveMovieList.onClickInteractive = ClickInteractiveMovieBt;
+        //interactiveMovieList.SetInteractiveItem(videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);
     }
 
-    //¼ôÆû ºñµð¿À ¼­¹ö 
-    public void SetItem(VideolInfo Info)
+
+
+    //ì¸í„°ë ‰í‹°ë¸Œ ë²„íŠ¼
+    void ClickInteractiveMovieBt(int index)
     {
-        videoInfo = Info;
-        // ¿µ»ó ´Ù¿î·Îµå
-        HttpInfo httpInfo = new HttpInfo();
-        httpInfo.Set(RequestType.GET, videoInfo.url, (downloadHandler) =>
-        {
+        ShortVideoInfo info = new ShortVideoInfo();
 
-            byte[] videoBytes = downloadHandler.data;
+        info.isInteractive = true;
+        info.title = videoInfo.interactiveMovieDTOS[index].choice;
+        info.url = videoInfo.interactiveMovieDTOS[index].url;
 
-            FileStream file = new FileStream(Application.dataPath + "/" + videoInfo.title + ".mp4", FileMode.Create);
-            //byteData ¸¦ file ¿¡ ¾²ÀÚ
-            file.Write(videoBytes, 0, videoBytes.Length);
-            file.Close();
-
-            RenderTexture rt = new RenderTexture(1920, 1080, 24);
-
-            videoPlayer.targetTexture = rt;
-            videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
-            videoPlayer.url = Application.dataPath + "/" + videoInfo.title + ".mp4";
-            videoPlayer.Play();
-
-        }, false);
-
-        HttpManager.Get().SendRequest(httpInfo);
-    }
-
-    ////¿µ»ó Àç»ý
-    //public void PlayVideo()
-    //{
-    //    videoPlayer.Play();
-    //}
-    ////¿µ»ó ¸ØÃã
-    //public void StopVideo()
-    //{
-    //    videoPlayer.Stop();
-    //}
-
-    //¿µ»ó ²ô±â
-    public void CloseVideo()
-    {
-        if (onClickEvent != null)
-        {
-            onClickEvent();
-            Destroy(gameObject);
-        }
+        J_VideoReceiver.instance.CreateInteractiveMovie(info);
     }
 }
