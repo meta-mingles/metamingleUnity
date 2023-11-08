@@ -42,10 +42,10 @@ public class J_LoginUIManager : MonoBehaviour
         IntroductionText();
         //이전
         prev_LoginBt.onClick.AddListener(Click_Prev);
-        prev_SignUp.onClick.AddListener(Click_Prev);
+        prev_SignUp.onClick.AddListener(OnChange);
         close_Bt1.onClick.AddListener(Click_Prev);
         close_Bt2.onClick.AddListener(Click_Prev);
-        close_Bt3.onClick.AddListener(Click_Prev);
+        close_Bt3.onClick.AddListener( OnChange);
 
         //다음
         move_startBt.onClick.AddListener(Click_Next);
@@ -89,6 +89,18 @@ public class J_LoginUIManager : MonoBehaviour
         panels[page -= 1].SetActive(true);
         CheckControl();
     }
+
+
+    public void OnChange()
+    {
+        if (page <= 0 || !isReady) return;
+        panels[page].SetActive(false);
+        panels[page -= 2].SetActive(true);
+        CheckControl();
+    }
+
+
+
 
 
     //다음으로 이동하는 버튼
