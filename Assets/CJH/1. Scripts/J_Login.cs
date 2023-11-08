@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -7,33 +7,65 @@ using UnityEngine.UI;
 
 public class J_Login : MonoBehaviour
 {
-    //[Header("Login & Register")]
-    //public InputField inputId;
-    //public InputField inputPw;
+    [Header("Login & Register")]
+    public InputField inputId;
+    public InputField inputPw;
 
+    public string serverURL = "https://yourserver.com"; // ì„œë²„ URLì„ ì—¬ê¸°ì— ì…ë ¥
 
-    ////public InputField inputId;
+    // íšŒì›ê°€ì… í•¨ìˆ˜
+    public IEnumerator RegisterUser(string username, string password)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", username);
+        form.AddField("password", password);
 
-    //public void NetSignUp()
-    //{
-    //    HttpInfo info = new HttpInfo();
+        using (UnityWebRequest www = UnityWebRequest.Post(serverURL + "/register", form))
+        {
+            yield return www.SendWebRequest();
 
-    //    info.Set(RequestType.POST, "/sign-up", (DownloadHandler downloadHandler) => {
-    //        //Post µ¥ÀÌÅÍ Àü¼ÛÇßÀ» ¶§ ¼­¹ö·ÎºÎÅÍ ÀÀ´ä ¿É´Ï´Ù~
-    //        print("NetSignUp : " + downloadHandler.text);
-    //        //ProjectManager.instance.myInfo = JsonUtility.FromJson<ReceiveUserInfo>(downloadHandler.text);
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("íšŒì›ê°€ì… ì„±ê³µ!");
+                // íšŒì›ê°€ì… ì„±ê³µ ì‹œ ì¶”ê°€ ì‘ì—… ìˆ˜í–‰
+            }
+        }
+    }
 
-    //        SceneManager.LoadScene("GameSceneFInal");
+    public void metamingleSignUp()
+    {
+        StartCoroutine(RegisterUser(inputId.text, inputPw.text));
+    }
 
-    //    });
+    // ë¡œê·¸ì¸ í•¨ìˆ˜
+    public IEnumerator LogIn(string username, string password)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", username);
+        form.AddField("password", password);
 
-    //    SignUpInfo signUpInfo = new SignUpInfo();
+        using (UnityWebRequest www = UnityWebRequest.Post(serverURL + "/login", form))
+        {
+            yield return www.SendWebRequest();
 
-    //    signUpInfo.nickname = inputId.text;
-        
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Logged in successfully!");
+                // ë¡œê·¸ì¸ ì„±ê³µ ì‹œ ì¶”ê°€ ì‘ì—… ìˆ˜í–‰
+            }
+        }
+    }
 
-    //    info.body = JsonUtility.ToJson(signUpInfo);
-
-    //    HttpManager.Get().SendRequest(info);
-    //}
+    public void metamingleLogIn()
+    {
+        StartCoroutine(LogIn(inputId.text, inputPw.text));
+    }
 }

@@ -106,7 +106,7 @@ public class HttpManager : MonoBehaviour
         switch (httpInfo.requestType)
         {
             case RequestType.GET:
-                Debug.Log(httpInfo.url);
+                //Debug.Log(httpInfo.url);
                 req = UnityWebRequest.Get(httpInfo.url);
                 break;
             case RequestType.POST:
