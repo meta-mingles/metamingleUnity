@@ -21,6 +21,10 @@ public class ShortVideoInfo //비디오 정보
 
     public bool isInteractive;//인터랙티브 여부
 
+    public bool isLike;//  사용자 본인이 해당 숏폼에 좋아요를 했는지 여부
+
+    public int shortFormLikeCnt; //해당 숏폼의 좋아요 수
+
     public List<InteractiveDTOS> interactiveMovieDTOS;
 }
 

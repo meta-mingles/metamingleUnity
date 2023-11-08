@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -8,8 +9,8 @@ using UnityEngine.UI;
 public class J_Login : MonoBehaviour
 {
     [Header("Login & Register")]
-    public InputField inputId;
-    public InputField inputPw;
+    public TMP_InputField inputId;
+    public TMP_InputField inputPw;
 
     public string serverURL = "https://yourserver.com"; // 서버 URL을 여기에 입력
 

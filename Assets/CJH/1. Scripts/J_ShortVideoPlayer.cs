@@ -11,6 +11,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public TMP_Text date;
     public TMP_Text description;
     public TMP_Text membername;
+    public TMP_Text like_Count;
     public RawImage profilecolor;
 
     public J_InteractiveMovieItem interactiveMovieList;
@@ -30,7 +31,11 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         description.text = videoInfo.description;
         //크리에이터
         membername.text = videoInfo.memberName;
-       
+
+        //좋아요 수
+        //like_Count.text = videoInfo.shortFormLikeCnt;
+
+
     }
 
     //영상이 끝날때 인터렉티브 UI 생성
