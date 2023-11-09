@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -73,6 +74,13 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
         J_VideoReceiver.instance.CreateInteractiveMovie(info);
     }
+    public void LikeButton()
+    {
+
+
+    }
+
+
 
     void Like_Button()
     {

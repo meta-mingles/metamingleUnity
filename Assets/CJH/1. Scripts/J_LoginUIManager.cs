@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -11,6 +13,9 @@ public class J_LoginUIManager : MonoBehaviour
     public List<GameObject> panels = new List<GameObject>(); //패널 오브젝트 이름 배열
     private int page = 0;
     private bool isReady = false;
+    private bool canContinue = false;
+    EventSystem system;
+
     [SerializeField] private Transform panelTransform;
 
     [Header("Title")]
@@ -26,6 +31,7 @@ public class J_LoginUIManager : MonoBehaviour
     public Button loginBt; //로그인 버튼
     public TMP_InputField inputId; //로그인 아이디 입력
     public TMP_InputField inputPW; //로그인 패스워드 입력
+    public Selectable firstInput;
 
     [Header("Popup_ SignUp")]
     public GameObject PopUp_signUp; //회원가입 창
@@ -64,16 +70,15 @@ public class J_LoginUIManager : MonoBehaviour
         panels[page].SetActive(true);
         isReady = true;
         CheckControl();
+        system = EventSystem.current;
+
         Login_Bt();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if(onChange != null)
-        //{
-        //    IntroductionText();
-        //}
+        ChangeInput();
     }
     
     public void IntroductionText()
@@ -82,6 +87,14 @@ public class J_LoginUIManager : MonoBehaviour
 
         introductionText.GetComponent<TMP_Text>().text = IntroText;
         IntroText = introductionText.text;
+
+        //if (Input.anyKeyDown)
+        //{
+        //    canContinue = true;
+        //    move_startBt.onClick.Invoke();
+        //    Debug.Log("Button pressed!");
+        //}
+
 
     }
     //이전으로 이동하는 버튼
@@ -136,7 +149,7 @@ public class J_LoginUIManager : MonoBehaviour
         move_SignUpBt.gameObject.SetActive(page < panels.Count - 1);
         signUpBt.gameObject.SetActive(page < panels.Count - 1);
     }
-
+    //현재 로그인 포스트 통신 함수 => 추후 함수 이름 변경
     public void PostTest()
     {
         HttpInfo info = new HttpInfo();
@@ -156,9 +169,38 @@ public class J_LoginUIManager : MonoBehaviour
     //로그인 버튼
     public void Login_Bt()
     {
-        if(loginBt.onClick != null)
+        if (loginBt.onClick != null)
         {
             loginBt.onClick.AddListener(PostTest);
+        }
+
+    }
+
+
+
+    //탭키로 인풋필드 이동 및 엔터버튼으로 로그인하기 
+    public void ChangeInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab) && Input.GetKey(KeyCode.LeftShift))
+        {
+            Selectable next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnUp();
+            if (next != null)
+            {
+                next.Select();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Selectable next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+            if (next != null)
+            {
+                next.Select();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            loginBt.onClick.Invoke();
+            Debug.Log("Button pressed!");
         }
     }
 

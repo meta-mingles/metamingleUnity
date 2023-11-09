@@ -13,6 +13,7 @@ public class J_VideoPlayerBase : MonoBehaviour
     public Action onClickEvent;
     public Button playBt;
     public Button pauseBt;
+    public Button restartBt;
     
     public virtual void SetItem(ShortVideoInfo Info)
     {
@@ -38,7 +39,7 @@ public class J_VideoPlayerBase : MonoBehaviour
             videoPlayer.Play();
 
             videoPlayer.loopPointReached += OnFinishVideo;
-
+            
         }, false);
 
         HttpManager.Get().SendRequest(httpInfo);
@@ -49,8 +50,6 @@ public class J_VideoPlayerBase : MonoBehaviour
     {
 
     }
-
-
     //영상 재생
     public void PlayPauseVideo()
     {

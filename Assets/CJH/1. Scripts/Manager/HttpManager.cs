@@ -22,6 +22,7 @@ public class HttpInfo
 {
     public RequestType requestType;
     public string url = "";
+    public string testUrl = "";
 
     public string body = "{}";
 
@@ -42,8 +43,8 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://192.168.0.28:8080";
-        //if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080";
+        if (useDefaultUrl) testUrl = "http://192.168.0.28:8080";  //로그인 임시 url
+        if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
         url += u;
         onReceive = callback;
     }
@@ -118,11 +119,14 @@ public class HttpManager : MonoBehaviour
                 break;
             case RequestType.POST:
                 string str = JsonUtility.ToJson(httpInfo.body);
-                req = UnityWebRequest.Post(httpInfo.url, str);
+                //토큰 처리를 어떻게 해야될지 고민....
+                string token = httpInfo.token;
+                req = UnityWebRequest.Post(httpInfo.testUrl, str);
+                Debug.Log(httpInfo.testUrl);
                 byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
                 req.uploadHandler = new UploadHandlerRaw(byteBody);
                 //헤더추가
-                req.SetRequestHeader("Content-Type", "application/json");
+                req.SetRequestHeader("Authorization", token);
                 //req.SetRequestHeader("Authorization", token);
                 break;
             case RequestType.PUT:
@@ -149,9 +153,6 @@ public class HttpManager : MonoBehaviour
                     httpInfo.onReceiveToken(req.downloadHandler, httpInfo.token);
                 }
             }
-
-
-
             //이미지 다운로드
             if (httpInfo.requestType == RequestType.TEXTURE)
             {
