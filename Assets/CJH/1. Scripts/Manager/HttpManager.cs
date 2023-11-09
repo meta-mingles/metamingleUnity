@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -23,9 +24,14 @@ public class HttpInfo
     public string url = "";
 
     public string body = "{}";
+
     public Action<DownloadHandler> onReceive;
+    public Action<DownloadHandler, string> onReceiveToken; //로그인 토큰
     public Action<DownloadHandler, int> onReceiveImage;
 
+    public string loginId;
+    public string loginPW;
+    public string token;
 
     public int imageId;
 
@@ -36,7 +42,8 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080";
+        if (useDefaultUrl) url = "http://192.168.0.28:8080";
+        //if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080";
         url += u;
         onReceive = callback;
     }
@@ -114,7 +121,9 @@ public class HttpManager : MonoBehaviour
                 req = UnityWebRequest.Post(httpInfo.url, str);
                 byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
                 req.uploadHandler = new UploadHandlerRaw(byteBody);
+                //헤더추가
                 req.SetRequestHeader("Content-Type", "application/json");
+                //req.SetRequestHeader("Authorization", token);
                 break;
             case RequestType.PUT:
                 req = UnityWebRequest.Put(httpInfo.url, httpInfo.body);
@@ -131,6 +140,19 @@ public class HttpManager : MonoBehaviour
 
         if (req.result == UnityWebRequest.Result.Success)
         {
+
+            //로그인 token
+            if(httpInfo.requestType == RequestType.POST)
+            {
+                if(httpInfo.onReceiveToken != null)
+                {
+                    httpInfo.onReceiveToken(req.downloadHandler, httpInfo.token);
+                }
+            }
+
+
+
+            //이미지 다운로드
             if (httpInfo.requestType == RequestType.TEXTURE)
             {
                 if (httpInfo.onReceiveImage != null)

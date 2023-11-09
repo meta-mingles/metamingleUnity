@@ -1,7 +1,19 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+[System.Serializable]
+public class SignUpInfo //로그인 정보
+{
+    public string email; //아이디
+    public string password; //패스워드
+}
+
+
+
 
 [System.Serializable] 
 public class ShortVideoInfo //비디오 정보

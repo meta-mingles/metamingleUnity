@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -14,13 +15,28 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public TMP_Text like_Count;
     public RawImage profilecolor;
 
+    public Button like_Button; // 좋아요 버튼
+
+    int likeCnt;
     public J_InteractiveMovieItem interactiveMovieList;
 
+
+    private void Start()
+    {
+        //처음엔 0 
+        like_Count.text = "0";
+        //but 누르고나서 서버에서 받는 좋아요수로 업데이트
+
+        if(like_Button != null)
+        {
+            like_Button.onClick.AddListener(Like_Button);
+        }
+    }
     //숏폼 비디오 서버 
     public override void SetItem(ShortVideoInfo info)
     {
-        base.SetItem(info); 
-        
+        base.SetItem(info);
+
         //제목
         title.text = videoInfo.title;
         //날짜 
@@ -33,8 +49,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         membername.text = videoInfo.memberName;
 
         //좋아요 수
-        //like_Count.text = videoInfo.shortFormLikeCnt;
-
+        like_Count.text = videoInfo.shortFormLikeCnt.ToString();
 
     }
 
@@ -57,5 +72,23 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         info.url = videoInfo.interactiveMovieDTOS[index].url;
 
         J_VideoReceiver.instance.CreateInteractiveMovie(info);
+    }
+
+    void Like_Button()
+    {
+         likeCnt = videoInfo.shortFormLikeCnt;
+         likeCnt += 1;
+         like_Count.text = likeCnt.ToString();
+
+        //계정당 한번
+        if (videoInfo.isLike == true) //숏폼을 좋아요 했다면
+        {
+            return;
+        }
+        else 
+        {
+            
+        }
+        //서버랑 연동
     }
 }

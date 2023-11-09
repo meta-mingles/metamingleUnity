@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class J_LoginUIManager : MonoBehaviour
@@ -22,6 +22,10 @@ public class J_LoginUIManager : MonoBehaviour
     public GameObject PopUp_Login; //로그인 창
     public Button move_SignUpBt; //이동 버튼
     public Button close_Bt1; //닫기 버튼
+
+    public Button loginBt; //로그인 버튼
+    public TMP_InputField inputId; //로그인 아이디 입력
+    public TMP_InputField inputPW; //로그인 패스워드 입력
 
     [Header("Popup_ SignUp")]
     public GameObject PopUp_signUp; //회원가입 창
@@ -60,6 +64,7 @@ public class J_LoginUIManager : MonoBehaviour
         panels[page].SetActive(true);
         isReady = true;
         CheckControl();
+        Login_Bt();
     }
 
     // Update is called once per frame
@@ -90,7 +95,7 @@ public class J_LoginUIManager : MonoBehaviour
         CheckControl();
     }
 
-
+    //2칸 뒤로 이동
     public void OnChange()
     {
         if (page <= 0 || !isReady) return;
@@ -98,10 +103,11 @@ public class J_LoginUIManager : MonoBehaviour
         panels[page -= 2].SetActive(true);
         CheckControl();
     }
+    //자신 비활성화
+    public void OnClose()
+    {
 
-
-
-
+    }
 
     //다음으로 이동하는 버튼
     public void Click_Next()
@@ -130,4 +136,31 @@ public class J_LoginUIManager : MonoBehaviour
         move_SignUpBt.gameObject.SetActive(page < panels.Count - 1);
         signUpBt.gameObject.SetActive(page < panels.Count - 1);
     }
+
+    public void PostTest()
+    {
+        HttpInfo info = new HttpInfo();
+        info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) => {
+            //Post 데이터 전송했을 때 서버로부터 응답온다
+            Debug.Log("Signup : " + downloadHandler.text);
+        });
+        SignUpInfo signUpInfo = new SignUpInfo();
+        signUpInfo.email = inputId.text;
+        signUpInfo.password = inputPW.text;
+
+        info.body = JsonUtility.ToJson(signUpInfo);
+
+        HttpManager.Get().SendRequest(info);
+
+    }
+    //로그인 버튼
+    public void Login_Bt()
+    {
+        if(loginBt.onClick != null)
+        {
+            loginBt.onClick.AddListener(PostTest);
+        }
+    }
+
+
 }

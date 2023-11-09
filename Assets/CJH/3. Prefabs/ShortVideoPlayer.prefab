@@ -1515,7 +1515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 189, y: 25}
+  m_AnchoredPosition: {x: 154, y: 25}
   m_SizeDelta: {x: 166.6162, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4250514497272716654
@@ -2159,6 +2159,8 @@ MonoBehaviour:
     memberName: 
     date: 
     isInteractive: 0
+    isLike: 0
+    shortFormLikeCnt: 0
     interactiveMovieDTOS: []
   playBt: {fileID: 4721770947117040615}
   pauseBt: {fileID: 5053333890703886935}
@@ -2166,7 +2168,9 @@ MonoBehaviour:
   date: {fileID: 117114583450953275}
   description: {fileID: 6551838191333486985}
   membername: {fileID: 7773059566765961745}
+  like_Count: {fileID: 5345094986162877568}
   profilecolor: {fileID: 6693701038207951974}
+  like_Button: {fileID: 2668735933095691388}
   interactiveMovieList: {fileID: 5565993458271900200}
 --- !u!1 &8439779269252918878
 GameObject:
