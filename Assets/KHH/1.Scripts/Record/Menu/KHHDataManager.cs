@@ -7,12 +7,7 @@ public class KHHDataManager : MonoBehaviour
     public Transform content;
     public GameObject dataPrefab;
 
-    protected List<KHHData> khhDatas;
-
-    protected virtual void Start()
-    {
-        khhDatas = new List<KHHData>();
-    }
+    protected List<KHHData> khhDatas = new List<KHHData>();
 
     public virtual void Refresh()
     {
