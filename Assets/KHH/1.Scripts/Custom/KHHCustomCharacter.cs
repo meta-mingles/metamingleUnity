@@ -7,7 +7,7 @@ using UnityEngine;
 public class KHHCustomCharacter : MonoBehaviour
 {
     public static KHHCustomCharacter instance;
-    public bool LoadCustom { get { return m_LoadingCoroutine == null; } }
+    public bool LoadCustom { get; set; }
 
     private IAssetLoader m_AssetLoader;
 
@@ -24,7 +24,7 @@ public class KHHCustomCharacter : MonoBehaviour
     private void Awake()
     {
         instance = this;
-
+        LoadCustom = false;
         //init variables
         m_AssetLoader = GetComponentInChildren<IAssetLoader>();
         m_CustomizationOptions = new Dictionary<string, List<string>>();
@@ -59,6 +59,7 @@ public class KHHCustomCharacter : MonoBehaviour
             }
             yield return m_LoadingCoroutine;
         }
+        LoadCustom = true;
     }
 
     private void InitBody(string path, GameObject prefab)

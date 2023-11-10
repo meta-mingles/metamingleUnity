@@ -5,7 +5,17 @@ using UnityEngine;
 
 public class KHHModelRecorder : MonoBehaviour
 {
-    public VNectModel model;
+    public VNectModel[] models;
+    VNectModel Model
+    {
+        get
+        {
+            foreach (var model in models)
+                if (model.gameObject.activeSelf)
+                    return model;
+            return models[0];
+        }
+    }
     public KHHScreenEditor screenEditor;
 
     bool isRecording = false;
@@ -17,7 +27,7 @@ public class KHHModelRecorder : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (model != null && KHHRecordManager.Instance.StartRecord)
+        if (Model != null && KHHRecordManager.Instance.StartRecord)
         {
             recordTime += Time.deltaTime;
 
@@ -25,7 +35,7 @@ public class KHHModelRecorder : MonoBehaviour
             string[] curJointData = new string[PositionIndex.Count.Int() + 1];
             curJointData[0] = recordTime.ToString();
             for (int i = 1; i < curJointData.Length; i++)
-                curJointData[i] = $"{model.JointPoints[i - 1].Pos3D.x}_{model.JointPoints[i - 1].Pos3D.y}_{model.JointPoints[i - 1].Pos3D.z}_{model.JointPoints[i - 1].InverseRotation.x}_{model.JointPoints[i - 1].InverseRotation.y}_{model.JointPoints[i - 1].InverseRotation.z}_{model.JointPoints[i - 1].InverseRotation.w}";
+                curJointData[i] = $"{Model.JointPoints[i - 1].Pos3D.x}_{Model.JointPoints[i - 1].Pos3D.y}_{Model.JointPoints[i - 1].Pos3D.z}_{Model.JointPoints[i - 1].InverseRotation.x}_{Model.JointPoints[i - 1].InverseRotation.y}_{Model.JointPoints[i - 1].InverseRotation.z}_{Model.JointPoints[i - 1].InverseRotation.w}";
             recordData.Add(curJointData);
         }
     }
