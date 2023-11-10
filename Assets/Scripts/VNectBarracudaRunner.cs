@@ -19,7 +19,17 @@ public class VNectBarracudaRunner : MonoBehaviour
     public WorkerFactory.Type WorkerType = WorkerFactory.Type.Auto;
     public bool Verbose = true;
 
-    public VNectModel VNectModel;
+    public VNectModel[] VNectModels;
+    VNectModel VNectModel
+    {
+        get
+        {
+            foreach (var model in VNectModels)
+                if (model.gameObject.activeSelf)
+                    return model;
+            return VNectModels[0];
+        }
+    }
 
     public VideoCapture videoCapture;
 
@@ -186,6 +196,9 @@ public class VNectBarracudaRunner : MonoBehaviour
 
         // Create input and Execute model
         yield return _worker.StartManualSchedule(inputs);
+
+        while (!KHHCustomCharacter.instance.LoadCustom)
+            yield return null;
 
         // Get outputs
         for (var i = 2; i < _model.outputs.Count; i++)

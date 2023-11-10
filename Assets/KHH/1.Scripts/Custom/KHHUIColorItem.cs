@@ -11,6 +11,8 @@ public class KHHUIColorItem : MonoBehaviour
 
     public System.Action OnClickLight;
 
+    public int Index { get; set; }
+
     public Color LightColor
     {
         get => m_RightImage.color;

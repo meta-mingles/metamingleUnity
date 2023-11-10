@@ -29,7 +29,7 @@ public class KHHUIMaterialItem : MonoBehaviour
             m_ColorItems[i].gameObject.SetActive(false);
     }
 
-    public void SetColor(Color color, System.Action<Color> onChangeColor)
+    public void SetColor(Color color, int index, System.Action<Color> onChangeColor)
     {
         color.a = 1;
 
@@ -45,6 +45,7 @@ public class KHHUIMaterialItem : MonoBehaviour
         item.transform.SetAsLastSibling();
         item.gameObject.SetActive(true);
 
+        item.Index = index;
         item.LightColor = color;
         item.OnClickLight = () =>
         {
@@ -58,6 +59,7 @@ public class KHHUIMaterialItem : MonoBehaviour
             {
                 item.LightColor = c;
                 onChangeColor?.Invoke(c);
+                KHHUserCustom.SetColor(Title, item.Index, c);
             });
         };
     }

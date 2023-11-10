@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class KHHUICustomizationDemo : MonoBehaviour
 {
+    [SerializeField] private Button m_SaveButton;
     [Header("category")]
     [SerializeField] private LayoutGroup m_CategoryPanel;
     [SerializeField] private KHHUICategoryItem m_CategoryItemPrefab;
@@ -40,6 +42,9 @@ public class KHHUICustomizationDemo : MonoBehaviour
 
         m_SwapperItem.OnClickLeft = _OnSwapPrevious;
         m_SwapperItem.OnClickRight = _OnSwapNext;
+
+        if (m_SaveButton != null)
+            m_SaveButton.onClick.AddListener(SaveButtonEvent);
     }
 
     private void Start()
@@ -120,8 +125,16 @@ public class KHHUICustomizationDemo : MonoBehaviour
         m_SwapperItem.gameObject.SetActive(true);
     }
 
-    public void SetCustomizationMaterials(Renderer[] renderers)
+    public void SetCustomizationMaterials(Renderer[] renderers, List<KHHMaterialData> materialDatas = null)
     {
+        if (CurrentCategory == "body")
+        {
+            for (int i = 0; i < m_MaterialItems.Count; i++)
+                m_MaterialItems[i].gameObject.SetActive(false);
+            m_ColorPicker.Close();
+            return;
+        }
+
         if (renderers == null)
             renderers = new Renderer[0];
 
@@ -138,6 +151,8 @@ public class KHHUICustomizationDemo : MonoBehaviour
 
             for (int j = 0; j < sharedMaterials.Length; j++)
             {
+                if (sharedMaterials[j].name.Contains("mouth"))
+                    continue;
                 if (materials.Contains(sharedMaterials[j]))
                     continue;
                 materials.Add(sharedMaterials[j]);
@@ -173,37 +188,51 @@ public class KHHUICustomizationDemo : MonoBehaviour
             var auxMatIndex = rendererMaterialIndex[i];
             var auxPropertyBlock = propertyBlock[i];
 
+            KHHMaterialData materialData = materialDatas == null ? null : materialDatas.Find(x => x.name == materials[i].name);
+
             if (materials[i].HasProperty("_MaskRemap"))
             {
                 item.ResetColors();
 
+                Color colorA = materials[i].GetColor("_Color_A_2");
+                Color colorB = materials[i].GetColor("_Color_B_2");
+                Color colorC = materials[i].GetColor("_Color_C_2");
+                if (materialData != null)
+                {
+                    if (materialData.ColorA != Color.black)
+                        colorA = materialData.ColorA;
+                    if (materialData.ColorB != Color.black)
+                        colorB = materialData.ColorB;
+                    if (materialData.ColorC != Color.black)
+                        colorC = materialData.ColorC;
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", colorA);
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", colorB);
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", colorC);
+                }
+
                 //customization channel 1
-                item.SetColor(
-                    auxPropertyBlock.HasColor("_Color_A_2") ? auxPropertyBlock.GetColor("_Color_A_2") : materials[i].GetColor("_Color_A_2"),
-                    //auxPropertyBlock.HasColor("_Color_A_1") ? auxPropertyBlock.GetColor("_Color_A_1") : materials[i].GetColor("_Color_A_1"),
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", c)
-                //(c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_1", c)
-                );
+                item.SetColor(auxPropertyBlock.HasColor("_Color_A_2") ? auxPropertyBlock.GetColor("_Color_A_2") : colorA, 0,
+                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", c));
                 //customization channel 2
-                item.SetColor(
-                    auxPropertyBlock.HasColor("_Color_B_2") ? auxPropertyBlock.GetColor("_Color_B_2") : materials[i].GetColor("_Color_B_2"),
-                    //auxPropertyBlock.HasColor("_Color_B_1") ? auxPropertyBlock.GetColor("_Color_B_1") : materials[i].GetColor("_Color_B_1"),
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", c)
-                //(c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_1", c)
-                );
+                item.SetColor(auxPropertyBlock.HasColor("_Color_B_2") ? auxPropertyBlock.GetColor("_Color_B_2") : colorB, 1,
+                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", c));
                 //customization channel 3
-                item.SetColor(
-                    auxPropertyBlock.HasColor("_Color_C_2") ? auxPropertyBlock.GetColor("_Color_C_2") : materials[i].GetColor("_Color_C_2"),
-                    //auxPropertyBlock.HasColor("_Color_C_1") ? auxPropertyBlock.GetColor("_Color_C_1") : materials[i].GetColor("_Color_C_1"),
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", c)
-                //(c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_1", c)
-                );
+                item.SetColor(auxPropertyBlock.HasColor("_Color_C_2") ? auxPropertyBlock.GetColor("_Color_C_2") : colorC, 2,
+                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", c));
             }
-            else if (materials[i].HasProperty("_Color"))
+            else if (materials[i].HasProperty("_BaseColor"))
             {
-                item.SetColor(
-                    auxPropertyBlock.HasColor("_Color") ? auxPropertyBlock.GetColor("_Color") : materials[i].GetColor("_Color"),
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color", c));
+                item.ResetColors();
+
+                Color color = materials[i].GetColor("_BaseColor");
+                if (materialData != null)
+                {
+                    if (materialData.ColorA != Color.black)
+                        color = materialData.ColorA;
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_BaseColor", color);
+                }
+                item.SetColor(auxPropertyBlock.HasColor("_BaseColor") ? auxPropertyBlock.GetColor("_BaseColor") : color, 0,
+                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_BaseColor", c));
             }
         }
 
@@ -231,4 +260,12 @@ public class KHHUICustomizationDemo : MonoBehaviour
     }
 
     #endregion
+
+    void SaveButtonEvent()
+    {
+        KHHUserCustom.SaveData(() => 
+        {
+            SceneManager.LoadScene("ToolCapture");
+        });        
+    }
 }
