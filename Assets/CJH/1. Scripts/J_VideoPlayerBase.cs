@@ -12,6 +12,7 @@ public class J_VideoPlayerBase : MonoBehaviour
 
     public Action onClickEvent;
     public Button playBt;
+    public Button playBt1;
     public Button pauseBt;
     public Button restartBt;
     
@@ -38,18 +39,57 @@ public class J_VideoPlayerBase : MonoBehaviour
             videoPlayer.url = Application.dataPath + "/" + "CJH" + "/10.Videos"+ "/" + videoInfo.title + ".mp4";
             videoPlayer.Play();
 
-            videoPlayer.loopPointReached += OnFinishVideo;
-            
+            videoPlayer.loopPointReached += MakeInteractiveUI;
+
+            videoPlayer.loopPointReached += MakeRestartUI;
+
+
         }, false);
 
         HttpManager.Get().SendRequest(httpInfo);
     }
 
     //영상이 끝날때 인터렉티브 UI 생성
-    protected virtual void OnFinishVideo(VideoPlayer source)
+    protected virtual void MakeInteractiveUI(VideoPlayer source)
     {
 
     }
+    //영상이 끝날때 Restart UI 생성
+    protected virtual void MakeRestartUI(VideoPlayer source)
+    {
+
+    }
+
+    //RestartButton으로 여는 함수
+    public void ClickRestartButton()
+    {
+        Destroy(gameObject);
+    }
+
+
+    //희미해지는 재생 버튼
+    public void FadePlayBt()
+    {
+        if(videoPlayer != null && playBt1 != null && playBt1.gameObject.activeSelf)
+        {
+            if (!videoPlayer.isPlaying) //멈췄을때
+            {
+                playBt1.interactable = false;
+
+                //투명도 변경
+                Image buttonImage = playBt1.GetComponent<Image>();
+                if(buttonImage != null)
+                {
+                    buttonImage.DOFade(0.5f, 1f).OnComplete(() => {
+                        playBt1.gameObject.SetActive(false);
+
+                    });
+                }
+            }
+        }
+    }
+
+
     //영상 재생
     public void PlayPauseVideo()
     {
@@ -78,5 +118,6 @@ public class J_VideoPlayerBase : MonoBehaviour
         onClickEvent?.Invoke();
 
         Destroy(gameObject);
+        
     }
 }

@@ -55,7 +55,7 @@ public class J_LoginUIManager : MonoBehaviour
         prev_SignUp.onClick.AddListener(OnChange);
         close_Bt1.onClick.AddListener(Click_Prev);
         close_Bt2.onClick.AddListener(Click_Prev);
-        close_Bt3.onClick.AddListener( OnChange);
+        close_Bt3.onClick.AddListener(OnChange);
 
         //다음
         move_startBt.onClick.AddListener(Click_Next);
@@ -80,7 +80,7 @@ public class J_LoginUIManager : MonoBehaviour
     {
         ChangeInput();
     }
-    
+
     public void IntroductionText()
     {
         string IntroText = "메타 밍글은 숏폼, 인터랙티브 무비를 통한 문화 교류 커뮤니티 메타버스 플랫폼입니다.";
@@ -152,10 +152,23 @@ public class J_LoginUIManager : MonoBehaviour
     //현재 로그인 포스트 통신 함수 => 추후 함수 이름 변경
     public void PostTest()
     {
+        //string text = " {\r\n    \"apiStatus\": \"SUCCESS\",\r\n    \"message\": \"성공적으로 로그인되었습니다.\",\r\n    \"data\": {\r\n        \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2x8c\"\r\n    }}";
+        //SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(text);
+        //HttpManager.Get().token = signInInfo.data.token;
+
+
         HttpInfo info = new HttpInfo();
         info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) => {
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Signup : " + downloadHandler.text);
+
+            SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(downloadHandler.text);
+            HttpManager.Get().token = signInInfo.data.token;
+
+
+            //여기서 씬이동
+            print("커스터마이징씬이동");
+            
         });
         SignUpInfo signUpInfo = new SignUpInfo();
         signUpInfo.email = inputId.text;
@@ -164,6 +177,8 @@ public class J_LoginUIManager : MonoBehaviour
         info.body = JsonUtility.ToJson(signUpInfo);
 
         HttpManager.Get().SendRequest(info);
+
+
 
     }
     //로그인 버튼

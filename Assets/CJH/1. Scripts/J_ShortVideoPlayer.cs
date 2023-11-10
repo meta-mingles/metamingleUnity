@@ -22,6 +22,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public J_InteractiveMovieItem interactiveMovieList;
 
 
+
     private void Start()
     {
         //처음엔 0 
@@ -55,7 +56,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     }
 
     //영상이 끝날때 인터렉티브 UI 생성
-    protected override void OnFinishVideo(VideoPlayer source)
+    protected override void MakeInteractiveUI(VideoPlayer source)
     {
         interactiveMovieList.SetInteractiveInfo(ClickInteractiveMovieBt, videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);
         //interactiveMovieList.gameObject.SetActive(true);
@@ -74,14 +75,6 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
         J_VideoReceiver.instance.CreateInteractiveMovie(info);
     }
-    public void LikeButton()
-    {
-
-
-    }
-
-
-
     void Like_Button()
     {
          likeCnt = videoInfo.shortFormLikeCnt;

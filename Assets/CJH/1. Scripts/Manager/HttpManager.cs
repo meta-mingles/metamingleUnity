@@ -25,9 +25,8 @@ public class HttpInfo
     public string testUrl = "";
 
     public string body = "{}";
-
+    
     public Action<DownloadHandler> onReceive;
-    public Action<DownloadHandler, string> onReceiveToken; //로그인 토큰
     public Action<DownloadHandler, int> onReceiveImage;
 
     public string loginId;
@@ -46,6 +45,7 @@ public class HttpInfo
         if (useDefaultUrl) testUrl = "http://192.168.0.28:8080";  //로그인 임시 url
         if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
         url += u;
+        testUrl += u;
         onReceive = callback;
     }
 }
@@ -54,6 +54,8 @@ public class HttpInfo
 public class HttpManager : MonoBehaviour
 {
     static HttpManager instance;
+
+    public string token = "";
 
     public static HttpManager Get()
     {
@@ -103,32 +105,30 @@ public class HttpManager : MonoBehaviour
 
     public void SendRequest(HttpInfo httpInfo)
     {
-        StartCoroutine(CoSendRequest(httpInfo));
+        if(httpInfo.requestType == RequestType.POST)
+        {
+            StartCoroutine(Post(httpInfo));
+
+        }
+        else
+        {
+            StartCoroutine(CoSendRequest(httpInfo));
+        }
     }
 
     IEnumerator CoSendRequest(HttpInfo httpInfo)
     {
+
         UnityWebRequest req = null;
 
-        //POST, GET, PUT, DELETE �б�
+        //POST, GET, PUT, DELETE  б 
         switch (httpInfo.requestType)
         {
             case RequestType.GET:
                 //Debug.Log(httpInfo.url);
                 req = UnityWebRequest.Get(httpInfo.url);
                 break;
-            case RequestType.POST:
-                string str = JsonUtility.ToJson(httpInfo.body);
-                //토큰 처리를 어떻게 해야될지 고민....
-                string token = httpInfo.token;
-                req = UnityWebRequest.Post(httpInfo.testUrl, str);
-                Debug.Log(httpInfo.testUrl);
-                byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
-                req.uploadHandler = new UploadHandlerRaw(byteBody);
-                //헤더추가
-                req.SetRequestHeader("Authorization", token);
-                //req.SetRequestHeader("Authorization", token);
-                break;
+           
             case RequestType.PUT:
                 req = UnityWebRequest.Put(httpInfo.url, httpInfo.body);
                 break;
@@ -140,19 +140,44 @@ public class HttpManager : MonoBehaviour
                 break;
         }
 
+        if(token.Length > 0)
+        {
+            req.SetRequestHeader("Authorization", token);
+        }
+
         yield return req.SendWebRequest();
 
+        SetResult(req, httpInfo);
+    }
+
+    IEnumerator Post(HttpInfo httpInfo)
+    {
+        string str = JsonUtility.ToJson(httpInfo.body);
+        using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.testUrl, str))
+        {
+            byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
+            req.uploadHandler = new UploadHandlerRaw(byteBody);
+            //헤더추가
+            req.SetRequestHeader("Content-Type", "application/json");
+
+            if (token.Length > 0)
+            {
+                req.SetRequestHeader("Authorization", token);
+
+
+            }
+
+            yield return req.SendWebRequest();
+
+
+            SetResult(req, httpInfo);
+        }
+    }
+
+    void SetResult(UnityWebRequest req, HttpInfo httpInfo)
+    {
         if (req.result == UnityWebRequest.Result.Success)
         {
-
-            //로그인 token
-            if(httpInfo.requestType == RequestType.POST)
-            {
-                if(httpInfo.onReceiveToken != null)
-                {
-                    httpInfo.onReceiveToken(req.downloadHandler, httpInfo.token);
-                }
-            }
             //이미지 다운로드
             if (httpInfo.requestType == RequestType.TEXTURE)
             {
@@ -162,8 +187,8 @@ public class HttpManager : MonoBehaviour
                 }
             }
             else
-            {          
-                if(req.downloadHandler.text.Length > 0)
+            {
+                if (req.downloadHandler.text.Length > 0)
                 {
                     //print(req.downloadHandler.text);
                 }
@@ -178,7 +203,5 @@ public class HttpManager : MonoBehaviour
         {
             print("네트워크 에러 : " + req.error);
         }
-
-        req.Dispose();
     }
 }
