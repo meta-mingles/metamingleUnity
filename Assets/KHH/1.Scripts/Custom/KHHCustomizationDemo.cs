@@ -1,11 +1,21 @@
 ﻿using Rukha93.ModularAnimeCharacter.Customization;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class KHHCustomizationDemo : MonoBehaviour
 {
+    public static readonly List<string> CustomCategories = new List<string>
+        {
+            "body",
+            "head",
+            "hairstyle",
+            "top",
+            "bottom",
+            "shoes",
+            "outfit"
+        };
+
     public class EquipedItem
     {
         public string path;
@@ -19,16 +29,6 @@ public class KHHCustomizationDemo : MonoBehaviour
     [SerializeField] private KHHUICustomizationDemo m_UI;
 
     private IAssetLoader m_AssetLoader;
-    private List<string> m_Categories = new List<string>
-        {
-            "body",
-            "head",
-            "hairstyle",
-            "top",
-            "bottom",
-            "shoes",
-            "outfit"
-        };
 
     private Animator m_Character;
     private SkinnedMeshRenderer m_ReferenceMesh;
@@ -56,14 +56,37 @@ public class KHHCustomizationDemo : MonoBehaviour
         m_UI.OnChangeColor += OnChangeColor;
     }
 
-    private void Start()
+    IEnumerator Start()
     {
         //init categories UI
-        m_UI.SetCategories(m_Categories.ToArray());
-        for (int i = 0; i < m_Categories.Count; i++)
+        m_UI.SetCategories(CustomCategories.ToArray());
+        for (int i = 0; i < CustomCategories.Count; i++)
             m_UI.SetCategoryValue(i, "");
 
-        m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody("f"));
+        //load data
+        KHHUserCustom.Init();
+        KHHUserCustomData data = KHHUserCustom.LoadData();
+
+        if (data == null || data.datas == null || data.datas.Count == 0)
+        {
+            m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody("f"));
+            yield break;
+        }
+
+        for (int i = 0; i < data.datas.Count; i++)
+        {
+            var d = data.datas[i];
+            if (d.category.Equals("body"))
+            {
+                m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody(d.itemIndex == 0 ? "m" : "f"));
+            }
+            else
+            {
+                if (d.itemIndex == 0) continue;
+                m_LoadingCoroutine = StartCoroutine(Co_LoadAndEquip(d.category, m_CustomizationOptions[d.category][d.itemIndex], d.materialDatas));
+            }
+            yield return m_LoadingCoroutine;
+        }
     }
 
     private void InitBody(string path, GameObject prefab)
@@ -91,7 +114,7 @@ public class KHHCustomizationDemo : MonoBehaviour
         m_Equiped["body"] = equip;
 
         //update ui
-        m_UI.SetCategoryValue(m_Categories.IndexOf("body"), path);
+        m_UI.SetCategoryValue(CustomCategories.IndexOf("body"), path);
         if (m_UI.IsCustomizationOpen && m_UI.CurrentCategory == "body")
             m_UI.SetCustomizationMaterials(equip.renderers);
     }
@@ -111,22 +134,22 @@ public class KHHCustomizationDemo : MonoBehaviour
 
         //init the customization options for the selected body type
         List<Coroutine> coroutines = new List<Coroutine>();
-        for (int i = 0; i < m_Categories.Count; i++)
+        for (int i = 0; i < CustomCategories.Count; i++)
         {
             int index = i;
-            string path = m_Categories[i].Equals("body") ? "body" : GetAssetPath(bodyType, m_Categories[i]);
-            coroutines.Add(StartCoroutine(m_AssetLoader.LoadAssetList(path, res => m_CustomizationOptions[m_Categories[index]] = new List<string>(res))));
+            string path = CustomCategories[i].Equals("body") ? "body" : GetAssetPath(bodyType, CustomCategories[i]);
+            coroutines.Add(StartCoroutine(m_AssetLoader.LoadAssetList(path, res => m_CustomizationOptions[CustomCategories[index]] = new List<string>(res))));
         }
-        for (int i = 0; i < m_Categories.Count; i++)
+        for (int i = 0; i < CustomCategories.Count; i++)
         {
             yield return coroutines[i];
 
             //add an empty item for all categories that can be empty
-            if (m_Categories[i].Equals("body"))
+            if (CustomCategories[i].Equals("body"))
                 continue;
-            if (m_Categories[i].Equals("head"))
+            if (CustomCategories[i].Equals("head"))
                 continue;
-            m_CustomizationOptions[m_Categories[i]].Insert(0, "");
+            m_CustomizationOptions[CustomCategories[i]].Insert(0, "");
         }
 
         //initialize the body
@@ -142,7 +165,7 @@ public class KHHCustomizationDemo : MonoBehaviour
 
     #region EQUIPMENT
 
-    public void Equip(string cat, string path, CustomizationItemAsset item)
+    public void Equip(string cat, string path, CustomizationItemAsset item, List<KHHMaterialData> materialDatas = null)
     {
         //if outfit, remove all othet pieces
         if (cat.Equals("outfit"))
@@ -199,18 +222,81 @@ public class KHHCustomizationDemo : MonoBehaviour
         InitRenderersForItem(equip);
 
         //update ui
-        m_UI.SetCategoryValue(m_Categories.IndexOf(cat), path);
-        if (m_UI.IsCustomizationOpen && m_UI.CurrentCategory == cat)
-            m_UI.SetCustomizationMaterials(equip.renderers);
+        m_UI.SetCategoryValue(CustomCategories.IndexOf(cat), path);
+        if ((m_UI.IsCustomizationOpen && m_UI.CurrentCategory == cat) || materialDatas != null)
+            m_UI.SetCustomizationMaterials(equip.renderers, materialDatas);
 
         //send message to the character
         //used to update the facial blendshape controller and colliders for hair
         m_Character.SendMessage("OnChangeEquip", new object[] { cat, equip.instantiatedObjects }, SendMessageOptions.DontRequireReceiver);
     }
 
-    private IEnumerator Co_LoadAndEquip(string cat, string path)
+    //public void LoadColor(Renderer[] renderers, List<KHHMaterialData> materialDatas)
+    //{
+    //    //get all available materials
+    //    List<Material> materials = new List<Material>();
+    //    List<Renderer> renderersPerMaterial = new List<Renderer>();
+    //    List<int> rendererMaterialIndex = new List<int>();
+    //    List<MaterialPropertyBlock> propertyBlock = new List<MaterialPropertyBlock>();
+
+    //    for (int i = 0; i < renderers.Length; i++)
+    //    {
+    //        var renderer = renderers[i];
+    //        var sharedMaterials = renderer.sharedMaterials;
+
+    //        for (int j = 0; j < sharedMaterials.Length; j++)
+    //        {
+    //            if (sharedMaterials[j].name.Contains("mouth"))
+    //                continue;
+    //            if (materials.Contains(sharedMaterials[j]))
+    //                continue;
+    //            materials.Add(sharedMaterials[j]);
+    //            renderersPerMaterial.Add(renderer);
+    //            rendererMaterialIndex.Add(j);
+
+    //            var block = new MaterialPropertyBlock();
+    //            renderer.GetPropertyBlock(block, j);
+    //            propertyBlock.Add(block);
+    //        }
+    //    }
+
+    //    for (int i = 0; i < materials.Count; i++)
+    //    {
+    //        KHHMaterialData materialData = materialDatas.Find(x => x.name == materials[i].name);
+    //        if (materialData == null) continue;
+
+    //        var auxRenderer = renderersPerMaterial[i];
+    //        var auxMatIndex = rendererMaterialIndex[i];
+    //        var auxPropertyBlock = propertyBlock[i];
+
+    //        if (materials[i].HasProperty("_MaskRemap"))
+    //        {
+    //            //customization channel 1
+    //            Color colorA = materialData.ColorA;
+    //            if (colorA.r != 0 || colorA.g != 0 || colorA.b != 0)
+    //                OnChangeColor(auxRenderer, auxMatIndex, "_Color_A_1", colorA);
+    //            //customization channel 2
+    //            Color colorB = materialData.ColorB;
+    //            if (colorB.r != 0 || colorB.g != 0 || colorB.b != 0)
+    //                OnChangeColor(auxRenderer, auxMatIndex, "_Color_B_1", colorB);
+    //            //customization channel 3
+    //            Color colorC = materialData.ColorC;
+    //            if (colorC.r != 0 || colorC.g != 0 || colorC.b != 0)
+    //                OnChangeColor(auxRenderer, auxMatIndex, "_Color_C_1", colorC);
+
+    //        }
+    //        else if (materials[i].HasProperty("_BaseColor"))
+    //        {
+    //            Color color = materialData.ColorA;
+    //            if (color.r != 0 || color.g != 0 || color.b != 0)
+    //                OnChangeColor(auxRenderer, auxMatIndex, "_BaseColor", color);
+    //        }
+    //    }
+    //}
+
+    private IEnumerator Co_LoadAndEquip(string cat, string path, List<KHHMaterialData> materialDatas = null)
     {
-        yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(path, res => Equip(cat, path, res));
+        yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(path, res => Equip(cat, path, res, materialDatas));
         m_LoadingCoroutine = null;
     }
 
@@ -231,7 +317,7 @@ public class KHHCustomizationDemo : MonoBehaviour
             UpdateBodyRenderers();
 
         //update UI
-        m_UI.SetCategoryValue(m_Categories.IndexOf(category), "");
+        m_UI.SetCategoryValue(CustomCategories.IndexOf(category), "");
         if (m_UI.IsCustomizationOpen)
             m_UI.SetCustomizationMaterials(null);
     }
@@ -341,6 +427,9 @@ public class KHHCustomizationDemo : MonoBehaviour
 
         //show UI
         m_UI.ShowCustomization(true);
+
+        //착용 물건 변경에 따른 저장
+        KHHUserCustom.SetCategory(cat);
     }
 
     private void OnSwapItem(string cat, string asset)
@@ -361,6 +450,9 @@ public class KHHCustomizationDemo : MonoBehaviour
             m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody(asset.StartsWith("m") ? "m" : "f"));
         else
             m_LoadingCoroutine = StartCoroutine(Co_LoadAndEquip(cat, asset));
+
+        //착용 물건 변경에 따른 저장
+        KHHUserCustom.SetItem(m_CustomizationOptions[cat].IndexOf(asset));
     }
 
     private void OnChangeColor(Renderer renderer, int materialIndex, string property, Color color)

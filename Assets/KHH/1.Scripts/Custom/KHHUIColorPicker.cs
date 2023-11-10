@@ -9,12 +9,15 @@ public class KHHUIColorPicker : MonoBehaviour
     [Space]
     [SerializeField] private Button m_CloseButton;
 
+    RectTransform rt;
+
     public System.Action<Color> OnChangeColor;
 
     private Color m_Color;
 
     private void Awake()
     {
+        rt = GetComponent<RectTransform>();
         m_CloseButton.onClick.AddListener(OnClickClose);
     }
 
@@ -22,6 +25,9 @@ public class KHHUIColorPicker : MonoBehaviour
     {
         if (gameObject.activeSelf)
             Close();
+
+        if (rt.anchoredPosition.y < -750f)
+            rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, -750f);
 
         colorPicker.CurrentColor = color;
         colorPicker.onValueChanged.AddListener((c) => OnChangeColor?.Invoke(c));

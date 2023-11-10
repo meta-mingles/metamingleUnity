@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
@@ -66,6 +67,7 @@ public class KHHEditSetting : MonoBehaviour
     void CostomButtonEvent()
     {
         //커스터마이즈 씬 열기
+        SceneManager.LoadScene("Customization");
     }
 
     void DropDownEvent(int idx)

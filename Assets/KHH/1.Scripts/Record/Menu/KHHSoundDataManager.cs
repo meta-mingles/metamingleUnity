@@ -13,9 +13,8 @@ public class KHHSoundDataManager : KHHDataManager
 
     KHHEditItemSound soundItem;
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
         volumeSlider.onValueChanged.AddListener((value) =>
         {
             if (soundItem != null)
