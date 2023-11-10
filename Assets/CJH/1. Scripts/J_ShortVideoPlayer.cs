@@ -18,6 +18,8 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
     public Button like_Button; // 좋아요 버튼
 
+    public Button Sound_Button; //사운드 버튼
+
     int likeCnt;
     public J_InteractiveMovieItem interactiveMovieList;
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +21,7 @@ public class J_UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TabŰ�� ������ ä��â�� ���̵��� �Ѵ�.
+        //Tab키를 누르면 채팅창이 보이도록 한다.
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             ViewChat();
@@ -32,6 +32,15 @@ public class J_UIManager : MonoBehaviour
         isChatVisible = !isChatVisible;
         canvasGroup.SetActive(isChatVisible);
     }
+    //비디오 씬 버튼
+    void VideoSceneButton()
+    {
+        //비디오씬 버튼을 누르면 
+        
+        //비디오씬으로 이동한다.
+    }
+
+
     void SceneChange(int SceneNumber)
     {
         SceneManager.LoadScene(2);

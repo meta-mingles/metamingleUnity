@@ -43,7 +43,7 @@ public class J_VideoReceiver : MonoBehaviour
             //CSV
             //httpInfo.Set(RequestType.GET, uri.AbsoluteUri, OnCompleteSearchVideo, false);
             httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
-            
+
             HttpManager.Get().SendRequest(httpInfo);
 
 

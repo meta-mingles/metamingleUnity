@@ -34,7 +34,7 @@ public class J_ThumItem : MonoBehaviour
     //public VideoPlayer videoPlayer;
     void Start()
     {
-        profileColor.GetComponentInChildren<RawImage>().color = UnityEngine.Random.ColorHSV(0, 1);
+        //profileColor.GetComponentInChildren<RawImage>().color = UnityEngine.Random.ColorHSV(0, 1);
         //처음 생성될 때 랜덤값으로 프로필컬러가 바뀌게 나온다.
 
     }
