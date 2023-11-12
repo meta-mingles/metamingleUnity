@@ -27,16 +27,19 @@ public class J_VideoPlayerBase : MonoBehaviour
         {
             byte[] videoBytes = downloadHandler.data;
 
-            FileStream file = new FileStream(Application.dataPath +"/" + "CJH" + "/10.Videos" + "/" + videoInfo.title + ".mp4", FileMode.Create);
+ 
+
+            //FileStream file = new FileStream(Application.dataPath +"/" + "CJH" + "/10.Videos" + "/" + videoInfo.title + ".mp4", FileMode.Create);
             //byteData 를 file 에 쓰자
-            file.Write(videoBytes, 0, videoBytes.Length);
-            file.Close();
+            //file.Write(videoBytes, 0, videoBytes.Length);
+            //file.Close();
 
             RenderTexture rt = new RenderTexture(1920, 1080, 24);
 
             videoPlayer.targetTexture = rt;
             videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
-            videoPlayer.url = Application.dataPath + "/" + "CJH" + "/10.Videos"+ "/" + videoInfo.title + ".mp4";
+            //videoPlayer.url = Application.dataPath + "/" + "CJH" + "/10.Videos"+ "/" + videoInfo.title + ".mp4";
+            videoPlayer.url = videoInfo.url;
             videoPlayer.Play();
 
             videoPlayer.loopPointReached += MakeInteractiveUI;

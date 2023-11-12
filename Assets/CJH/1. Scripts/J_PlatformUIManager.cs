@@ -13,7 +13,7 @@ public class J_PlatformUIManager : MonoBehaviour
         Instance = this;
 
         //사운드 키기
-        SoundManager.instance.BGMVolume = 1;
+        SoundManager.instance.BGMVolume = -5;
         SoundManager.instance.PlayBGM("PlatformBGM");
     }
     [Header("Platform")]
