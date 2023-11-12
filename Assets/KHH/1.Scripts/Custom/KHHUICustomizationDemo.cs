@@ -194,7 +194,6 @@ public class KHHUICustomizationDemo : MonoBehaviour
             {
                 item.ResetColors();
 
-
                 Color colorA, colorB, colorC, newColorA, newColorB, newColorC;
                 colorA = newColorA = materials[i].GetColor("_Color_A_2");
                 colorB = newColorB = materials[i].GetColor("_Color_B_2");
@@ -204,9 +203,9 @@ public class KHHUICustomizationDemo : MonoBehaviour
                     newColorA = materialData.ColorA;
                     newColorB = materialData.ColorB;
                     newColorC = materialData.ColorC;
-                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", colorA);
-                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", colorB);
-                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", colorC);
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", newColorA);
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", newColorB);
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", newColorC);
                 }
 
                 //customization channel 1
@@ -216,11 +215,11 @@ public class KHHUICustomizationDemo : MonoBehaviour
                 //customization channel 2
                 if (colorB.r != 0 || colorB.g != 0 || colorB.b != 0)
                     item.SetColor(auxPropertyBlock.HasColor("_Color_B_2") ? auxPropertyBlock.GetColor("_Color_B_2") : newColorB, 1,
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", c));
+                        (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", c));
                 //customization channel 3
                 if (colorC.r != 0 || colorC.g != 0 || colorC.b != 0)
                     item.SetColor(auxPropertyBlock.HasColor("_Color_C_2") ? auxPropertyBlock.GetColor("_Color_C_2") : newColorC, 2,
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", c));
+                        (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", c));
             }
             else if (materials[i].HasProperty("_BaseColor"))
             {

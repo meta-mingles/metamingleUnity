@@ -15,7 +15,7 @@ using System.Threading;
 /// </summary>
 public class VNectBarracudaRunner : MonoBehaviour
 {
-    public bool IsTracking { get; set; }
+    public bool IsTracking = false;
 
     public VNectModel[] VNectModels;
     VNectModel VNectModel
@@ -71,10 +71,8 @@ public class VNectBarracudaRunner : MonoBehaviour
     private bool Lock = true;                                              // WaitLoad()에서 false로 바뀜
     // private float Countdown = 0;  
 
-
     private void Start()
     {
-        IsTracking = false;
         // Initialize 
         HeatMapCol_Squared = HeatMapCol * HeatMapCol;                      // 28*28, feature map 1개 크기
         HeatMapCol_Cube = HeatMapCol * HeatMapCol * HeatMapCol;            // 28*28*28, 28개의 feature map 크기
@@ -152,6 +150,7 @@ public class VNectBarracudaRunner : MonoBehaviour
         // VideoCapture 초기화, Background의 크기 설정
         videoCapture.Init(InputImageSize, InputImageSize);
         Lock = false;
+        gameObject.SetActive(false);
         //Msg.gameObject.SetActive(false);                     // Msg 없앤다.
     }
     /*

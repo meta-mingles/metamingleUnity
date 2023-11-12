@@ -912,11 +912,11 @@ PlayerSettings:
   apiCompatibilityLevel: 3
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: e678843e-5507-44f3-9524-61589173c2ce
+  cloudProjectId: 8523a008-5be5-419c-8b48-7809da8582f3
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: metamingle (1)
-  organizationId: metamingle
+  projectName: metamingle
+  organizationId: hhkim331
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
