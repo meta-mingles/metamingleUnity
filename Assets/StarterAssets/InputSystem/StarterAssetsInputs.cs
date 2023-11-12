@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -66,15 +66,15 @@ namespace StarterAssets
 			sprint = newSprintState;
 		}
 
-		private void OnApplicationFocus(bool hasFocus)
-		{
-			SetCursorState(cursorLocked);
-		}
+		//private void OnApplicationFocus(bool hasFocus)
+		//{
+		//	SetCursorState(cursorLocked);
+		//}
 
-		private void SetCursorState(bool newState)
-		{
-			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-		}
+		//private void SetCursorState(bool newState)
+		//{
+		//	Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+		//}
 	}
 	
 }

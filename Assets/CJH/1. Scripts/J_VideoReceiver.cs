@@ -31,6 +31,8 @@ public class J_VideoReceiver : MonoBehaviour
     {
         //씬이 넘어올 때 
         //tumbnail 리스트
+
+        //씬이 처음 로드될때 
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             // 서버한테 영상 정보 요청
