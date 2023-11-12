@@ -1,5 +1,4 @@
-﻿using DG.Tweening;
-using RockVR.Video;
+﻿using RockVR.Video;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -19,13 +18,14 @@ public class KHHExport : MonoBehaviour
 
     public Button backButton;
     public Button uploadButton;
-    public CanvasGroup uploadWaitCG;
 
     [Header("Interactive")]
     public Button interactiveButton;
     public GameObject interactive;
     public KHHInteractiveButton interactiveButtonLeft;
     public KHHInteractiveButton interactiveButtonRight;
+
+    Outline interacitveOutline;
 
     public KHHScreenEditor screenEditor;
     //complete
@@ -42,16 +42,17 @@ public class KHHExport : MonoBehaviour
         if (backButton != null) backButton.onClick.AddListener(() => { gameObject.SetActive(false); });  //에디터로 돌아가기
         if (uploadButton != null) uploadButton.onClick.AddListener(ExportButtonEvent);
         if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
+
+        interacitveOutline = interactiveButton.GetComponent<Outline>();
     }
 
-    private void Update()
-    {
-        if (exportState != ExportState.Exporting && uploadWaitCG.alpha == 1)
-        {
-            uploadWaitCG.DOFade(0, 0.5f).OnComplete(() => { uploadWaitCG.gameObject.SetActive(false); });
-            uploadWaitCG.blocksRaycasts = false;
-        }
-    }
+    //private void Update()
+    //{
+    //    if (exportState != ExportState.Exporting && uploadWaitCG.alpha == 1)
+    //    {
+    //        uploadButton.interactable = false;
+    //    }
+    //}
 
     public void Open()
     {
@@ -63,9 +64,7 @@ public class KHHExport : MonoBehaviour
     void GenerateVideo()
     {
         exportState = ExportState.Exporting;
-        uploadWaitCG.alpha = 1;
-        uploadWaitCG.gameObject.SetActive(true);
-        uploadWaitCG.blocksRaycasts = true;
+        uploadButton.interactable = false;
 
         StartCoroutine(CoGenerateVideo());
     }
@@ -86,6 +85,7 @@ public class KHHExport : MonoBehaviour
 
         //captureCamera.targetTexture = captureRenderTexture;
         exportState = ExportState.None;
+        uploadButton.interactable = true;
     }
 
     void ExportButtonEvent()
@@ -104,7 +104,8 @@ public class KHHExport : MonoBehaviour
     {
         isInterActive = !isInterActive;
         interactive.SetActive(isInterActive);
-        interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
+        interacitveOutline.enabled = isInterActive;
+        //interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
     }
 
     IEnumerator CoExportInteractiveVideo()
