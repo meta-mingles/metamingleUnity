@@ -23,7 +23,7 @@ public class KHHBackgroundData : KHHData
             if (Input.GetKeyDown(KeyCode.Delete))
             {
                 //파일 삭제
-                File.Delete(KHHVideoData.FileMotionPath + "/" + fileName + fileExtension);
+                File.Delete(KHHEditData.FileMotionPath + "/" + fileName + fileExtension);
                 khhDataManager.Refresh();
             }
         }

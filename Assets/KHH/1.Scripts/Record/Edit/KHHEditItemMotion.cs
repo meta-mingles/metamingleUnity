@@ -118,14 +118,14 @@ public class KHHEditItemMotion : KHHEditItem
 
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}M");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MCX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MCLX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MCRX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVCX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVCLX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVCRX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}MVV");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}M");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVV");
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == pairSound));
         Destroy(gameObject);

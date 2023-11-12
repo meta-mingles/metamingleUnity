@@ -29,9 +29,9 @@ public class KHHSoundDataManager : KHHDataManager
     {
         base.Refresh();
         //경로가 없으면 생성
-        if (!Directory.Exists(KHHVideoData.FileSoundPath))
-            Directory.CreateDirectory(KHHVideoData.FileSoundPath);
-        DirectoryInfo di = new DirectoryInfo(KHHVideoData.FileSoundPath);
+        if (!Directory.Exists(KHHEditData.FileSoundPath))
+            Directory.CreateDirectory(KHHEditData.FileSoundPath);
+        DirectoryInfo di = new DirectoryInfo(KHHEditData.FileSoundPath);
         foreach (FileInfo file in di.GetFiles())
         {
             var ext = file.Extension.ToLower();

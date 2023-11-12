@@ -28,18 +28,13 @@ public class KHHEditManager : MonoBehaviour
     public Button soundButton;
     public Button backgroundButton;
     public Button captionButton;
-    public Button interactiveButton;
 
     public Button settingButton;
     public Button exitButton;
 
-    public CanvasGroup recordWaitCG;
     public GameObject motionPanel;
     public GameObject soundPanel;
     public GameObject backgroundPanel;
-    public GameObject interactive;
-    public KHHInteractiveButton interactiveButtonLeft;
-    public KHHInteractiveButton interactiveButtonRight;
 
     public KHHEditSetting editSetting;
 
@@ -48,27 +43,27 @@ public class KHHEditManager : MonoBehaviour
     public Button stopButton;
     public Button exportButton;
 
-    public KHHExportWindow exportWindow;
+    public KHHExport export;
 
-    bool isInterActive = false;
-    bool isExporting = false;
+    bool init = false;
 
     private void Awake()
     {
         Instance = this;
-        KHHVideoData.Open("test video");
+        KHHEditData.Open("test video");
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        KHHCanvasShield.Instance.Show();
+
         if (recordButton != null) recordButton.onClick.AddListener(RecordButtonEvent);
         if (motionButton != null) motionButton.onClick.AddListener(MotionButtonEvent);
         if (soundButton != null) soundButton.onClick.AddListener(SoundButtonEvent);
         if (backgroundButton != null) backgroundButton.onClick.AddListener(BackgroundButtonEvent);
-        if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
 
-        if(settingButton != null) settingButton.onClick.AddListener(SettingButtonEvent);
+        if (settingButton != null) settingButton.onClick.AddListener(SettingButtonEvent);
 
         if (playButton != null) playButton.onClick.AddListener(PlayButtonEvent);
         if (stopButton != null) stopButton.onClick.AddListener(StopButtonEvent);
@@ -80,10 +75,10 @@ public class KHHEditManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (KHHRecordManager.Instance.videoCapture.SetEnd && recordWaitCG.alpha == 1)
+        if(!init && KHHRecordManager.Instance.videoCapture.SetEnd)
         {
-            recordWaitCG.DOFade(0, 0.5f).OnComplete(() => { recordWaitCG.gameObject.SetActive(false); });
-            recordWaitCG.blocksRaycasts = false;
+            init = true;
+            KHHCanvasShield.Instance.Close();
         }
     }
 
@@ -135,14 +130,6 @@ public class KHHEditManager : MonoBehaviour
         backgroundDataMaanger.Refresh();
     }
 
-    void InteractiveButtonEvent()
-    {
-        isInterActive = !isInterActive;
-        KHHVideoCapture.instance.IsInteractive = isInterActive;
-        interactive.SetActive(isInterActive);
-        interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
-    }
-
     void SettingButtonEvent()
     {
         editSetting.Open();
@@ -164,133 +151,6 @@ public class KHHEditManager : MonoBehaviour
 
     void ExportButtonEvent()
     {
-        if (screenEditor.FileLoaded)
-            GenerateVideo();
-    }
-
-    void GenerateVideo()
-    {
-        isExporting = true;
-
-        //전송 윈도우 띄우기
-        exportWindow.gameObject.SetActive(true);
-        exportWindow.StateChange(KHHExportWindow.ExportState.Processing);
-
-        captureCamera.targetTexture = null;
-
-        if (isInterActive)
-            StartCoroutine(CoGenerateInteractiveVideo());
-        else
-            StartCoroutine(CoGenerateShortformVideo());
-    }
-
-    public void ExportVideo()
-    {
-        if (isInterActive)
-            StartCoroutine(CoExportInteractiveVideo());
-        else
-            StartCoroutine(CoExportShortformVideo());
-    }
-
-    IEnumerator CoGenerateInteractiveVideo()
-    {
-        //first
-        screenEditor.Play();
-        VideoCaptureCtrl.instance.StartCapture();
-
-        while (screenEditor.IsPlaying)
-            yield return null;
-
-        screenEditor.Stop();
-        VideoCaptureCtrl.instance.StopCapture();
-
-        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
-            yield return null;
-
-        //yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonLeft.FileName));
-        screenEditor.LoadFileMotion(interactiveButtonLeft.FileName);
-        while (screenEditor.FileLoaded)
-            yield return null;
-
-        //choice1
-        screenEditor.Play();
-        VideoCaptureCtrl.instance.StartCapture();
-
-        while (screenEditor.IsPlaying)
-            yield return null;
-
-        screenEditor.Stop();
-        VideoCaptureCtrl.instance.StopCapture();
-
-        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
-            yield return null;
-
-        //yield return StartCoroutine(screenEditor.LoadFileMotion(interactiveButtonRight.FileName));
-        screenEditor.LoadFileMotion(interactiveButtonLeft.FileName);
-        while (screenEditor.FileLoaded)
-            yield return null;
-
-        //choice2
-        screenEditor.Play();
-        VideoCaptureCtrl.instance.StartCapture();
-
-        while (screenEditor.IsPlaying)
-            yield return null;
-
-        screenEditor.Stop();
-        VideoCaptureCtrl.instance.StopCapture();
-
-        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
-            yield return null;
-
-        captureCamera.targetTexture = captureRenderTexture;
-        exportWindow.StateChange(KHHExportWindow.ExportState.Generate);
-    }
-
-    IEnumerator CoExportInteractiveVideo()
-    {
-        exportWindow.StateChange(KHHExportWindow.ExportState.Exporting);
-
-        //upload
-        KHHVideoCapture.instance.UploadInteractiveVideo("test Interactive", interactiveButtonLeft.Title, interactiveButtonRight.Title);
-        while (KHHVideoCapture.instance.IsUploading)
-            yield return null;
-
-        exportWindow.StateChange(KHHExportWindow.ExportState.Complete);
-        //complete
-        isExporting = false;
-        Debug.Log("Interactive Finish");
-    }
-
-    IEnumerator CoGenerateShortformVideo()
-    {
-        screenEditor.Play();
-        VideoCaptureCtrl.instance.StartCapture();
-
-        while (screenEditor.IsPlaying)
-            yield return null;
-
-        screenEditor.Stop();
-        VideoCaptureCtrl.instance.StopCapture();
-
-        while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
-            yield return null;
-
-        captureCamera.targetTexture = captureRenderTexture;
-        exportWindow.StateChange(KHHExportWindow.ExportState.Generate);
-    }
-
-    IEnumerator CoExportShortformVideo()
-    {
-        exportWindow.StateChange(KHHExportWindow.ExportState.Exporting);
-        //upload
-        KHHVideoCapture.instance.UploadShortformVideo("test video");
-        while (KHHVideoCapture.instance.IsUploading)
-            yield return null;
-
-        exportWindow.StateChange(KHHExportWindow.ExportState.Complete);
-        //complete
-        isExporting = false;
-        Debug.Log("Finish");
+        export.Open();
     }
 }

@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class KHHScreenEditor : MonoBehaviour
 {
-    public VNectModel model;
     public RawImage backgroundImage;
 
     int initCount = 0;
+    int loadCount = 0;
     bool fileLoaded = false;
     public bool FileLoaded { get { return fileLoaded; } }
 
@@ -26,9 +26,11 @@ public class KHHScreenEditor : MonoBehaviour
     float endTime = 0.0f;
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
         editItemList = new List<KHHEditItem>();
+        while (modelRecorder.Model == null)
+            yield return null;
         Init();
     }
 
@@ -51,16 +53,18 @@ public class KHHScreenEditor : MonoBehaviour
     {
         fileLoaded = false;
         initCount = 0;
+        loadCount = 0;
 
         if (KHHEditVideoState.MotionName != string.Empty)
         {
-            string filePathMotion = KHHVideoData.FileMotionPath + "/" + KHHEditVideoState.MotionName;
+            initCount += 2;
+            string filePathMotion = KHHEditData.FileMotionPath + "/" + KHHEditVideoState.MotionName;
             //모션 데이터를 로드한다.
             GameObject go1 = Instantiate(editItemPrefabs[0], editItemParent);
             KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
             editItemMotion.Init(KHHEditVideoState.MotionChangeX, KHHEditVideoState.MotionChangeLeftX, KHHEditVideoState.MotionChangeRightX);
-            editItemMotion.LoadItemData(this, filePathMotion + ".csv", KHHEditVideoState.MotionName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
-            editItemMotion.Model = model;
+            editItemMotion.LoadItemData(this, filePathMotion + ".csv", KHHEditVideoState.MotionName, InitEnd);
+            editItemMotion.Model = modelRecorder.Model;
             editItemList.Add(editItemMotion);
 
             //보이스 데이터를 로드한다.
@@ -68,7 +72,7 @@ public class KHHScreenEditor : MonoBehaviour
             KHHEditItemSound editItemVoice = go2.GetComponent<KHHEditItemSound>();
             editItemVoice.IsVoice = true;
             editItemVoice.Init(KHHEditVideoState.MotionVChangeX, KHHEditVideoState.MotionVChangeLeftX, KHHEditVideoState.MotionVChangeRightX);
-            editItemVoice.LoadItemData(this, filePathMotion + ".wav", KHHEditVideoState.MotionName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
+            editItemVoice.LoadItemData(this, filePathMotion + ".wav", KHHEditVideoState.MotionName, InitEnd);
             editItemList.Add(editItemVoice);
 
             //페어간 정보 획득
@@ -78,25 +82,34 @@ public class KHHScreenEditor : MonoBehaviour
 
         if (KHHEditVideoState.SoundName != string.Empty)
         {
-            string filePathSound = KHHVideoData.FileSoundPath + "/" + KHHEditVideoState.SoundName;
+            initCount++;
+            string filePathSound = KHHEditData.FileSoundPath + "/" + KHHEditVideoState.SoundName;
             //사운드 데이터를 로드한다.
             GameObject go3 = Instantiate(editItemPrefabs[1], editItemParent);
             KHHEditItemSound editItemSound = go3.GetComponent<KHHEditItemSound>();
             editItemSound.Init(KHHEditVideoState.SoundChangeX, KHHEditVideoState.SoundChangeLeftX, KHHEditVideoState.SoundChangeRightX);
-            editItemSound.LoadItemData(this, filePathSound, KHHEditVideoState.SoundName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
+            editItemSound.LoadItemData(this, filePathSound, KHHEditVideoState.SoundName, InitEnd);
             editItemList.Add(editItemSound);
         }
 
         if (KHHEditVideoState.ImageName != string.Empty)
         {
-            string filePathBackground = KHHVideoData.FileImagePath + "/" + KHHEditVideoState.ImageName;
+            initCount++;
+            string filePathBackground = KHHEditData.FileImagePath + "/" + KHHEditVideoState.ImageName;
             //배경 데이터를 로드한다.
             GameObject go4 = Instantiate(editItemPrefabs[2], editItemParent);
             KHHEditItemBackground editItemImage = go4.GetComponent<KHHEditItemBackground>();
             editItemImage.Init(KHHEditVideoState.ImageChangeX, KHHEditVideoState.ImageChangeLeftX, KHHEditVideoState.ImageChangeRightX);
-            editItemImage.LoadItemData(this, filePathBackground, KHHEditVideoState.ImageName, () => { initCount++; if (initCount == 4) fileLoaded = true; });
+            editItemImage.LoadItemData(this, filePathBackground, KHHEditVideoState.ImageName, InitEnd);
             editItemList.Add(editItemImage);
         }
+    }
+
+    void InitEnd()
+    {
+        loadCount++;
+        if (loadCount == initCount)
+            fileLoaded = true;
     }
 
     //드롭 아이템이 편집 영역에 드랍되었을 때 호출
@@ -148,14 +161,14 @@ public class KHHScreenEditor : MonoBehaviour
     public void LoadFileMotion(string fileName)
     {
         fileLoaded = false;
-        string filePath = KHHVideoData.FileMotionPath + "/" + fileName;
+        string filePath = KHHEditData.FileMotionPath + "/" + fileName;
 
         //모션 데이터를 로드한다.
         GameObject go1 = Instantiate(editItemPrefabs[0], editItemParent);
         KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
         editItemMotion.Init();
         editItemMotion.LoadItemData(this, filePath + ".csv", fileName, null);
-        editItemMotion.Model = model;
+        editItemMotion.Model = modelRecorder.Model;
         editItemList.Add(editItemMotion);
 
         //보이스 데이터를 로드한다.
@@ -180,7 +193,7 @@ public class KHHScreenEditor : MonoBehaviour
     public void LoadFileSound(string fileName)
     {
         fileLoaded = false;
-        string filePath = KHHVideoData.FileSoundPath + "/" + fileName;
+        string filePath = KHHEditData.FileSoundPath + "/" + fileName;
 
         //사운드 데이터를 로드한다.
         GameObject go = Instantiate(editItemPrefabs[1], editItemParent);
@@ -198,7 +211,7 @@ public class KHHScreenEditor : MonoBehaviour
     public void LoadFileBackground(string fileName)
     {
         fileLoaded = false;
-        string filePath = KHHVideoData.FileImagePath + "/" + fileName;
+        string filePath = KHHEditData.FileImagePath + "/" + fileName;
 
         //배경 데이터를 로드한다.
         GameObject go = Instantiate(editItemPrefabs[2], editItemParent);

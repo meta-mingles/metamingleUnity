@@ -124,10 +124,9 @@ public class VNectModel : MonoBehaviour
 
     private void Update()
     {
-        if (jointPoints != null)
-        {
-            PoseUpdate();
-        }
+        if (!KHHCustomCharacter.instance.LoadCustom) return;
+        if (jointPoints == null) return;
+        PoseUpdate();
     }
 
     /// <summary>
@@ -281,7 +280,7 @@ public class VNectModel : MonoBehaviour
         var gaze = jointPoints[PositionIndex.Nose.Int()].Transform.position - jointPoints[PositionIndex.head.Int()].Transform.position;
         head.Inverse = Quaternion.Inverse(Quaternion.LookRotation(gaze));
         head.InverseRotation = head.Inverse * head.InitRotation;
-        
+
         var lHand = jointPoints[PositionIndex.lHand.Int()];
         var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
         lHand.InitRotation = lHand.Transform.rotation;
@@ -354,7 +353,7 @@ public class VNectModel : MonoBehaviour
         var f = TriangleNormal(jointPoints[PositionIndex.Nose.Int()].Pos3D, jointPoints[PositionIndex.rEar.Int()].Pos3D, jointPoints[PositionIndex.lEar.Int()].Pos3D);
         var head = jointPoints[PositionIndex.head.Int()];
         head.Transform.rotation = Quaternion.LookRotation(gaze, f) * head.InverseRotation;
-        
+
         // Wrist rotation (Test code)
         var lHand = jointPoints[PositionIndex.lHand.Int()];
         var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
@@ -408,7 +407,7 @@ public class VNectModel : MonoBehaviour
         sk.Line = sk.LineObject.AddComponent<LineRenderer>();
         sk.Line.startWidth = 0.04f;
         sk.Line.endWidth = 0.01f;
-        
+
         // define the number of vertex
         sk.Line.positionCount = 2;
         sk.Line.material = SkeletonMaterial;

@@ -52,10 +52,10 @@ public class KHHEditItemBackground : KHHEditItem
 
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}I");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}ICX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}ICLX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}ICRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}I");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICRX");
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
         Destroy(gameObject);
     }

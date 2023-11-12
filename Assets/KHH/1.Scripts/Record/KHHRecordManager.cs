@@ -67,7 +67,7 @@ public class KHHRecordManager : MonoBehaviour
         {
             isRecording = false;
             string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-            modelRecorder.StopRecord(KHHVideoData.FileMotionPath + "/" + fileName + ".csv");
+            modelRecorder.StopRecord(KHHEditData.FileMotionPath + "/" + fileName + ".csv");
             MicrophoneRecorder.Instance.StopRecordMicrophone(fileName);
             recordStartButton.gameObject.SetActive(true);
             recordStopButton.gameObject.SetActive(false);

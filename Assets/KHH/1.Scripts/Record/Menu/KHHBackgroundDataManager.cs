@@ -13,9 +13,9 @@ public class KHHBackgroundDataManager : KHHDataManager
     {
         base.Refresh();
         //경로가 없으면 생성
-        if (!Directory.Exists(KHHVideoData.FileImagePath))
-            Directory.CreateDirectory(KHHVideoData.FileImagePath);
-        DirectoryInfo di = new DirectoryInfo(KHHVideoData.FileImagePath);
+        if (!Directory.Exists(KHHEditData.FileImagePath))
+            Directory.CreateDirectory(KHHEditData.FileImagePath);
+        DirectoryInfo di = new DirectoryInfo(KHHEditData.FileImagePath);
         foreach (FileInfo file in di.GetFiles())
         {
             var ext = file.Extension.ToLower();

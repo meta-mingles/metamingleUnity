@@ -77,11 +77,11 @@ public class KHHEditItemSound : KHHEditItem
 
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}S");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}SCX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}SCLX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}SCRX");
-        PlayerPrefs.DeleteKey($"{KHHVideoData.VideoName}SV");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}S");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SV");
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
         Destroy(gameObject);
     }

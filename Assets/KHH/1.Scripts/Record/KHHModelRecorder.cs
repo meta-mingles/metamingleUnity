@@ -6,14 +6,14 @@ using UnityEngine;
 public class KHHModelRecorder : MonoBehaviour
 {
     public VNectModel[] models;
-    VNectModel Model
+    public VNectModel Model
     {
         get
         {
             foreach (var model in models)
                 if (model.gameObject.activeSelf)
                     return model;
-            return models[0];
+            return null;
         }
     }
     public KHHScreenEditor screenEditor;

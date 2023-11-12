@@ -15,6 +15,7 @@ public class KHHData : Selectable, IBeginDragHandler, IDragHandler, IEndDragHand
         SoundData,
         BackgroundData,
         CaptionData,
+        VideoData,
     }
     public DataType type;
 

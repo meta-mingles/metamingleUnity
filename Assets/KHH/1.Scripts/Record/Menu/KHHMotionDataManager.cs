@@ -12,9 +12,9 @@ public class KHHMotionDataManager : KHHDataManager
     {
         base.Refresh();
         //경로가 없으면 생성
-        if (!Directory.Exists(KHHVideoData.FileMotionPath))
-            Directory.CreateDirectory(KHHVideoData.FileMotionPath);
-        DirectoryInfo di = new DirectoryInfo(KHHVideoData.FileMotionPath);
+        if (!Directory.Exists(KHHEditData.FileMotionPath))
+            Directory.CreateDirectory(KHHEditData.FileMotionPath);
+        DirectoryInfo di = new DirectoryInfo(KHHEditData.FileMotionPath);
         if (!di.Exists)
             return;
 

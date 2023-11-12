@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,12 +11,15 @@ public class KHHInteractiveButton : MonoBehaviour
     string fileName;
     public string FileName { get { return fileName; } }
     public string Title { get { return inputField.text; } }
+    string filePath;
+    public string FilePath { get { return filePath; } }
 
-    //µå·Ó ¾ÆÀÌÅÛÀÌ ÆíÁı ¿µ¿ª¿¡ µå¶øµÇ¾úÀ» ¶§ È£Ãâ
+    //ë“œë¡­ ì•„ì´í…œì´ í¸ì§‘ ì˜ì—­ì— ë“œëë˜ì—ˆì„ ë•Œ í˜¸ì¶œ
     public void OnDropItem(GameObject dropItem)
     {
-        //µå·Ó ¾ÆÀÌÅÛÀÇ ÆÄÀÏ ÀÌ¸§À» ¾ò¾î¿Â´Ù.
-        fileName = dropItem.GetComponent<KHHMotionData>().FileName;
+        //ë“œë¡­ ì•„ì´í…œì˜ íŒŒì¼ ì´ë¦„ì„ ì–»ì–´ì˜¨ë‹¤.
+        fileName = dropItem.GetComponent<KHHVideoData>().FileName;
+        filePath = dropItem.GetComponent<KHHVideoData>().FilePath;
         fileNameText.text = "Link: " + fileName;
     }
 }

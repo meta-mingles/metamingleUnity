@@ -12,11 +12,7 @@ public class KHHVideoCapture : MonoBehaviour
     public object Lock => _lock;
     public Queue<string> actionQueue = new Queue<string>();
 
-    private string filePathShortform;
-    private List<string> filePathInteractive = new List<string>();
-
-    //private bool isPlayVideo = false;
-    public bool IsInteractive { get; set; } = false;
+    private string filePath;
 
     //업로드중
     public bool IsUploading { get; set; } = false;
@@ -39,19 +35,8 @@ public class KHHVideoCapture : MonoBehaviour
         {
             if (actionQueue.Count > 0)
             {
-                if (IsInteractive)
-                {
-                    filePathInteractive.Add(actionQueue.Dequeue());
-                    if (filePathInteractive.Count == 3)
-                    {
-                        OnCaptureComplete();
-                    }
-                }
-                else
-                {
-                    filePathShortform = actionQueue.Dequeue();
-                    OnCaptureComplete();
-                }
+                filePath = actionQueue.Dequeue();
+                OnCaptureComplete();
             }
         }
     }
@@ -141,17 +126,17 @@ public class KHHVideoCapture : MonoBehaviour
     }
 
     string uploadShortformURL = "http://metaverse.ohgiraffers.com:8080/short-form-firebase";
-    public void UploadShortformVideo(string title)
+    public void UploadShortformVideo(string title, string description)
     {
         IsUploading = true;
 
-        StartCoroutine(CoUploadShortformVideo(ReadVideoAsBytes(filePathShortform), title));
+        StartCoroutine(CoUploadShortformVideo(ReadVideoAsBytes(filePath), title, description));
 
         ////비디오 삭제
         //System.IO.File.Delete(filePathShortform);
     }
 
-    IEnumerator CoUploadShortformVideo(byte[] videoBytes, string title)
+    IEnumerator CoUploadShortformVideo(byte[] videoBytes, string title, string description)
     {
         using (UnityWebRequest www = new UnityWebRequest(uploadShortformURL, "POST"))
         {
@@ -163,7 +148,7 @@ public class KHHVideoCapture : MonoBehaviour
 
             // Add the title to the form data.
             form.AddField("title", title);
-            form.AddField("description", "test description");
+            form.AddField("description", description);
 
             // Set the form as the request's upload handler.
             www.uploadHandler = new UploadHandlerRaw(form.data);
@@ -193,23 +178,22 @@ public class KHHVideoCapture : MonoBehaviour
     }
 
     string uploadInteractiveURL = "http://metaverse.ohgiraffers.com:8080/interactive-movie";
-    public void UploadInteractiveVideo(string title, string choice1, string choice2)
+    public void UploadInteractiveVideo(string title, string description, string c1, string c1Path, string c2, string c2Path)
     {
         IsUploading = true;
 
         List<byte[]> videoBytes = new List<byte[]>();
-        for (int i = 0; i < filePathInteractive.Count; i++)
-            videoBytes.Add(ReadVideoAsBytes(filePathInteractive[i]));
+        List<string> paths = new List<string>();
+        paths.Add(filePath);
+        paths.Add(c1Path);
+        paths.Add(c2Path);
+        for (int i = 0; i < paths.Count; i++)
+            videoBytes.Add(ReadVideoAsBytes(paths[i]));
 
-        StartCoroutine(CoUploadInteractiveVideo(videoBytes, title, choice1, choice2));
-
-        ////비디오 삭제
-        //for (int i = 0; i < filePathInteractive.Count; i++)
-        //    System.IO.File.Delete(filePathInteractive[i]);
-        //filePathInteractive.Clear();
+        StartCoroutine(CoUploadInteractiveVideo(videoBytes, description, title, c1, c2));
     }
 
-    IEnumerator CoUploadInteractiveVideo(List<byte[]> videoBytesList, string title, string choice1, string choice2)
+    IEnumerator CoUploadInteractiveVideo(List<byte[]> videoBytesList, string title, string description, string c1, string c2)
     {
         using (UnityWebRequest www = new UnityWebRequest(uploadInteractiveURL, "POST"))
         {
@@ -228,9 +212,9 @@ public class KHHVideoCapture : MonoBehaviour
 
             // Add the title to the form data.
             form.AddField("title", title);
-            form.AddField("description", "test description");
-            form.AddField("choice1", choice1);
-            form.AddField("choice2", choice2);
+            form.AddField("description", description);
+            form.AddField("choice1", c1);
+            form.AddField("choice2", c2);
 
             // Set the form as the request's upload handler.
             www.uploadHandler = new UploadHandlerRaw(form.data);

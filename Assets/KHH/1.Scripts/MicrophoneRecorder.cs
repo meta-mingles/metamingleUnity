@@ -64,7 +64,7 @@ public class MicrophoneRecorder : MonoBehaviour
 
             recordClip.SetData(cutSamples, 0);
 
-            SaveLoadWav.Save(KHHVideoData.FileMotionPath + "/" + fileName + ".wav", recordClip);
+            SaveLoadWav.Save(KHHEditData.FileMotionPath + "/" + fileName + ".wav", recordClip);
         }
     }
 }
