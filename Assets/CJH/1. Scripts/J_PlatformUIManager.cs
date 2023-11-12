@@ -12,6 +12,10 @@ public class J_PlatformUIManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        //사운드 키기
+        SoundManager.instance.BGMVolume = 1;
+        SoundManager.instance.PlayBGM("PlatformBGM");
     }
     [Header("Platform")]
     public Button videoBt; //영상보러가기 버튼
@@ -37,10 +41,10 @@ public class J_PlatformUIManager : MonoBehaviour
 
     private void OnValidate()
     {
-        if (videoBt.onClick.GetPersistentEventCount() == 0)
+        if (videoBt != null && videoBt.onClick.GetPersistentEventCount() == 0)
             UnityEventTools.AddStringPersistentListener(videoBt.onClick, SceneChange, videoSceneName);
-        if (customizeBt.onClick.GetPersistentEventCount() == 0)
+        if (customizeBt != null &&customizeBt.onClick.GetPersistentEventCount() == 0)
             UnityEventTools.AddStringPersistentListener(customizeBt.onClick, SceneChange, customizationSceneName);
-      
+
     }
 }

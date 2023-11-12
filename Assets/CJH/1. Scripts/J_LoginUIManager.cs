@@ -76,6 +76,9 @@ public class J_LoginUIManager : MonoBehaviour
         system = EventSystem.current;
 
         Login_Bt();
+        //사운드매니저로 브금 실행
+        SoundManager.instance.PlayBGM("Bgm");
+
     }
 
     // Update is called once per frame

@@ -7,12 +7,22 @@ public class J_SoundManager : MonoBehaviour
 {
     public static J_SoundManager instance;
 
+    public bool isPlaying = true;
     private void Awake()
     {
-        if (instance == null)
+        if (instance == null & isPlaying)
+        {
             instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+
+
         else
+        {
             Destroy(gameObject);
+        }
+
     }
 
     //브금, 환경음, 효과음

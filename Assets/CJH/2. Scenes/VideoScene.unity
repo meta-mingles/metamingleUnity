@@ -5329,7 +5329,7 @@ GameObject:
   - component: {fileID: 1967478219}
   - component: {fileID: 1967478218}
   m_Layer: 0
-  m_Name: UIManger
+  m_Name: VideoSceneManger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5348,6 +5348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homeBt: {fileID: 706041883}
+  platformSceneName: Main_Platform
 --- !u!4 &1967478219
 Transform:
   m_ObjectHideFlags: 0
