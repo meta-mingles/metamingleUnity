@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEditor.Events;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -38,13 +37,14 @@ public class J_PlatformUIManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-
+#if UNITY_EDITOR
     private void OnValidate()
     {
         if (videoBt != null && videoBt.onClick.GetPersistentEventCount() == 0)
-            UnityEventTools.AddStringPersistentListener(videoBt.onClick, SceneChange, videoSceneName);
+            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(videoBt.onClick, SceneChange, videoSceneName);
         if (customizeBt != null &&customizeBt.onClick.GetPersistentEventCount() == 0)
-            UnityEventTools.AddStringPersistentListener(customizeBt.onClick, SceneChange, customizationSceneName);
+            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(customizeBt.onClick, SceneChange, customizationSceneName);
 
     }
+#endif
 }

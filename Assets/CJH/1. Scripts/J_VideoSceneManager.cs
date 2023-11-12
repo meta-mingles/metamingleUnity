@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -26,10 +25,13 @@ public class J_VideoSceneManager : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+
+#if UNITY_EDITOR
     private void OnValidate()
     {
       
         if (homeBt.onClick.GetPersistentEventCount() == 0)
-            UnityEventTools.AddStringPersistentListener(homeBt.onClick, SceneChange, platformSceneName);
+            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(homeBt.onClick, SceneChange, platformSceneName);
     }
+#endif
 }

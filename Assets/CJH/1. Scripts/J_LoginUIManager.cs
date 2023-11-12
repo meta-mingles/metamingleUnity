@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
@@ -205,13 +203,14 @@ public class J_LoginUIManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-
+#if UNITY_EDITOR
     private void OnValidate()
     {
         if (loginBt.onClick.GetPersistentEventCount() == 0)
-            UnityEventTools.AddStringPersistentListener(loginBt.onClick, SceneChange, customizationSceneName);
+            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(loginBt.onClick, SceneChange, customizationSceneName);
 
     }
+#endif
 
 
 
