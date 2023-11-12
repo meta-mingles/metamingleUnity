@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class J_LoginUIManager : MonoBehaviour
@@ -46,6 +48,7 @@ public class J_LoginUIManager : MonoBehaviour
     public Button close_Bt3; //닫기 버튼
 
     Action onChange;
+    string customizationSceneName = "Customization";
     // Start is called before the first frame update
     void Start()
     {
@@ -167,6 +170,7 @@ public class J_LoginUIManager : MonoBehaviour
 
 
             //여기서 씬이동
+            SceneChange(customizationSceneName);
             print("커스터마이징씬이동");
             
         });
@@ -188,6 +192,21 @@ public class J_LoginUIManager : MonoBehaviour
         {
             loginBt.onClick.AddListener(PostTest);
         }
+
+    }
+
+    public void SceneChange(string sceneName)
+    {
+        GlobalValue.PrevSceneName = "Main_Platform";
+        GlobalValue.CurSceneName = sceneName;
+        SceneManager.LoadScene(sceneName);
+    }
+
+
+    private void OnValidate()
+    {
+        if (loginBt.onClick.GetPersistentEventCount() == 0)
+            UnityEventTools.AddStringPersistentListener(loginBt.onClick, SceneChange, customizationSceneName);
 
     }
 

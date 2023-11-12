@@ -29,6 +29,8 @@ public class J_PlatformUIManager : MonoBehaviour
 
     public void SceneChange(string sceneName)
     {
+        GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+        GlobalValue.CurSceneName = sceneName;
         SceneManager.LoadScene(sceneName);
     }
 
