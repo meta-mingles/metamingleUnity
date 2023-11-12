@@ -67,6 +67,8 @@ public class KHHEditSetting : MonoBehaviour
     void CostomButtonEvent()
     {
         //커스터마이즈 씬 열기
+        GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+        GlobalValue.CurSceneName = "Customization";
         SceneManager.LoadScene("Customization");
     }
 

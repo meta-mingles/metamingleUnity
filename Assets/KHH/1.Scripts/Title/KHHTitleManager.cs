@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,7 +12,12 @@ public class KHHTitleManager : MonoBehaviour
     void Start()
     {
         if (loginButton != null)
-            loginButton.onClick.AddListener(() => { SceneManager.LoadScene("ToolSelect"); });
+            loginButton.onClick.AddListener(() =>
+            {
+                GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+                GlobalValue.CurSceneName = "ToolSelect";
+                SceneManager.LoadScene("ToolSelect");
+            });
     }
 
     //// Update is called once per frame

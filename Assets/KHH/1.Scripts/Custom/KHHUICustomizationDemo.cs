@@ -263,9 +263,12 @@ public class KHHUICustomizationDemo : MonoBehaviour
 
     void SaveButtonEvent()
     {
-        KHHUserCustom.SaveData(() => 
+        KHHUserCustom.SaveData(() =>
         {
-            SceneManager.LoadScene("ToolCapture");
-        });        
+            string newSceneName = GlobalValue.PrevSceneName;
+            GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+            GlobalValue.CurSceneName = newSceneName;
+            SceneManager.LoadScene(newSceneName);
+        });
     }
 }
