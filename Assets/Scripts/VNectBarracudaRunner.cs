@@ -356,4 +356,16 @@ public class VNectBarracudaRunner : MonoBehaviour
         measurement.P.z = KalmanParamR * (measurement.P.z + KalmanParamQ) / (KalmanParamR + measurement.P.z + KalmanParamQ);
     }
 
+    public void OnDestroy()
+    {
+        _worker?.Dispose();
+
+        // Assuming model with multiple inputs that were passed as a Dictionary
+        foreach (var key in inputs.Keys)
+        {
+            inputs[key].Dispose();
+        }
+
+        inputs.Clear();
+    }
 }
