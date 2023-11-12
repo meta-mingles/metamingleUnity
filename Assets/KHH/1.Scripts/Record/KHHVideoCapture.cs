@@ -190,7 +190,7 @@ public class KHHVideoCapture : MonoBehaviour
         for (int i = 0; i < paths.Count; i++)
             videoBytes.Add(ReadVideoAsBytes(paths[i]));
 
-        StartCoroutine(CoUploadInteractiveVideo(videoBytes, description, title, c1, c2));
+        StartCoroutine(CoUploadInteractiveVideo(videoBytes, title, description, c1, c2));
     }
 
     IEnumerator CoUploadInteractiveVideo(List<byte[]> videoBytesList, string title, string description, string c1, string c2)

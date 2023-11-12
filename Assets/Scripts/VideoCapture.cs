@@ -53,6 +53,8 @@ public class VideoCapture : MonoBehaviour
 
         webCamTexture = new WebCamTexture(devices[WebCamIndex].name);
         //미러
+        webCamTexture.requestedWidth = 1080;
+        webCamTexture.requestedHeight = 1080;
 
         var sd = VideoScreen.GetComponent<RectTransform>();
         VideoScreen.texture = webCamTexture;

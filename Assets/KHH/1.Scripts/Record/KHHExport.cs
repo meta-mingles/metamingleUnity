@@ -112,8 +112,7 @@ public class KHHExport : MonoBehaviour
         exportState = ExportState.Uploading;
 
         //upload
-        KHHVideoCapture.instance.UploadInteractiveVideo(titleInputField.text, descriptionInputField.text, interactiveButtonLeft.Title, interactiveButtonLeft.FilePath,
-            interactiveButtonRight.Title, interactiveButtonRight.FilePath);
+        KHHVideoCapture.instance.UploadInteractiveVideo(titleInputField.text, descriptionInputField.text, interactiveButtonLeft.Title, interactiveButtonLeft.FilePath, interactiveButtonRight.Title, interactiveButtonRight.FilePath);
         while (KHHVideoCapture.instance.IsUploading)
             yield return null;
 
