@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class J_VideoReceiver : MonoBehaviour
 {
@@ -20,19 +21,25 @@ public class J_VideoReceiver : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        SceneLoad();
+
     }
-
-    private void Start()
+    ////씬이 넘어올 때 
+    private void SceneLoad()
     {
-
+        // 서버한테 영상 정보 요청
+        HttpInfo httpInfo = new HttpInfo();
+        string url = "/short-form";
+        httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
+        HttpManager.Get().SendRequest(httpInfo);
     }
 
     private void Update()
     {
-        //씬이 넘어올 때 
-        //tumbnail 리스트
-
-        //씬이 처음 로드될때 
+        ////씬이 넘어올 때 
+        ////tumbnail 리스트
+        ////씬이 처음 로드될때 
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             // 서버한테 영상 정보 요청
