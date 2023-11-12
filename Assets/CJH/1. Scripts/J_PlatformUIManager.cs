@@ -7,6 +7,12 @@ using UnityEditor.Events;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
+    public static J_PlatformUIManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     [Header("Platform")]
     public Button videoBt; //영상보러가기 버튼
     public Button customizeBt; //아바타 커스터마이징 가기 버튼
