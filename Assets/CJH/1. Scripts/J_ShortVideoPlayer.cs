@@ -33,7 +33,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
         if(like_Button != null)
         {
-            like_Button.onClick.AddListener(Like_Button);
+            like_Button.onClick.AddListener(LikeButton);
         }
     }
     //숏폼 비디오 서버 
@@ -77,20 +77,20 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
         J_VideoReceiver.instance.CreateInteractiveMovie(info);
     }
-    void Like_Button()
+    void LikeButton()
     {
-         likeCnt = videoInfo.shortFormLikeCnt;
-         likeCnt += 1;
-         like_Count.text = likeCnt.ToString();
+        likeCnt = videoInfo.shortFormLikeCnt;
+        likeCnt += 1;
+        like_Count.text = likeCnt.ToString();
 
         //계정당 한번
         if (videoInfo.isLike == true) //숏폼을 좋아요 했다면
         {
             return;
         }
-        else 
+        else
         {
-            
+
         }
         //서버랑 연동
     }
