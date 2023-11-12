@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -20,14 +20,14 @@ public class GameManager : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
-        //OnPhotonSerializeView È£Ãâ ºóµµ
+        //OnPhotonSerializeView í˜¸ì¶œ ë¹ˆë„
         PhotonNetwork.SerializationRate = 10;
 
-        //³ªÀÇ ÇÃ·¹ÀÌ¾î »ı¼º
+        //ë‚˜ì˜ í”Œë ˆì´ì–´ ìƒì„±
         GameObject myPlayer = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
 
-        //¸¶¿ì½º Æ÷ÀÎÅÍ ºñÈ°¼ºÈ­
-        Cursor.visible = false;
+        //ë§ˆìš°ìŠ¤ í¬ì¸í„° ë¹„í™œì„±í™”
+        //Cursor.visible = false;
 
         tpsCamera.target = myPlayer.transform;
     }
@@ -36,24 +36,24 @@ public class GameManager : MonoBehaviourPun
     void Update()
     {
 
-        //¸¸¾à¿¡ escÅ°¸¦ ´©¸£¸é
+        //ë§Œì•½ì— escí‚¤ë¥¼ ëˆ„ë¥´ë©´
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //¸¶¿ì½º Æ÷ÀÎÅÍ È°¼ºÈ­ 
+            //ë§ˆìš°ìŠ¤ í¬ì¸í„° í™œì„±í™” 
             Cursor.visible = true;
         }
-        //¸¶¿ì½º Å¬¸¯ÇßÀ» ¶§
+        //ë§ˆìš°ìŠ¤ í´ë¦­í–ˆì„ ë•Œ
         if (Input.GetMouseButton(0))
         {
-            //¸¶¿ì½º Å¬¸¯½Ã ÇØ´çÀ§Ä¡¿¡ UI°¡ ¾øÀ¸¸é 
+            //ë§ˆìš°ìŠ¤ í´ë¦­ì‹œ í•´ë‹¹ìœ„ì¹˜ì— UIê°€ ì—†ìœ¼ë©´ 
             if (EventSystem.current.IsPointerOverGameObject() == false)
             {
-                //¸¶¿ì½º Æ÷ÀÎÅÍ ºñÈ°¼ºÈ­
+                //ë§ˆìš°ìŠ¤ í¬ì¸í„° ë¹„í™œì„±í™”
                 Cursor.visible = false;
 
             }
         }
-        //UI Å¬¸¯ÇßÀ» ¶§ ¸¶¿ì½º Æ÷ÀÎÅÍ´Â »ç¶óÁöÁö ¾Ê°ÔÇØ¾ßÇÔ
+        //UI í´ë¦­í–ˆì„ ë•Œ ë§ˆìš°ìŠ¤ í¬ì¸í„°ëŠ” ì‚¬ë¼ì§€ì§€ ì•Šê²Œí•´ì•¼í•¨
         
 
 
