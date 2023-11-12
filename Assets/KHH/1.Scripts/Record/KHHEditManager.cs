@@ -2,6 +2,7 @@
 using RockVR.Video;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -75,7 +76,7 @@ public class KHHEditManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!init && KHHRecordManager.Instance.videoCapture.SetEnd)
+        if (!init && KHHRecordManager.Instance.videoCapture.SetEnd)
         {
             init = true;
             KHHCanvasShield.Instance.Close();
@@ -99,9 +100,12 @@ public class KHHEditManager : MonoBehaviour
         motionPanel.SetActive(true);
         soundPanel.SetActive(false);
         backgroundPanel.SetActive(false);
-        motionButton.image.color = new Color32(200, 200, 200, 255);
-        soundButton.image.color = new Color32(255, 255, 255, 255);
-        backgroundButton.image.color = new Color32(255, 255, 255, 255);
+        motionButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color32(242, 189, 171, 255);
+        motionButton.targetGraphic.color = new Color32(242, 189, 171, 255);
+        soundButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        soundButton.targetGraphic.color = Color.white;
+        backgroundButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        backgroundButton.targetGraphic.color = Color.white;
 
         motionDataManager.Refresh();
     }
@@ -111,9 +115,12 @@ public class KHHEditManager : MonoBehaviour
         motionPanel.SetActive(false);
         soundPanel.SetActive(true);
         backgroundPanel.SetActive(false);
-        motionButton.image.color = new Color32(255, 255, 255, 255);
-        soundButton.image.color = new Color32(200, 200, 200, 255);
-        backgroundButton.image.color = new Color32(255, 255, 255, 255);
+        motionButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        motionButton.targetGraphic.color = Color.white;
+        soundButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color32(242, 189, 171, 255);
+        soundButton.targetGraphic.color = new Color32(242, 189, 171, 255);
+        backgroundButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        backgroundButton.targetGraphic.color = Color.white;
 
         soundDataManager.Refresh();
     }
@@ -123,9 +130,12 @@ public class KHHEditManager : MonoBehaviour
         motionPanel.SetActive(false);
         soundPanel.SetActive(false);
         backgroundPanel.SetActive(true);
-        motionButton.image.color = new Color32(255, 255, 255, 255);
-        soundButton.image.color = new Color32(255, 255, 255, 255);
-        backgroundButton.image.color = new Color32(200, 200, 200, 255);
+        motionButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        motionButton.targetGraphic.color = Color.white;
+        soundButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        soundButton.targetGraphic.color = Color.white;
+        backgroundButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color32(242, 189, 171, 255);
+        backgroundButton.targetGraphic.color = new Color32(242, 189, 171, 255);
 
         backgroundDataMaanger.Refresh();
     }
