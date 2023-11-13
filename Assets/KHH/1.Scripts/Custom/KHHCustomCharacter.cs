@@ -299,12 +299,12 @@ public class KHHCustomCharacter : MonoBehaviour
                 Color colorC = materials[i].GetColor("_Color_C_2");
                 if (materialData != null)
                 {
-                    if (materialData.ColorA != Color.black)
-                        colorA = materialData.ColorA;
-                    if (materialData.ColorB != Color.black)
-                        colorB = materialData.ColorB;
-                    if (materialData.ColorC != Color.black)
-                        colorC = materialData.ColorC;
+                    //if (materialData.ColorA != Color.black)
+                    colorA = materialData.ColorA;
+                    //if (materialData.ColorB != Color.black)
+                    colorB = materialData.ColorB;
+                    //if (materialData.ColorC != Color.black)
+                    colorC = materialData.ColorC;
                     OnChangeColor(auxRenderer, auxMatIndex, "_Color_A_2", colorA);
                     OnChangeColor(auxRenderer, auxMatIndex, "_Color_B_2", colorB);
                     OnChangeColor(auxRenderer, auxMatIndex, "_Color_C_2", colorC);
