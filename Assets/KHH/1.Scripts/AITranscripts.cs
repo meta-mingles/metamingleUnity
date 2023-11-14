@@ -46,9 +46,9 @@ public class AITranscripts : MonoBehaviour
     }
 
 
-    private string apiUrl_chat =  "http://192.168.0.2:8080/scenario/streaming";
-    private string apiUrl_image = "http://192.168.0.2:8080/creative/image";
-    private string apiUrl_sound = "http://192.168.0.2:8080/creative/sound";
+    private string apiUrl_chat =  "http://metaverse.ohgiraffers.com:8080/scenario/streaming";
+    private string apiUrl_image = "http://metaverse.ohgiraffers.com:8080/creative/image";
+    private string apiUrl_sound = "http://metaverse.ohgiraffers.com:8080/creative/sound";
 
     public Button aiTranscriptsButton;
     public TextMeshProUGUI aiTranscriptsButtonText;
