@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,19 +20,22 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public Button like_Button; // 좋아요 버튼
 
     public Button Sound_Button; //사운드 버튼
-
+    public float colorChangeDuration = 0.5f;//색상변경시간
     int likeCnt;
+
+    private Color[] rainbowColor = new Color[] { Color.green, Color.magenta, Color.yellow, Color.blue, Color.cyan, Color.red }; //무지개 색상 변화
+
     public J_InteractiveMovieItem interactiveMovieList;
 
 
 
     private void Start()
     {
+        like_Button.onClick.AddListener(() => StartCoroutine(ChangeToRainbowAndThenBlack()));
         //처음엔 0 
         like_Count.text = "0";
         //but 누르고나서 서버에서 받는 좋아요수로 업데이트
-
-        if(like_Button != null)
+        if (like_Button != null)
         {
             like_Button.onClick.AddListener(LikeButton);
         }
@@ -93,5 +97,34 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
         }
         //서버랑 연동
+    }
+
+    //무지개색상변경
+    IEnumerator ChangeToRainbowAndThenBlack()
+    {
+        Image likeBtImage = like_Button.GetComponent<Image>();
+        //무지개 색상 변경
+        foreach(Color color in rainbowColor)
+        {
+            yield return StartCoroutine(ChangeColor(likeBtImage,color, colorChangeDuration));
+        }
+        //최종 색깔 검정색으로 바뀐다./
+        yield return like_Button.GetComponent<Image>().color = Color.black;
+    }
+
+    //색상변경
+    IEnumerator ChangeColor(Image image, Color newColor, float duration)
+    {
+        float elapsedTime = 0; //경과 시간
+        Color orignColor = like_Button.image.color;
+        while(elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            image.color = Color.Lerp(orignColor,newColor,elapsedTime/duration);
+            yield return null;
+
+        }
+        image.color = newColor;
+
     }
 }
