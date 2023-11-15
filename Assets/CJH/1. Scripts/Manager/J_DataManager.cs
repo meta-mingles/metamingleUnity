@@ -6,6 +6,14 @@ using UnityEngine;
 
 
 [System.Serializable]
+public class QuizInfo //퀴즈 정보
+{
+    public string question; //질문
+    public string answer; //답
+}
+
+
+[System.Serializable]
 public class SignUpInfo //로그인 정보
 {
     public string email; //아이디

@@ -13,7 +13,6 @@ public class J_LoginUIManager : MonoBehaviour
     public List<GameObject> panels = new List<GameObject>(); //패널 오브젝트 이름 배열
     private int page = 0;
     private bool isReady = false;
-    private bool canContinue = false;
     EventSystem system;
 
     [SerializeField] private Transform panelTransform;
@@ -91,14 +90,6 @@ public class J_LoginUIManager : MonoBehaviour
 
         introductionText.GetComponent<TMP_Text>().text = IntroText;
         IntroText = introductionText.text;
-
-        //if (Input.anyKeyDown)
-        //{
-        //    canContinue = true;
-        //    move_startBt.onClick.Invoke();
-        //    Debug.Log("Button pressed!");
-        //}
-
 
     }
     //이전으로 이동하는 버튼

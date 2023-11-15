@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,8 +17,8 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public TMP_Text like_Count;
     public RawImage profilecolor;
 
+   
     public Button like_Button; // 좋아요 버튼
-
     public Button Sound_Button; //사운드 버튼
 
     int likeCnt;
@@ -27,6 +28,8 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
     private void Start()
     {
+        
+
         //처음엔 0 
         like_Count.text = "0";
         //but 누르고나서 서버에서 받는 좋아요수로 업데이트
@@ -79,9 +82,12 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     }
     void LikeButton()
     {
+        //좋아요 버튼을 클릭하면 이미지 컴포넌트의 color값이 검정색으로 천천히 변한다. 
+
         likeCnt = videoInfo.shortFormLikeCnt;
         likeCnt += 1;
         like_Count.text = likeCnt.ToString();
+        
 
         //계정당 한번
         if (videoInfo.isLike == true) //숏폼을 좋아요 했다면
@@ -94,4 +100,5 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         }
         //서버랑 연동
     }
+
 }
