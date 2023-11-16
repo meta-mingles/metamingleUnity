@@ -40,10 +40,14 @@ public class J_LoginUIManager : MonoBehaviour
     public Button close_Bt2; //닫기 버튼
 
 
+    [Header("Popup_ CheckCode")]
+    public GameObject PopUp_checkCode; //인증코드팝업
+
+
     [Header("Popup_ CheckSignUp")]
     public GameObject PopUp_checkSignUp; //회원가입 성공 창
     public Button prev_SignUp;
-    public Button close_Bt3; //닫기 버튼
+    public Button close_Bt4; //닫기 버튼
 
     Action onChange;
     //string customizationSceneName = "Customization";
@@ -56,7 +60,7 @@ public class J_LoginUIManager : MonoBehaviour
         if (prev_SignUp != null) prev_SignUp.onClick.AddListener(OnChange);
         if (close_Bt1 != null) close_Bt1.onClick.AddListener(Click_Prev);
         if (close_Bt2 != null) close_Bt2.onClick.AddListener(Click_Prev);
-        if (close_Bt3 != null) close_Bt3.onClick.AddListener(OnChange);
+        if (close_Bt4 != null) close_Bt4.onClick.AddListener(OnChange);
 
         //다음
         if (move_startBt != null) move_startBt.onClick.AddListener(Click_Next);
@@ -91,15 +95,6 @@ public class J_LoginUIManager : MonoBehaviour
 
         introductionText.GetComponent<TMP_Text>().text = IntroText;
         IntroText = introductionText.text;
-
-        //if (Input.anyKeyDown)
-        //{
-        //    canContinue = true;
-        //    move_startBt.onClick.Invoke();
-        //    Debug.Log("Button pressed!");
-        //}
-
-
     }
     //이전으로 이동하는 버튼
     public void Click_Prev()
@@ -147,7 +142,7 @@ public class J_LoginUIManager : MonoBehaviour
         if (prev_SignUp != null) prev_SignUp.gameObject.SetActive(page > 0);
         if (close_Bt1 != null) close_Bt1.gameObject.SetActive(page > 0);
         if (close_Bt2 != null) close_Bt2.gameObject.SetActive(page > 0);
-        if (close_Bt3 != null) close_Bt3.gameObject.SetActive(page > 0);
+        if (close_Bt4 != null) close_Bt4.gameObject.SetActive(page > 0);
         //다음
         if (move_startBt != null) move_startBt.gameObject.SetActive(page < panels.Count - 1);
         if (move_SignUpBt != null) move_SignUpBt.gameObject.SetActive(page < panels.Count - 1);

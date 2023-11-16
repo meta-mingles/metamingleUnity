@@ -204,8 +204,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enter text...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
-  m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
+  m_fontAsset: {fileID: 11400000, guid: d82617a8c6d05054f816f35a53809f50, type: 2}
+  m_sharedMaterial: {fileID: 3684533707445504926, guid: d82617a8c6d05054f816f35a53809f50,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -672,8 +672,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
-  m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
+  m_fontAsset: {fileID: 11400000, guid: d82617a8c6d05054f816f35a53809f50, type: 2}
+  m_sharedMaterial: {fileID: 3684533707445504926, guid: d82617a8c6d05054f816f35a53809f50,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -882,7 +882,7 @@ Transform:
   - {fileID: 224859182}
   - {fileID: 729991987}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &543825280
 GameObject:
@@ -1035,8 +1035,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD034\uC988 \n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
-  m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
+  m_fontAsset: {fileID: 11400000, guid: d82617a8c6d05054f816f35a53809f50, type: 2}
+  m_sharedMaterial: {fileID: 3684533707445504926, guid: d82617a8c6d05054f816f35a53809f50,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1142,7 +1142,7 @@ Transform:
   - {fileID: 1495724637}
   - {fileID: 465841444}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &729991985
 GameObject:
@@ -1777,8 +1777,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: What's meaning of mingles in korean?
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
-  m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
+  m_fontAsset: {fileID: 11400000, guid: d82617a8c6d05054f816f35a53809f50, type: 2}
+  m_sharedMaterial: {fileID: 3684533707445504926, guid: d82617a8c6d05054f816f35a53809f50,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1863,7 +1863,7 @@ PrefabInstance:
     - target: {fileID: 458552687273551684, guid: a5464ccbcc4f8f646bd6e02b58699193,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 458552687273551684, guid: a5464ccbcc4f8f646bd6e02b58699193,
         type: 3}
@@ -2017,8 +2017,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enter
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
-  m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
+  m_fontAsset: {fileID: 11400000, guid: d82617a8c6d05054f816f35a53809f50, type: 2}
+  m_sharedMaterial: {fileID: 3684533707445504926, guid: d82617a8c6d05054f816f35a53809f50,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2153,8 +2153,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uBC88\uC5ED"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
-  m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
+  m_fontAsset: {fileID: 11400000, guid: d82617a8c6d05054f816f35a53809f50, type: 2}
+  m_sharedMaterial: {fileID: 3684533707445504926, guid: d82617a8c6d05054f816f35a53809f50,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2582,7 +2582,7 @@ Transform:
   - {fileID: 911510518}
   - {fileID: 1473530694}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1473530691
 GameObject:
@@ -3088,8 +3088,8 @@ MonoBehaviour:
   m_text: "\uBA54\uD0C0\uBC0D\uAE00\uC758 \uBC0D\uAE00\uC740 \uD55C\uAD6D\uB9D0\uB85C
     \uBB34\uC2A8 \uB73B\uC77C\uAE4C\uC694?"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6eadc310266c0dd46b2d58f5c3f34655, type: 2}
-  m_sharedMaterial: {fileID: -6257655852170938170, guid: 6eadc310266c0dd46b2d58f5c3f34655,
+  m_fontAsset: {fileID: 11400000, guid: d82617a8c6d05054f816f35a53809f50, type: 2}
+  m_sharedMaterial: {fileID: 3684533707445504926, guid: d82617a8c6d05054f816f35a53809f50,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3651,80 +3651,6 @@ MonoBehaviour:
   autoLockCursor: 0
   target: {fileID: 0}
   offset: {x: -20, y: 20, z: -20}
---- !u!1001 &4336730981783547168
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4336730980516089113, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_Name
-      value: Chair
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089113, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.374
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.446
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.79
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336730980516089114, guid: a700580ae64040f4187a5a6491c9f963,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a700580ae64040f4187a5a6491c9f963, type: 3}
 --- !u!1001 &8913512247399273132
 PrefabInstance:
   m_ObjectHideFlags: 0
