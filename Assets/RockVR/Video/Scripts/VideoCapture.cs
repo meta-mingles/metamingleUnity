@@ -245,7 +245,7 @@ namespace RockVR.Video
             // the pixels read by frameTexture.
             if (format == FormatType.NORMAL)
             {
-                if (isDedicated)
+                if (isDedicated && isCreateRenderTexture)
                 {
                     // Set the aspect ratio of the camera to match the rendertexture.
                     captureCamera.aspect = frameWidth / ((float)frameHeight);
@@ -760,7 +760,7 @@ namespace RockVR.Video
             while (File.Exists(filePath))
             {
                 count++;
-                filePath = PathConfig.SaveFolder + KHHEditData.VideoTitle + count.ToString();
+                filePath = PathConfig.SaveFolder + KHHEditData.VideoTitle + count.ToString() + ".mp4";
             }
 
             System.IntPtr libAPI = MuxingLib_Get(

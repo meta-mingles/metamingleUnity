@@ -5276,7 +5276,7 @@ PrefabInstance:
     - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
       propertyPath: encodeQuality
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
