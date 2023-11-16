@@ -156,6 +156,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.url, str))
         {
             byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
+            req.uploadHandler.Dispose();
             req.uploadHandler = new UploadHandlerRaw(byteBody);
             //헤더추가
             req.SetRequestHeader("Content-Type", "application/json");
