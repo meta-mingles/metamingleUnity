@@ -154,7 +154,7 @@ public class J_LoginUIManager : MonoBehaviour
         signUpBt.gameObject.SetActive(page < panels.Count - 1);
     }
     //현재 로그인 포스트 통신 함수 => 추후 함수 이름 변경
-    public void PostTest()
+    public void LoginPost()
     {
         //string text = " {\r\n    \"apiStatus\": \"SUCCESS\",\r\n    \"message\": \"성공적으로 로그인되었습니다.\",\r\n    \"data\": {\r\n        \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2x8c\"\r\n    }}";
         //SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(text);
@@ -203,10 +203,11 @@ public class J_LoginUIManager : MonoBehaviour
     {
         if (loginBt.onClick != null)
         {
-            loginBt.onClick.AddListener(PostTest);
+            loginBt.onClick.AddListener(LoginPost);
         }
 
     }
+
 
     public void SceneChange(string prevSceneName, string nextSceneName)
     {

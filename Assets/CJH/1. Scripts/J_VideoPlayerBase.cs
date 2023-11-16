@@ -42,7 +42,7 @@ public class J_VideoPlayerBase : MonoBehaviour
         {
             float progress = (float)videoPlayer.frame / (float)videoPlayer.frameCount;
             progressSlider.value = progress;
-            progressSlider.GetComponentInChildren<Image>().color = Color.red;
+            //progressSlider.GetComponentInChildren<Image>().color = Color.red;
 
         }
     }
