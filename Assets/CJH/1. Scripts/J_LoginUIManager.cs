@@ -52,16 +52,16 @@ public class J_LoginUIManager : MonoBehaviour
     {
         IntroductionText();
         //이전
-        prev_LoginBt.onClick.AddListener(Click_Prev);
-        prev_SignUp.onClick.AddListener(OnChange);
-        close_Bt1.onClick.AddListener(Click_Prev);
-        close_Bt2.onClick.AddListener(Click_Prev);
-        close_Bt3.onClick.AddListener(OnChange);
+        if (prev_LoginBt != null) prev_LoginBt.onClick.AddListener(Click_Prev);
+        if (prev_SignUp != null) prev_SignUp.onClick.AddListener(OnChange);
+        if (close_Bt1 != null) close_Bt1.onClick.AddListener(Click_Prev);
+        if (close_Bt2 != null) close_Bt2.onClick.AddListener(Click_Prev);
+        if (close_Bt3 != null) close_Bt3.onClick.AddListener(OnChange);
 
         //다음
-        move_startBt.onClick.AddListener(Click_Next);
-        move_SignUpBt.onClick.AddListener(Click_Next);
-        signUpBt.onClick.AddListener(Click_Next);
+        if (move_startBt != null) move_startBt.onClick.AddListener(Click_Next);
+        if (move_SignUpBt != null) move_SignUpBt.onClick.AddListener(Click_Next);
+        if (signUpBt != null) signUpBt.onClick.AddListener(Click_Next);
         foreach (Transform t in panelTransform)
         {
             panels.Add(t.gameObject);
@@ -143,15 +143,15 @@ public class J_LoginUIManager : MonoBehaviour
     private void SetArrowActive()
     {
         //이전
-        prev_LoginBt.gameObject.SetActive(page > 0);
-        prev_SignUp.gameObject.SetActive(page > 0);
-        close_Bt1.gameObject.SetActive(page > 0);
-        close_Bt2.gameObject.SetActive(page > 0);
-        close_Bt3.gameObject.SetActive(page > 0);
+        if (prev_LoginBt != null) prev_LoginBt.gameObject.SetActive(page > 0);
+        if (prev_SignUp != null) prev_SignUp.gameObject.SetActive(page > 0);
+        if (close_Bt1 != null) close_Bt1.gameObject.SetActive(page > 0);
+        if (close_Bt2 != null) close_Bt2.gameObject.SetActive(page > 0);
+        if (close_Bt3 != null) close_Bt3.gameObject.SetActive(page > 0);
         //다음
-        move_startBt.gameObject.SetActive(page < panels.Count - 1);
-        move_SignUpBt.gameObject.SetActive(page < panels.Count - 1);
-        signUpBt.gameObject.SetActive(page < panels.Count - 1);
+        if (move_startBt != null) move_startBt.gameObject.SetActive(page < panels.Count - 1);
+        if (move_SignUpBt != null) move_SignUpBt.gameObject.SetActive(page < panels.Count - 1);
+        if (signUpBt != null) signUpBt.gameObject.SetActive(page < panels.Count - 1);
     }
     //현재 로그인 포스트 통신 함수 => 추후 함수 이름 변경
     public void LoginPost()
