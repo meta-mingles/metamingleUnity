@@ -4894,7 +4894,7 @@ PrefabInstance:
     - target: {fileID: 3172258966209387761, guid: c2ed88dc23a0ad74cb8a33a1e870e92a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8191446018470501425, guid: c2ed88dc23a0ad74cb8a33a1e870e92a,
         type: 3}
@@ -12675,12 +12675,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300038, guid: 72e643619fa32984785527a0c110a313, type: 3}
---- !u!1 &562978052 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 731249386106909259, guid: acd4f936cf4caec48b4bf1d1cbe39fd8,
-    type: 3}
-  m_PrefabInstance: {fileID: 1966164038}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &563263283
 GameObject:
   m_ObjectHideFlags: 0
@@ -12886,6 +12880,12 @@ Transform:
   m_Father: {fileID: 1904632693}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &566183087 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3172258966209387761, guid: c2ed88dc23a0ad74cb8a33a1e870e92a,
+    type: 3}
+  m_PrefabInstance: {fileID: 186215038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!64 &568334122
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -24749,7 +24749,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -1806895369103569564, guid: eff7d7ea71048f345a1dec8db4848cef, type: 3}
+  m_Mesh: {fileID: 0}
   m_Bones:
   - {fileID: 1381673694}
   - {fileID: 58235400}
@@ -29119,7 +29119,7 @@ RectTransform:
   - {fileID: 1128957727}
   - {fileID: 33869206}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -32166,7 +32166,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1447084620
 MonoBehaviour:
@@ -35268,7 +35268,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Follow
       value: 
-      objectReference: {fileID: 2021099309328633200}
+      objectReference: {fileID: 291281933}
     - target: {fileID: 2070925442191277752, guid: a1a802ecaf6775746bb2a929fb554ad8,
         type: 3}
       propertyPath: ShoulderOffset.z
@@ -37815,6 +37815,12 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300016, guid: 72e643619fa32984785527a0c110a313, type: 3}
+--- !u!1 &1691155065 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 731249386106909259, guid: acd4f936cf4caec48b4bf1d1cbe39fd8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1262079149}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1694528332 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731249385373522766, guid: acd4f936cf4caec48b4bf1d1cbe39fd8,
@@ -43401,7 +43407,7 @@ RectTransform:
   m_Children:
   - {fileID: 1911790488}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -43922,7 +43928,7 @@ PrefabInstance:
     - target: {fileID: 731249386106909259, guid: acd4f936cf4caec48b4bf1d1cbe39fd8,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 731249386145532252, guid: acd4f936cf4caec48b4bf1d1cbe39fd8,
         type: 3}
@@ -45370,13 +45376,14 @@ GameObject:
   - component: {fileID: 2016139860}
   - component: {fileID: 2016139859}
   - component: {fileID: 2016139866}
+  - component: {fileID: 2016139867}
   m_Layer: 8
   m_Name: PlayerArmature (1)
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2016139859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45615,7 +45622,7 @@ Transform:
   - {fileID: 1830765978}
   - {fileID: 1717643428}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2016139866
 MonoBehaviour:
@@ -45629,6 +45636,188 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 794b5bb390daf4c45bcd05cb812ec87e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basicBody:
+  - {fileID: 1849928467}
+  - {fileID: 1971845121}
+  - {fileID: 717380191}
+  - {fileID: 793715455}
+  - {fileID: 0}
+  - {fileID: 827239580}
+  - {fileID: 1109822712}
+  - {fileID: 1698804593}
+  - {fileID: 1256729654}
+  - {fileID: 944582207}
+  - {fileID: 1925220246}
+  - {fileID: 323708024}
+  top: {fileID: 1789269658}
+  matTops:
+  - {fileID: 2100000, guid: 2c83ca4710dc3b940b36a413eb7cb11b, type: 2}
+  - {fileID: 2100000, guid: 78779fe5ad8a2b44bbe056a7e04ce33a, type: 2}
+  - {fileID: 2100000, guid: 789347235aef886428cbe255c98c6a24, type: 2}
+  - {fileID: 2100000, guid: 0073f5e0e8672db408ce685747224d21, type: 2}
+  - {fileID: 2100000, guid: 846168b691d67ca43a51a681a12746b0, type: 2}
+  - {fileID: 2100000, guid: 4c379467a2178034b9cc82cea7419e6a, type: 2}
+  - {fileID: 2100000, guid: 0c1217a33f6358147abc6635750ebe88, type: 2}
+  - {fileID: 2100000, guid: 2a167cc35297ffd4d955644687064dfb, type: 2}
+  pants: {fileID: 1085531453}
+  matPants:
+  - {fileID: 2100000, guid: 92d7766679f501c45bdf5033b8c7677b, type: 2}
+  - {fileID: 2100000, guid: e40cde4d451f0c7438e6dcf2953b6af9, type: 2}
+  - {fileID: 2100000, guid: b6130ea7ef074cf44b856bd868fcd2f8, type: 2}
+  - {fileID: 2100000, guid: 4a4ab015ea37b594caab36a39155b245, type: 2}
+  - {fileID: 2100000, guid: 0a77a5ae9f8f29d4f9d3e4dd447d875d, type: 2}
+  - {fileID: 2100000, guid: 70c0feef45bc4a245b2c35de6b0b58e2, type: 2}
+  shoes: {fileID: 331735291}
+  matShoes:
+  - {fileID: 2100000, guid: 2b56d1ed5691cca41901bcfff5d4d49a, type: 2}
+  - {fileID: 2100000, guid: 4413e6ae6afb0b44d8a4280d6833c87a, type: 2}
+  - {fileID: 2100000, guid: ba69d07531f70874285d1e5f573613c3, type: 2}
+  - {fileID: 2100000, guid: 04095e9c31a3ccc4daf4c531254597fd, type: 2}
+  - {fileID: 2100000, guid: f2b638f86ebce1844a3426e1e7511285, type: 2}
+  - {fileID: 2100000, guid: 7ea1d8bbdf511dd4bab5900ac14db1e7, type: 2}
+  - {fileID: 2100000, guid: 7ea1d8bbdf511dd4bab5900ac14db1e7, type: 2}
+  - {fileID: 2100000, guid: bf20c2f7c6c0c8a4d960c2370bd40402, type: 2}
+--- !u!114 &2016139867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016139856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10f0c51cf72e89408b52d9869c45005, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FakeLoadTime: 0
+  m_MaleItems:
+    m_BaseBody: {fileID: 1691155065}
+    m_Heads:
+    - {fileID: 11400000, guid: 91c5cfca57d515249b054aabbc80e3dd, type: 2}
+    - {fileID: 11400000, guid: 7a78f363742c2d74eabaf3733c4dbf22, type: 2}
+    - {fileID: 11400000, guid: e618aef129af89442bfb22ff30942e83, type: 2}
+    - {fileID: 11400000, guid: ae1a23eec37e76242ad337a47536b133, type: 2}
+    m_Hairstyles:
+    - {fileID: 11400000, guid: 7e4ef972f19663f4c88bf26fbae98cba, type: 2}
+    - {fileID: 11400000, guid: 30b5b0742f3aed04c9e842368cfed9fc, type: 2}
+    - {fileID: 11400000, guid: 9b9e8738666593948a433d43535f7f03, type: 2}
+    - {fileID: 11400000, guid: 7a8a99a66d1dd2147ae95ef2aa8e6f83, type: 2}
+    - {fileID: 11400000, guid: b8266349458ab874fa48a46b63a887c2, type: 2}
+    - {fileID: 11400000, guid: d1be84a6fdaac3f4085dbefe57edf6b2, type: 2}
+    - {fileID: 11400000, guid: 59e76d06ea02fff439f8ef59288953c8, type: 2}
+    - {fileID: 11400000, guid: b926cf1b853c38c42ae7c69a1cc2ef8c, type: 2}
+    - {fileID: 11400000, guid: cd5f13a8e4a36d44ba97b9db2ba4176d, type: 2}
+    - {fileID: 11400000, guid: 811e0c40f488eda4e812a2e01052028a, type: 2}
+    - {fileID: 11400000, guid: 81e823a1f6fb6c94b86f55069ea30b50, type: 2}
+    - {fileID: 11400000, guid: 3c188bee7c917b446a1281c2c6c650dd, type: 2}
+    - {fileID: 11400000, guid: 6d01ede6be261b0499812ebabc6c2fe3, type: 2}
+    - {fileID: 11400000, guid: 73b51bc28070ed148befb4eabee4d82a, type: 2}
+    - {fileID: 11400000, guid: 5987a0970f4bbf6489e4c3934100c663, type: 2}
+    - {fileID: 11400000, guid: f08084804e92ae14f9a8c3f8dcebe7b9, type: 2}
+    - {fileID: 11400000, guid: bea15038669990f45a186b0d13f81c59, type: 2}
+    - {fileID: 11400000, guid: 41661ac4d079c234f846cb6bd1989770, type: 2}
+    - {fileID: 11400000, guid: d358582c7ebaa994899733eb0ad2ac7d, type: 2}
+    - {fileID: 11400000, guid: d7b4eb22f98c2f04fa1a8b675219d48b, type: 2}
+    - {fileID: 11400000, guid: 00264346e8b2cae43838a804fdd2a820, type: 2}
+    - {fileID: 11400000, guid: fe04ff58ee0e3d645987aef666bfb0ed, type: 2}
+    - {fileID: 11400000, guid: 66a0cdf6352404e45847c1918f2ababf, type: 2}
+    - {fileID: 11400000, guid: 340223b35d8bc3342b8702806683854e, type: 2}
+    - {fileID: 11400000, guid: 6929f4d54f69ed140b47e01a6464457b, type: 2}
+    - {fileID: 11400000, guid: ac678f099ec52b8489858253bc878be7, type: 2}
+    - {fileID: 11400000, guid: 2c4c0f86d22668b45ad2dde17eb2e2d8, type: 2}
+    - {fileID: 11400000, guid: 8fa38ae3fec2b1a4f9545cd11798715f, type: 2}
+    m_Tops:
+    - {fileID: 11400000, guid: cf9472d30dba4844098704858303d86b, type: 2}
+    - {fileID: 11400000, guid: 988261f40895d5d41818d0c750135127, type: 2}
+    - {fileID: 11400000, guid: 9e8ff9e023e5f864ea1f8f6749e84bfa, type: 2}
+    - {fileID: 11400000, guid: e66c6cadd6cdd744eac72b827fce25d2, type: 2}
+    - {fileID: 11400000, guid: d81b0a90725c31d428590c955a6a9733, type: 2}
+    - {fileID: 11400000, guid: 9ea1f6bfab91bad42b5037ac3621a78d, type: 2}
+    - {fileID: 11400000, guid: 953e001ce8f23124da50a364890f4294, type: 2}
+    - {fileID: 11400000, guid: c2577bb215067fa4595a42c8ca5a1899, type: 2}
+    m_Bottoms:
+    - {fileID: 11400000, guid: 512ae00e3fd8e14418364645625825d1, type: 2}
+    - {fileID: 11400000, guid: 48eb52bd4c5f53d44965653d537cf6b7, type: 2}
+    - {fileID: 11400000, guid: ec235a9ba469f754188a55e9784a187c, type: 2}
+    - {fileID: 11400000, guid: c7b6e7dcaa300654faf992cd426ee5f1, type: 2}
+    - {fileID: 11400000, guid: e4e5d7ee3e40c964ba510b22e86f1f29, type: 2}
+    - {fileID: 11400000, guid: e5f41f0b0d3a7b3478d7f8d637e82f89, type: 2}
+    m_Shoes:
+    - {fileID: 11400000, guid: bc52f42adc423014d860b97a30ae2055, type: 2}
+    - {fileID: 11400000, guid: d472dbd68ab421e4da9b08cb33c1fb2b, type: 2}
+    - {fileID: 11400000, guid: 535e2700326396744aae5cd53adfee3c, type: 2}
+    - {fileID: 11400000, guid: 5d68495c4028eeb4a9033148e5d5ecb6, type: 2}
+    - {fileID: 11400000, guid: d882dd42c7bf24642a5800b8ca6948ac, type: 2}
+    - {fileID: 11400000, guid: 230a12d3836d9944ab389af4e685aef6, type: 2}
+    - {fileID: 11400000, guid: ad6f2c02d11386e4f953abf9c684a893, type: 2}
+    m_Outfits:
+    - {fileID: 11400000, guid: c56f422a68f52d44abd6f976c5cbb382, type: 2}
+    - {fileID: 11400000, guid: f6b4633c3120a4a4fa0ed2e242d77b0a, type: 2}
+    - {fileID: 11400000, guid: 18c851dfe17892340b03a405eae2dad0, type: 2}
+  m_FemaleItems:
+    m_BaseBody: {fileID: 872532471}
+    m_Heads:
+    - {fileID: 11400000, guid: 61e7010fd905b8246b21c414dda8132c, type: 2}
+    - {fileID: 11400000, guid: 6aecdc6566888c546973cbc39da1395b, type: 2}
+    - {fileID: 11400000, guid: 06c61ecb0f3448644bbf69a7ec657868, type: 2}
+    - {fileID: 11400000, guid: fa55e137edee2504f886e8539a0a313b, type: 2}
+    m_Hairstyles:
+    - {fileID: 11400000, guid: 7e4ef972f19663f4c88bf26fbae98cba, type: 2}
+    - {fileID: 11400000, guid: 30b5b0742f3aed04c9e842368cfed9fc, type: 2}
+    - {fileID: 11400000, guid: 9b9e8738666593948a433d43535f7f03, type: 2}
+    - {fileID: 11400000, guid: 7a8a99a66d1dd2147ae95ef2aa8e6f83, type: 2}
+    - {fileID: 11400000, guid: b8266349458ab874fa48a46b63a887c2, type: 2}
+    - {fileID: 11400000, guid: d1be84a6fdaac3f4085dbefe57edf6b2, type: 2}
+    - {fileID: 11400000, guid: 59e76d06ea02fff439f8ef59288953c8, type: 2}
+    - {fileID: 11400000, guid: b926cf1b853c38c42ae7c69a1cc2ef8c, type: 2}
+    - {fileID: 11400000, guid: cd5f13a8e4a36d44ba97b9db2ba4176d, type: 2}
+    - {fileID: 11400000, guid: 811e0c40f488eda4e812a2e01052028a, type: 2}
+    - {fileID: 11400000, guid: 81e823a1f6fb6c94b86f55069ea30b50, type: 2}
+    - {fileID: 11400000, guid: 3c188bee7c917b446a1281c2c6c650dd, type: 2}
+    - {fileID: 11400000, guid: 6d01ede6be261b0499812ebabc6c2fe3, type: 2}
+    - {fileID: 11400000, guid: 73b51bc28070ed148befb4eabee4d82a, type: 2}
+    - {fileID: 11400000, guid: 5987a0970f4bbf6489e4c3934100c663, type: 2}
+    - {fileID: 11400000, guid: f08084804e92ae14f9a8c3f8dcebe7b9, type: 2}
+    - {fileID: 11400000, guid: bea15038669990f45a186b0d13f81c59, type: 2}
+    - {fileID: 11400000, guid: 41661ac4d079c234f846cb6bd1989770, type: 2}
+    - {fileID: 11400000, guid: d358582c7ebaa994899733eb0ad2ac7d, type: 2}
+    - {fileID: 11400000, guid: d7b4eb22f98c2f04fa1a8b675219d48b, type: 2}
+    - {fileID: 11400000, guid: 00264346e8b2cae43838a804fdd2a820, type: 2}
+    - {fileID: 11400000, guid: fe04ff58ee0e3d645987aef666bfb0ed, type: 2}
+    - {fileID: 11400000, guid: 66a0cdf6352404e45847c1918f2ababf, type: 2}
+    - {fileID: 11400000, guid: 340223b35d8bc3342b8702806683854e, type: 2}
+    - {fileID: 11400000, guid: 6929f4d54f69ed140b47e01a6464457b, type: 2}
+    - {fileID: 11400000, guid: ac678f099ec52b8489858253bc878be7, type: 2}
+    - {fileID: 11400000, guid: 2c4c0f86d22668b45ad2dde17eb2e2d8, type: 2}
+    - {fileID: 11400000, guid: 8fa38ae3fec2b1a4f9545cd11798715f, type: 2}
+    m_Tops:
+    - {fileID: 11400000, guid: 7854d8a517fadca4481a8ef45c3b315c, type: 2}
+    - {fileID: 11400000, guid: b4bca058b73d30e488c8ed48e7d1d596, type: 2}
+    - {fileID: 11400000, guid: c0cca3d81996f804ea808b95d4a285de, type: 2}
+    - {fileID: 11400000, guid: a798a73f9fac8ef41930a90ef9884392, type: 2}
+    - {fileID: 11400000, guid: 56284222f0d49074786104e027156a05, type: 2}
+    - {fileID: 11400000, guid: 7c5fcb1cb4fbe014abaf03ab7b10a0e1, type: 2}
+    - {fileID: 11400000, guid: 3c6700cc9fe42874c85d78beca3a5456, type: 2}
+    - {fileID: 11400000, guid: 84624ead67ffc61468be63602468680b, type: 2}
+    m_Bottoms:
+    - {fileID: 11400000, guid: a722f7f8aa813954eb253eb4082aba0a, type: 2}
+    - {fileID: 11400000, guid: fe4b18399b61cdc459ee40b698d607f3, type: 2}
+    - {fileID: 11400000, guid: a739518e6772f2b468253e2aed7f0f24, type: 2}
+    - {fileID: 11400000, guid: 7c6e44c65007d954ab833bd5f17ef55e, type: 2}
+    - {fileID: 11400000, guid: 5ca657092edde3747acbd232aae8fb40, type: 2}
+    - {fileID: 11400000, guid: cdbbbd38111b02f4e9073a0ca91d005f, type: 2}
+    m_Shoes:
+    - {fileID: 11400000, guid: bc52f42adc423014d860b97a30ae2055, type: 2}
+    - {fileID: 11400000, guid: d472dbd68ab421e4da9b08cb33c1fb2b, type: 2}
+    - {fileID: 11400000, guid: 535e2700326396744aae5cd53adfee3c, type: 2}
+    - {fileID: 11400000, guid: 5d68495c4028eeb4a9033148e5d5ecb6, type: 2}
+    - {fileID: 11400000, guid: d882dd42c7bf24642a5800b8ca6948ac, type: 2}
+    - {fileID: 11400000, guid: 230a12d3836d9944ab389af4e685aef6, type: 2}
+    - {fileID: 11400000, guid: ad6f2c02d11386e4f953abf9c684a893, type: 2}
+    m_Outfits:
+    - {fileID: 11400000, guid: 1e84df432ec173c4397d973f58a712a7, type: 2}
+    - {fileID: 11400000, guid: bf1599548ddfaa7419fe8d07d0f13277, type: 2}
+    - {fileID: 11400000, guid: 237593946e79733469bf04b9f462b48a, type: 2}
 --- !u!1 &2016381147
 GameObject:
   m_ObjectHideFlags: 0
@@ -50775,7 +50964,7 @@ PrefabInstance:
     - target: {fileID: 6718638137682768810, guid: f97345f60e124314ead61ef24dfc136a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6718638137682768810, guid: f97345f60e124314ead61ef24dfc136a,
         type: 3}
@@ -51187,7 +51376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_FakeLoadTime: 0
   m_MaleItems:
-    m_BaseBody: {fileID: 562978052}
+    m_BaseBody: {fileID: 566183087}
     m_Heads:
     - {fileID: 11400000, guid: 91c5cfca57d515249b054aabbc80e3dd, type: 2}
     - {fileID: 11400000, guid: 7a78f363742c2d74eabaf3733c4dbf22, type: 2}
