@@ -46,7 +46,7 @@ public class J_LoginUIManager : MonoBehaviour
     public Button close_Bt3; //닫기 버튼
 
     Action onChange;
-    string customizationSceneName = "Customization";
+    //string customizationSceneName = "Customization";
     // Start is called before the first frame update
     void Start()
     {
@@ -75,8 +75,8 @@ public class J_LoginUIManager : MonoBehaviour
 
         Login_Bt();
         //사운드매니저로 브금 실행
-        SoundManager.instance.PlayBGM("Bgm");
-
+        if (!SceneManager.GetActiveScene().name.Contains("Tool"))
+            SoundManager.instance.PlayBGM("Bgm");
     }
 
     // Update is called once per frame
@@ -162,18 +162,30 @@ public class J_LoginUIManager : MonoBehaviour
 
 
         HttpInfo info = new HttpInfo();
-        info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) => {
+        info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) =>
+        {
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Signup : " + downloadHandler.text);
 
             SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(downloadHandler.text);
             HttpManager.Get().token = signInInfo.data.token;
 
+            string prevSceneName, nextSceneName;
+            if (SceneManager.GetActiveScene().name.Contains("Tool")) //tool
+            {
+                prevSceneName = SceneManager.GetActiveScene().name;
+                nextSceneName = "ToolSelect";
+            }
+            else //platform
+            {
+                prevSceneName = "Main_Platform";    //커스텀 존재 유무 확인 필요
+                nextSceneName = "Customization";    //커스텀 존재 유무 확인 필요
+            }
 
             //여기서 씬이동
-            SceneChange(customizationSceneName);
-            print("커스터마이징씬이동");
-            
+            SceneChange(prevSceneName, nextSceneName);
+            print("씬이동");
+
         });
         SignUpInfo signUpInfo = new SignUpInfo();
         signUpInfo.email = inputId.text;
@@ -196,21 +208,21 @@ public class J_LoginUIManager : MonoBehaviour
 
     }
 
-    public void SceneChange(string sceneName)
+    public void SceneChange(string prevSceneName, string nextSceneName)
     {
-        GlobalValue.PrevSceneName = "Main_Platform";
-        GlobalValue.CurSceneName = sceneName;
-        SceneManager.LoadScene(sceneName);
+        GlobalValue.PrevSceneName = prevSceneName;
+        GlobalValue.CurSceneName = nextSceneName;
+        SceneManager.LoadScene(nextSceneName);
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (loginBt.onClick.GetPersistentEventCount() == 0)
-            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(loginBt.onClick, SceneChange, customizationSceneName);
+    //#if UNITY_EDITOR
+    //    private void OnValidate()
+    //    {
+    //        if (loginBt.onClick.GetPersistentEventCount() == 0)
+    //            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(loginBt.onClick, SceneChange, customizationSceneName);
 
-    }
-#endif
+    //    }
+    //#endif
 
 
 

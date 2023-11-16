@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/KHH/0.Scenes/ToolLoginScene.unity
+    guid: 32d09ad97044df74ba8d0434c40d2444
+  - enabled: 1
     path: Assets/KHH/0.Scenes/ToolSelect.unity
     guid: 4bdb912eb595a804dac0b13de4cdacc0
   - enabled: 1

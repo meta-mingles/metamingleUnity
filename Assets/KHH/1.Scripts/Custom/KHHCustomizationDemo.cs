@@ -130,6 +130,7 @@ public class KHHCustomizationDemo : MonoBehaviour
             m_Equiped.Clear();
             m_CustomizationOptions.Clear();
             m_BodyParts.Clear();
+            KHHUserCustom.Clear();
         }
 
         //init the customization options for the selected body type

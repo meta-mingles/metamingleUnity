@@ -65,6 +65,12 @@ public static class KHHUserCustom
         }
     }
 
+    public static void Clear()
+    {
+        foreach (var data in customData.datas)
+            data.Reset();
+    }
+
     public static void SetCategory(string category)
     {
         if (category.Equals("outfit"))
