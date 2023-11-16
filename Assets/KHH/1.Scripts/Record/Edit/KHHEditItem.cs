@@ -11,6 +11,8 @@ public class KHHEditItem : Selectable
 
     protected KHHScreenEditor screenEditor;
 
+    string filePath;
+
     protected bool isSelected = false;
     public bool IsSelected { get { return isSelected; } set { isSelected = value; outline.enabled = value; } }
     RectTransform rt;
@@ -148,6 +150,11 @@ public class KHHEditItem : Selectable
 
     }
 
+    public bool CheckFile()
+    {
+        return System.IO.File.Exists(filePath);
+    }
+
     public virtual void Remove()
     {
 
@@ -155,6 +162,7 @@ public class KHHEditItem : Selectable
 
     public virtual void LoadItemData(KHHScreenEditor editor, string filePath, string fileName, UnityAction action)
     {
+        this.filePath = filePath;
         screenEditor = editor;
         nameText.text = fileName;
     }

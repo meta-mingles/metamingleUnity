@@ -22,7 +22,6 @@ public class KHHEditManager : MonoBehaviour
     public KHHScreenEditor screenEditor;
     public GameObject barracudaRunner;
 
-
     [Header("Left")]
     public Button recordButton;
     public Button motionButton;
@@ -31,7 +30,7 @@ public class KHHEditManager : MonoBehaviour
     public Button captionButton;
 
     public Button settingButton;
-    public Button exitButton;
+    public Button homeButton;
 
     public GameObject motionPanel;
     public GameObject soundPanel;
@@ -40,6 +39,7 @@ public class KHHEditManager : MonoBehaviour
     public KHHEditSetting editSetting;
 
     [Header("Middle")]
+    public TMP_InputField titleInputField;
     public Button playButton;
     public Button stopButton;
     public Button exportButton;
@@ -51,7 +51,7 @@ public class KHHEditManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        KHHEditData.Open("test video");
+        titleInputField.text = KHHEditData.VideoTitle;
     }
 
     // Start is called before the first frame update
@@ -65,7 +65,9 @@ public class KHHEditManager : MonoBehaviour
         if (backgroundButton != null) backgroundButton.onClick.AddListener(BackgroundButtonEvent);
 
         if (settingButton != null) settingButton.onClick.AddListener(SettingButtonEvent);
+        if (homeButton != null) homeButton.onClick.AddListener(HomeButtonEvent);
 
+        if (titleInputField != null) titleInputField.onEndEdit.AddListener(TitleInputFieldEvent);
         if (playButton != null) playButton.onClick.AddListener(PlayButtonEvent);
         if (stopButton != null) stopButton.onClick.AddListener(StopButtonEvent);
         if (exportButton != null) exportButton.onClick.AddListener(ExportButtonEvent);
@@ -145,6 +147,24 @@ public class KHHEditManager : MonoBehaviour
         editSetting.Open();
     }
 
+    void HomeButtonEvent()
+    {
+        StopButtonEvent();
+        KHHEditData.Close();
+        GlobalValue.PrevSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        GlobalValue.CurSceneName = "ToolSelect";
+        UnityEngine.SceneManagement.SceneManager.LoadScene("ToolSelect");
+    }
+
+    void TitleInputFieldEvent(string t)
+    {
+        if (!KHHEditData.ChangeVideoTitle(t))
+        {
+            Debug.Log("중복");
+            titleInputField.text = KHHEditData.VideoTitle;
+        }
+    }
+
     void PlayButtonEvent()
     {
         playButton.gameObject.SetActive(false);
@@ -161,6 +181,7 @@ public class KHHEditManager : MonoBehaviour
 
     void ExportButtonEvent()
     {
+        StopButtonEvent();
         export.Open();
     }
 }

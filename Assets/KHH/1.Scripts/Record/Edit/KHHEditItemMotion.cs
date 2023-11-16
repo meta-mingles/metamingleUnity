@@ -68,6 +68,7 @@ public class KHHEditItemMotion : KHHEditItem
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 Remove();
             }
         }
@@ -118,14 +119,14 @@ public class KHHEditItemMotion : KHHEditItem
 
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}M");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCRX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCRX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVV");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}M");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVV");
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == pairSound));
         Destroy(gameObject);

@@ -27,6 +27,7 @@ public class KHHEditItemBackground : KHHEditItem
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 Remove();
             }
         }
@@ -47,15 +48,21 @@ public class KHHEditItemBackground : KHHEditItem
     public override void PlayEnd()
     {
         base.PlayEnd();
+        StartCoroutine(RemoveBackground());
+    }
+
+    IEnumerator RemoveBackground()
+    {
+        yield return new WaitForSeconds(0.05f);
         screenEditor.backgroundImage.texture = null;
     }
 
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}I");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}I");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICRX");
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
         Destroy(gameObject);
     }

@@ -24,7 +24,7 @@ public class KHHVideoData : KHHData
             if (Input.GetKeyDown(KeyCode.Delete))
             {
                 //파일 삭제
-                File.Delete(KHHEditData.FileSoundPath + "/" + fileName + ".wav");
+                File.Delete(KHHEditData.FileVideoPath + fileName + FileExtension);
                 khhDataManager.Refresh();
             }
         }

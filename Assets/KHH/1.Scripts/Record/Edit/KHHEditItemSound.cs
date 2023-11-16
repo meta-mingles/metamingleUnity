@@ -51,6 +51,7 @@ public class KHHEditItemSound : KHHEditItem
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 Remove();
             }
         }
@@ -77,11 +78,11 @@ public class KHHEditItemSound : KHHEditItem
 
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}S");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCRX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SV");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}S");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SV");
         screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
         Destroy(gameObject);
     }

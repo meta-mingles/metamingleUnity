@@ -57,51 +57,77 @@ public class KHHScreenEditor : MonoBehaviour
 
         if (KHHEditVideoState.MotionName != string.Empty)
         {
-            initCount += 2;
             string filePathMotion = KHHEditData.FileMotionPath + "/" + KHHEditVideoState.MotionName;
-            //모션 데이터를 로드한다.
-            GameObject go1 = Instantiate(editItemPrefabs[0], editItemParent);
-            KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
-            editItemMotion.Init(KHHEditVideoState.MotionChangeX, KHHEditVideoState.MotionChangeLeftX, KHHEditVideoState.MotionChangeRightX);
-            editItemMotion.LoadItemData(this, filePathMotion + ".csv", KHHEditVideoState.MotionName, InitEnd);
-            editItemMotion.Model = modelRecorder.Model;
-            editItemList.Add(editItemMotion);
-
-            //보이스 데이터를 로드한다.
-            GameObject go2 = Instantiate(editItemPrefabs[1], editItemParent);
-            KHHEditItemSound editItemVoice = go2.GetComponent<KHHEditItemSound>();
-            editItemVoice.IsVoice = true;
-            editItemVoice.Init(KHHEditVideoState.MotionVChangeX, KHHEditVideoState.MotionVChangeLeftX, KHHEditVideoState.MotionVChangeRightX);
-            editItemVoice.LoadItemData(this, filePathMotion + ".wav", KHHEditVideoState.MotionName, InitEnd);
-            editItemList.Add(editItemVoice);
-
-            //페어간 정보 획득
-            editItemMotion.PairSound = editItemVoice;
-            editItemVoice.PairMotion = editItemMotion;
+            if (System.IO.File.Exists(filePathMotion + ".csv") && System.IO.File.Exists(filePathMotion + ".wav"))
+            {
+                initCount += 2;
+                //모션 데이터를 로드한다.
+                GameObject go1 = Instantiate(editItemPrefabs[0], editItemParent);
+                KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
+                editItemMotion.Init(KHHEditVideoState.MotionChangeX, KHHEditVideoState.MotionChangeLeftX, KHHEditVideoState.MotionChangeRightX);
+                editItemMotion.LoadItemData(this, filePathMotion + ".csv", KHHEditVideoState.MotionName, InitEnd);
+                editItemMotion.Model = modelRecorder.Model;
+                editItemList.Add(editItemMotion);
+                //보이스 데이터를 로드한다.
+                GameObject go2 = Instantiate(editItemPrefabs[1], editItemParent);
+                KHHEditItemSound editItemVoice = go2.GetComponent<KHHEditItemSound>();
+                editItemVoice.IsVoice = true;
+                editItemVoice.Init(KHHEditVideoState.MotionVChangeX, KHHEditVideoState.MotionVChangeLeftX, KHHEditVideoState.MotionVChangeRightX);
+                editItemVoice.LoadItemData(this, filePathMotion + ".wav", KHHEditVideoState.MotionName, InitEnd);
+                editItemList.Add(editItemVoice);
+                //페어간 정보 획득
+                editItemMotion.PairSound = editItemVoice;
+                editItemVoice.PairMotion = editItemMotion;
+            }
+            else
+                KHHEditVideoState.MotionName = string.Empty;
         }
 
         if (KHHEditVideoState.SoundName != string.Empty)
         {
-            initCount++;
             string filePathSound = KHHEditData.FileSoundPath + "/" + KHHEditVideoState.SoundName;
-            //사운드 데이터를 로드한다.
-            GameObject go3 = Instantiate(editItemPrefabs[1], editItemParent);
-            KHHEditItemSound editItemSound = go3.GetComponent<KHHEditItemSound>();
-            editItemSound.Init(KHHEditVideoState.SoundChangeX, KHHEditVideoState.SoundChangeLeftX, KHHEditVideoState.SoundChangeRightX);
-            editItemSound.LoadItemData(this, filePathSound, KHHEditVideoState.SoundName, InitEnd);
-            editItemList.Add(editItemSound);
+            if (System.IO.File.Exists(filePathSound))
+            {
+                initCount++;
+                //사운드 데이터를 로드한다.
+                GameObject go3 = Instantiate(editItemPrefabs[1], editItemParent);
+                KHHEditItemSound editItemSound = go3.GetComponent<KHHEditItemSound>();
+                editItemSound.Init(KHHEditVideoState.SoundChangeX, KHHEditVideoState.SoundChangeLeftX, KHHEditVideoState.SoundChangeRightX);
+                editItemSound.LoadItemData(this, filePathSound, KHHEditVideoState.SoundName, InitEnd);
+                editItemList.Add(editItemSound);
+            }
+            else
+                KHHEditVideoState.SoundName = string.Empty;
         }
 
         if (KHHEditVideoState.ImageName != string.Empty)
         {
-            initCount++;
             string filePathBackground = KHHEditData.FileImagePath + "/" + KHHEditVideoState.ImageName;
-            //배경 데이터를 로드한다.
-            GameObject go4 = Instantiate(editItemPrefabs[2], editItemParent);
-            KHHEditItemBackground editItemImage = go4.GetComponent<KHHEditItemBackground>();
-            editItemImage.Init(KHHEditVideoState.ImageChangeX, KHHEditVideoState.ImageChangeLeftX, KHHEditVideoState.ImageChangeRightX);
-            editItemImage.LoadItemData(this, filePathBackground, KHHEditVideoState.ImageName, InitEnd);
-            editItemList.Add(editItemImage);
+            if (System.IO.File.Exists(filePathBackground))
+            {
+                initCount++;
+                //배경 데이터를 로드한다.
+                GameObject go4 = Instantiate(editItemPrefabs[2], editItemParent);
+                KHHEditItemBackground editItemImage = go4.GetComponent<KHHEditItemBackground>();
+                editItemImage.Init(KHHEditVideoState.ImageChangeX, KHHEditVideoState.ImageChangeLeftX, KHHEditVideoState.ImageChangeRightX);
+                editItemImage.LoadItemData(this, filePathBackground, KHHEditVideoState.ImageName, InitEnd);
+                editItemList.Add(editItemImage);
+            }
+            else
+                KHHEditVideoState.ImageName = string.Empty;
+        }
+    }
+
+    public void Refresh()
+    {
+        foreach (var item in editItemList)
+        {
+            if (!item.CheckFile())
+            {
+                editItemList.Remove(item);
+                item.Remove();
+                break;
+            }
         }
     }
 
