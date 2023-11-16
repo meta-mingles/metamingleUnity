@@ -30,7 +30,9 @@ public class J_CustomCharacter : MonoBehaviour
     FakeLoader fakeLoader;
 
     //몸 기본 구조
-    public GameObject[] basicBody; 
+    public GameObject[] basicBody;
+    //머리카락의 부모
+    public Transform trBaseHead;
 
     //상의
     public SkinnedMeshRenderer top;
@@ -79,8 +81,54 @@ public class J_CustomCharacter : MonoBehaviour
                 shoes.material = matShoes[categoryData.itemIndex - 1];
                 SetBasicBody(fakeLoader.m_MaleItems.m_Shoes[categoryData.itemIndex - 1].bodyParts);
             }
+            else if(categoryData.category.Equals("hairstyle"))
+            {
+                for (int j = 0; j < fakeLoader.m_MaleItems.m_Hairstyles[categoryData.itemIndex - 1].objects.Length; j++)
+                {
+                    GameObject hair = Instantiate(fakeLoader.m_MaleItems.m_Hairstyles[categoryData.itemIndex - 1].objects[j].prefab, trBaseHead);
+                    //SkinnedMeshRenderer[] mr = hair.transform.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                    ////for(int k = 0; k < mr.Length; k++)
+                    //{
+                    //    mr[1].materials[0].SetColor("_Color_A_2", Color.white);
+                    //    mr[1].materials[0].SetColor("_Color_B_2", Color.white);
+                    //    mr[1].materials[0].SetColor("_Color_C_2", Color.white);
+                    //}
+                }
+            }
         }
     }
+
+    /*
+     if (materials[i].HasProperty("_MaskRemap"))
+            {
+                Color colorA = materials[i].GetColor("_Color_A_2");
+                Color colorB = materials[i].GetColor("_Color_B_2");
+                Color colorC = materials[i].GetColor("_Color_C_2");
+                if (materialData != null)
+                {
+                    //if (materialData.ColorA != Color.black)
+                    colorA = materialData.ColorA;
+                    //if (materialData.ColorB != Color.black)
+                    colorB = materialData.ColorB;
+                    //if (materialData.ColorC != Color.black)
+                    colorC = materialData.ColorC;
+                    OnChangeColor(auxRenderer, auxMatIndex, "_Color_A_2", colorA);
+                    OnChangeColor(auxRenderer, auxMatIndex, "_Color_B_2", colorB);
+                    OnChangeColor(auxRenderer, auxMatIndex, "_Color_C_2", colorC);
+                }
+            }
+            else if (materials[i].HasProperty("_BaseColor"))
+            {
+                Color color = materials[i].GetColor("_BaseColor");
+                if (materialData != null)
+                {
+                    if (materialData.ColorA != Color.black)
+                        color = materialData.ColorA;
+                    OnChangeColor(auxRenderer, auxMatIndex, "_BaseColor", color);
+                }
+            }
+     */
 
     void SetBasicBody(BodyPartType[] bodyPartTypes)
     {
