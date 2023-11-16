@@ -14,8 +14,8 @@ public class J_VideoSceneManager : MonoBehaviour
         //J_SoundManager soundManager = FindObjectOfType<J_SoundManager>();
         //if (soundManager != null)
         //{
-        //   soundManager.isPlaying = false;
-        //   soundManager.gameObject.SetActive(false);
+        //    soundManager.isPlaying = false;
+        //    soundManager.gameObject.SetActive(false);
         //}
         //브금 끄기
         SoundManager.instance.BGMVolume = -80;

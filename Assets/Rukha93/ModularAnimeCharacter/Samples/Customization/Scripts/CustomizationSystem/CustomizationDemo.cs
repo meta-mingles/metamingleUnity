@@ -1,4 +1,4 @@
-using Rukha93.ModularAnimeCharacter.Customization.UI;
+﻿using Rukha93.ModularAnimeCharacter.Customization.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
