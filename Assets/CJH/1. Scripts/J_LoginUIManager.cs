@@ -153,25 +153,15 @@ public class J_LoginUIManager : MonoBehaviour
     //현재 로그인 포스트 통신 함수 
     public void LoginPost()
     {
-        //string text = " {\r\n    \"apiStatus\": \"SUCCESS\",\r\n    \"message\": \"성공적으로 로그인되었습니다.\",\r\n    \"data\": {\r\n        \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2x8c\"\r\n    }}";
-        //SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(text);
-        //HttpManager.Get().token = signInInfo.data.token;
-
-
         HttpInfo info = new HttpInfo();
         info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) =>
         {
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Login : " + downloadHandler.text);
-
- 
-
+            //Netownjson
             JObject jObject = JObject.Parse(downloadHandler.text);
             JObject data = jObject["data"].ToObject<JObject>();
             HttpManager.instance.token = data["token"].ToObject<string>();
-
-            //SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(downloadHandler.text);
-            //HttpManager.instance.token = signInInfo.data.token;
 
             string prevSceneName, nextSceneName;
             if (SceneManager.GetActiveScene().name.Contains("Tool")) //tool
@@ -240,7 +230,6 @@ public class J_LoginUIManager : MonoBehaviour
         {
             signUpBt.onClick.AddListener(SignUpPost);
         }
-
     }
 
     public void SceneChange(string prevSceneName, string nextSceneName)
