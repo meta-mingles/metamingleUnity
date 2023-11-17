@@ -146,5 +146,13 @@ namespace RockVR.Video
                 }
             }
         }
+
+        public void Set()
+        {
+            foreach (VideoCapture videoCapture in videoCaptures)
+            {
+                videoCapture.Set();
+            }
+        }
     }
 }

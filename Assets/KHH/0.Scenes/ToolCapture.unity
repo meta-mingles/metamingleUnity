@@ -5283,6 +5283,21 @@ PrefabInstance:
       propertyPath: offlineRender
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: screens.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: screens.Array.data[0]
+      value: 
+      objectReference: {fileID: 487042573}
+    - target: {fileID: 114000011981344334, guid: 7fb4eb193786376458450101f3cdd3b3,
+        type: 3}
+      propertyPath: screens.Array.data[1]
+      value: 
+      objectReference: {fileID: 1656319250}
     - target: {fileID: 733585179911470089, guid: 7fb4eb193786376458450101f3cdd3b3,
         type: 3}
       propertyPath: m_Dithering

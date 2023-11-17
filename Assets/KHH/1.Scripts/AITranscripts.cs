@@ -161,7 +161,7 @@ public class AITranscripts : MonoBehaviour
         request.Headers.Add("Accept", "text/event-stream");
 
         ////헤더에 토큰 추가 (현재 생략 가능)
-        //request.Headers.Add("Authorization", 토큰);
+        request.Headers.Add("Authorization", HttpManager.Get().token);
 
         request.Content = new ByteArrayContent(jsonData);
         request.Content.Headers.Add("Content-Type", "application/json");

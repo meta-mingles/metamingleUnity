@@ -74,6 +74,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Runtime.InteropServices;
+using UnityEngine.UI;
 
 namespace RockVR.Video
 {
@@ -154,6 +155,27 @@ namespace RockVR.Video
         /// The frame encode thread.
         /// </summary>
         private Thread encodeThread;
+
+        public RawImage[] screens;
+        public void Set()
+        {
+            frameRenderTexture = new RenderTexture(frameWidth, frameHeight, 24);
+            frameRenderTexture.antiAliasing = antiAliasing;
+            frameRenderTexture.wrapMode = TextureWrapMode.Clamp;
+            frameRenderTexture.filterMode = FilterMode.Trilinear;
+            frameRenderTexture.hideFlags = HideFlags.HideAndDontSave;
+            // Make sure the rendertexture is created.
+            frameRenderTexture.Create();
+            isCreateRenderTexture = true;
+            if (isDedicated)
+            {
+                captureCamera.targetTexture = frameRenderTexture;
+            }
+
+            foreach (RawImage screen in screens)
+                screen.texture = frameRenderTexture;
+        }
+
         /// <summary>
         /// Cleanup this instance.
         /// </summary>
@@ -245,7 +267,7 @@ namespace RockVR.Video
             // the pixels read by frameTexture.
             if (format == FormatType.NORMAL)
             {
-                if (isDedicated && isCreateRenderTexture)
+                if (isDedicated)
                 {
                     // Set the aspect ratio of the camera to match the rendertexture.
                     captureCamera.aspect = frameWidth / ((float)frameHeight);
