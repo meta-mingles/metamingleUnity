@@ -64,7 +64,10 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     //영상이 끝날때 인터렉티브 UI 생성
     protected override void MakeInteractiveUI(VideoPlayer source)
     {
-        interactiveMovieList.SetInteractiveInfo(ClickInteractiveMovieBt, videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);
+        if (videoInfo.isInteractive)
+        {
+            interactiveMovieList.SetInteractiveInfo(ClickInteractiveMovieBt, videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);
+        }
         //interactiveMovieList.gameObject.SetActive(true);
         //interactiveMovieList.onClickInteractive = ClickInteractiveMovieBt;
         //interactiveMovieList.SetInteractiveItem(videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);

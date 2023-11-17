@@ -32,7 +32,7 @@ public class J_VideoReceiver : MonoBehaviour
         HttpInfo httpInfo = new HttpInfo();
         string url = "/short-form";
         httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
-        HttpManager.Get().SendRequest(httpInfo);
+        HttpManager.instance.SendRequest(httpInfo);
     }
 
     private void Update()
@@ -53,7 +53,7 @@ public class J_VideoReceiver : MonoBehaviour
             //httpInfo.Set(RequestType.GET, uri.AbsoluteUri, OnCompleteSearchVideo, false);
             httpInfo.Set(RequestType.GET, url, OnCompleteSearchVideo, true);
 
-            HttpManager.Get().SendRequest(httpInfo);
+            HttpManager.instance.SendRequest(httpInfo);
 
 
         }

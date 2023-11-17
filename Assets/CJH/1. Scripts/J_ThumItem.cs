@@ -73,7 +73,7 @@ public class J_ThumItem : MonoBehaviour
         HttpInfo info = new HttpInfo();
         info.Set(RequestType.TEXTURE, videoInfo.thumbnailUrl, null,false);
         info.onReceiveImage = OnCompleteDownloadTexture;
-        HttpManager.Get().SendRequest(info);
+        HttpManager.instance.SendRequest(info);
     }
     //썸네일 이미지 다운로드
     void OnCompleteDownloadTexture(DownloadHandler downloadHandler, int id)

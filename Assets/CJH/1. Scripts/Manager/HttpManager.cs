@@ -53,33 +53,9 @@ public class HttpInfo
 
 public class HttpManager : MonoBehaviour
 {
-    static HttpManager instance;
+    public static HttpManager instance;
 
     public string token = "";
-
-    public static HttpManager Get()
-    {
-        if (instance == null)
-        {
-            GameObject go = new GameObject("HttpStudy");
-            go.AddComponent<HttpManager>();
-        }
-
-        return instance;
-    }
-
-    //Texture
-    public static HttpManager Texture()
-    {
-        if(instance == null)
-        {
-            GameObject go = new GameObject("HttpTexture");
-            go.AddComponent<HttpManager>();
-        }
-        return instance;
-    }
-
-
     private void Awake()
     {
         if (instance == null)
@@ -92,17 +68,6 @@ public class HttpManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     public void SendRequest(HttpInfo httpInfo)
     {
         if(httpInfo.requestType == RequestType.POST)
@@ -164,8 +129,6 @@ public class HttpManager : MonoBehaviour
             if (token.Length > 0)
             {
                 req.SetRequestHeader("Authorization", token);
-
-
             }
 
             yield return req.SendWebRequest();

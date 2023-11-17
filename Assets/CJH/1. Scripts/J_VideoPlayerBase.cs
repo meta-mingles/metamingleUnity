@@ -68,7 +68,7 @@ public class J_VideoPlayerBase : MonoBehaviour
             videoPlayer.loopPointReached += MakeRestartUI;
         }, false);
 
-        HttpManager.Get().SendRequest(httpInfo);
+        HttpManager.instance.SendRequest(httpInfo);
     }
     //비디오 준비
     private void OnVideoPrepared(VideoPlayer source)

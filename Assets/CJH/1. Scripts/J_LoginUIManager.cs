@@ -157,13 +157,17 @@ public class J_LoginUIManager : MonoBehaviour
 
 
         HttpInfo info = new HttpInfo();
+        string login = "/member/login";
+        string signUp = "/member/signup";
+
+
         info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) =>
         {
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Signup : " + downloadHandler.text);
 
             SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(downloadHandler.text);
-            HttpManager.Get().token = signInInfo.data.token;
+            HttpManager.instance.token = signInInfo.data.token;
 
             string prevSceneName, nextSceneName;
             if (SceneManager.GetActiveScene().name.Contains("Tool")) //tool
@@ -188,10 +192,7 @@ public class J_LoginUIManager : MonoBehaviour
 
         info.body = JsonUtility.ToJson(signUpInfo);
 
-        HttpManager.Get().SendRequest(info);
-
-
-
+        HttpManager.instance.SendRequest(info);
     }
     //로그인 버튼
     public void Login_Bt()
