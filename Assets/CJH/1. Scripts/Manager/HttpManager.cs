@@ -42,7 +42,7 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) testUrl = "http://192.168.0.28:8080";  //로그인 임시 url
+        if (useDefaultUrl) testUrl = "http://192.168.0.20:8080";  //로그인 임시 url
         if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
         url += u;
         testUrl += u;
@@ -54,6 +54,10 @@ public class HttpInfo
 public class HttpManager : MonoBehaviour
 {
     public static HttpManager instance;
+
+    public string email= "";
+    public string password = "";
+    public string nickname = "";
 
     public string token = "";
     private void Awake()
@@ -118,7 +122,7 @@ public class HttpManager : MonoBehaviour
     IEnumerator Post(HttpInfo httpInfo)
     {
         string str = JsonUtility.ToJson(httpInfo.body);
-        using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.url, str))
+        using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.testUrl, str))
         {
             byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
             req.uploadHandler.Dispose();
