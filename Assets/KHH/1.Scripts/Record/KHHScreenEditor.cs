@@ -25,6 +25,8 @@ public class KHHScreenEditor : MonoBehaviour
     public float playTime = 0.0f;
     float endTime = 0.0f;
 
+    public bool IsAudio { get { return editItemList.Find(x => x is KHHEditItemSound) != null; } }
+
     // Start is called before the first frame update
     IEnumerator Start()
     {

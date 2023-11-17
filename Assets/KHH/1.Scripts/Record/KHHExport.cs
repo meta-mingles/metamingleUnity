@@ -44,6 +44,8 @@ public class KHHExport : MonoBehaviour
         if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
 
         interacitveOutline = interactiveButton.GetComponent<Outline>();
+
+        VideoCaptureCtrl.instance.Set();
     }
 
     //private void Update()

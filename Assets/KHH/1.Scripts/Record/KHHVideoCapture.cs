@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -155,6 +157,7 @@ public class KHHVideoCapture : MonoBehaviour
             www.downloadHandler = new DownloadHandlerBuffer();
 
             // Set the correct headers for a multipart/form-data POST request.
+            www.SetRequestHeader("Authorization", HttpManager.Get().token);
             foreach (KeyValuePair<string, string> header in form.headers)
             {
                 www.SetRequestHeader(header.Key, header.Value);
@@ -221,6 +224,7 @@ public class KHHVideoCapture : MonoBehaviour
             www.downloadHandler = new DownloadHandlerBuffer();
 
             // Set the correct headers for a multipart/form-data POST request.
+            www.SetRequestHeader("Authorization", HttpManager.Get().token);
             foreach (KeyValuePair<string, string> header in form.headers)
             {
                 www.SetRequestHeader(header.Key, header.Value);

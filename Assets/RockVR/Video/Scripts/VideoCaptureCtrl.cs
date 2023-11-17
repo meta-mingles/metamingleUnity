@@ -91,7 +91,7 @@ namespace RockVR.Video
             videoCaptures = validCaptures.ToArray();
             // Cache those value, thread cannot access unity's object.
             isCaptureAudio = false;
-            if (audioCapture != null && audioCapture.gameObject.activeSelf)
+            if (audioCapture != null && audioCapture.gameObject.activeSelf && KHHEditManager.Instance.screenEditor.IsAudio)
                 isCaptureAudio = true;
             // Check if can start a capture session.
             if (!isCaptureAudio && videoCaptures.Length == 0)
