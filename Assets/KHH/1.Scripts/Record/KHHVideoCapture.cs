@@ -15,6 +15,7 @@ public class KHHVideoCapture : MonoBehaviour
     public Queue<string> actionQueue = new Queue<string>();
 
     private string filePath;
+    //public string FilePath { get { return filePath; } }
 
     //업로드중
     public bool IsUploading { get; set; } = false;

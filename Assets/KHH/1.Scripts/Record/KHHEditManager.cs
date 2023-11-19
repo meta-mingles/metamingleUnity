@@ -167,9 +167,11 @@ public class KHHEditManager : MonoBehaviour
 
     void PlayButtonEvent()
     {
+        if (!screenEditor.Play())
+            return;
+
         playButton.gameObject.SetActive(false);
         stopButton.gameObject.SetActive(true);
-        screenEditor.Play();
     }
 
     public void StopButtonEvent()
@@ -181,6 +183,9 @@ public class KHHEditManager : MonoBehaviour
 
     void ExportButtonEvent()
     {
+        if (!screenEditor.FileLoaded)
+            return;
+
         StopButtonEvent();
         export.Open();
     }

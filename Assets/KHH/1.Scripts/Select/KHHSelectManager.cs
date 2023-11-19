@@ -20,12 +20,12 @@ public class KHHSelectManager : MonoBehaviour
                 //임시 제목 생성
                 int index = 0;
                 string workingTitle = $"제목 없는 동영상 {index}";
-                while (System.IO.Directory.Exists(workingTitle))
+                while (System.IO.Directory.Exists(Application.persistentDataPath + "/" + workingTitle))
                 {
                     index++;
                     workingTitle = $"제목 없는 동영상 {index}";
-                    System.IO.Directory.CreateDirectory(workingTitle);
                 }
+                System.IO.Directory.CreateDirectory(Application.persistentDataPath + "/" + workingTitle);
 
                 KHHEditData.Open(workingTitle);
                 GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;

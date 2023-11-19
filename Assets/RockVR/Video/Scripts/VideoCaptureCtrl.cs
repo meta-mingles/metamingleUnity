@@ -326,7 +326,7 @@ namespace RockVR.Video
         /// </summary>
         protected override void Awake()
         {
-            base.Awake();
+            //base.Awake();
             // For easy access the CameraCaptures var.
             if (videoCaptures == null)
                 videoCaptures = new VideoCapture[0];

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class KHHVideoItem : MonoBehaviour
 {
     Button button;
+    Button deleteButton;
     TextMeshProUGUI nameText;
 
     private void Awake()
@@ -19,6 +20,9 @@ public class KHHVideoItem : MonoBehaviour
             GlobalValue.CurSceneName = "ToolCapture";
             UnityEngine.SceneManagement.SceneManager.LoadScene("ToolCapture");
         });
+
+        deleteButton = transform.Find("DeleteButton").GetComponent<Button>();
+        if (deleteButton != null) deleteButton.onClick.AddListener(DeleteButtonEvent);
 
         nameText = GetComponentInChildren<TextMeshProUGUI>();
     }
@@ -33,5 +37,11 @@ public class KHHVideoItem : MonoBehaviour
             texture.LoadImage(System.IO.File.ReadAllBytes(path + "/thumbnail.png"));
             button.image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }
+    }
+
+    void DeleteButtonEvent()
+    {
+        System.IO.Directory.Delete(Application.persistentDataPath + "/" + nameText.text, true);
+        Destroy(gameObject);
     }
 }

@@ -28,6 +28,7 @@ public class KHHExport : MonoBehaviour
     Outline interacitveOutline;
 
     public KHHScreenEditor screenEditor;
+    public Camera captureCamera;
     //complete
     public TMP_InputField titleInputField;
     public TMP_InputField descriptionInputField;
@@ -75,6 +76,20 @@ public class KHHExport : MonoBehaviour
     {
         screenEditor.Play();
         VideoCaptureCtrl.instance.StartCapture();
+        yield return null;
+
+        RenderTexture rt = captureCamera.targetTexture;
+        RenderTexture.active = rt;
+        Texture2D tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false); // png 파일에 쓰일 재료 
+        tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+        RenderTexture.active = null;
+
+        byte[] bytes;
+        bytes = tex.EncodeToPNG();
+
+        string path = KHHEditData.FilePath + "/thumbnail.png";
+        System.IO.File.WriteAllBytes(path, bytes);
+
 
         while (screenEditor.IsPlaying)
             yield return null;
@@ -88,6 +103,13 @@ public class KHHExport : MonoBehaviour
         //captureCamera.targetTexture = captureRenderTexture;
         exportState = ExportState.None;
         uploadButton.interactable = true;
+
+        ////만든 mp4 영상에서 썸네일 생성
+        //Texture2D texture = new Texture2D(0, 0);
+        //texture.LoadImage(System.IO.File.ReadAllBytes(KHHVideoCapture.instance.FilePath));
+        //texture.Apply();
+        //byte[] bytes = texture.EncodeToPNG();
+        //System.IO.File.WriteAllBytes(KHHEditData.FilePath + "/thumbnail.png", bytes);
     }
 
     void ExportButtonEvent()

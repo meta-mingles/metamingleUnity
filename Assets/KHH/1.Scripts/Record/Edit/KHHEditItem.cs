@@ -23,7 +23,7 @@ public class KHHEditItem : Selectable
     protected float itemCorrectTime = 0.0f;
     protected float delayTime = 0.0f;
 
-    public float EndTime { get { return (endX + changeRightX) / lengthScale; } }
+    public float EndTime { get { return (endX + changePosX + changeRightX) / lengthScale; } }
 
     protected float curLength;
     protected float maxLength;
@@ -102,11 +102,21 @@ public class KHHEditItem : Selectable
             item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
             item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
             rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
+
+            itemCorrectTime = changeLeftX / lengthScale;
+            delayTime = (changePosX + changeLeftX) / lengthScale;
+
+            screenEditor.SetEndTime();
         }
 
         if (middle.isDrag)
         {
             changePosX += middle.posXDiff;
+            if (EndTime > screenEditor.maxTime)
+            {
+                changePosX = (screenEditor.maxTime * lengthScale) - (endX + changeRightX);
+            }
+
             if (startX + changePosX + changeLeftX < 0)
             {
                 changePosX = (startX + changeLeftX) * -1;
@@ -114,11 +124,21 @@ public class KHHEditItem : Selectable
 
             item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
             rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
+
+            itemCorrectTime = changeLeftX / lengthScale;
+            delayTime = (changePosX + changeLeftX) / lengthScale;
+
+            screenEditor.SetEndTime();
         }
 
         if (right.isDrag)
         {
             changeRightX += right.posXDiff;
+            if (EndTime > screenEditor.maxTime)
+            {
+                changeRightX = (screenEditor.maxTime * lengthScale) - (endX + changePosX);
+            }
+
             if (maxLength > 0 && changeRightX > 0)
             {
                 changeRightX = 0;
@@ -131,23 +151,24 @@ public class KHHEditItem : Selectable
             curLength = (endX + changeRightX) - (startX + changeLeftX);
             item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
             rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
+
+            itemCorrectTime = changeLeftX / lengthScale;
+            delayTime = (changePosX + changeLeftX) / lengthScale;
+
+            screenEditor.SetEndTime();
         }
     }
 
     public virtual void PlayStart()
     {
-        itemCorrectTime = changeLeftX / lengthScale;
-        delayTime = (changePosX + changeLeftX) / lengthScale;
     }
 
     public virtual void PlayStop()
     {
-
     }
 
     public virtual void PlayEnd()
     {
-
     }
 
     public bool CheckFile()

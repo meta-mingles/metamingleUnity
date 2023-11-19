@@ -226,6 +226,7 @@ public class AITranscripts : MonoBehaviour
         {
             www.uploadHandler = new UploadHandlerRaw(jsonData);
             www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Authorization", HttpManager.instance.token);
             www.SetRequestHeader("Content-Type", "application/json");
 
             yield return www.SendWebRequest();
@@ -284,6 +285,7 @@ public class AITranscripts : MonoBehaviour
         {
             www.uploadHandler = new UploadHandlerRaw(jsonData);
             www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Authorization", HttpManager.instance.token);
             www.SetRequestHeader("Content-Type", "application/json");
 
             yield return www.SendWebRequest();

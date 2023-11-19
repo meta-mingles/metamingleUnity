@@ -127,8 +127,8 @@ public class KHHEditItemMotion : KHHEditItem
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCLX");
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCRX");
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVV");
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == pairSound));
+        screenEditor.RemoveItem(this);
+        screenEditor.RemoveItem(pairSound);
         Destroy(gameObject);
         Destroy(pairSound.gameObject);
     }
@@ -198,7 +198,7 @@ public class KHHEditItemMotion : KHHEditItem
     {
         isSelected = true;
         outline.enabled = true;
-        if(pairSound!=null) pairSound.IsSelected = true;
+        if (pairSound != null) pairSound.IsSelected = true;
     }
 
     public override void OnDeselect(BaseEventData eventData)

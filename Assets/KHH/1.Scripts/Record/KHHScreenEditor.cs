@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,8 +23,11 @@ public class KHHScreenEditor : MonoBehaviour
     public Transform editItemParent;
     public KHHModelRecorder modelRecorder;
 
-    public float playTime = 0.0f;
+    public TextMeshProUGUI playTimeText;
+    public TextMeshProUGUI endTimeText;
+    [System.NonSerialized] public float playTime = 0.0f;
     float endTime = 0.0f;
+    public readonly float maxTime = 120f;
 
     public bool IsAudio { get { return editItemList.Find(x => x is KHHEditItemSound) != null; } }
 
@@ -41,17 +45,26 @@ public class KHHScreenEditor : MonoBehaviour
         if (isPlaying)
         {
             playTime += Time.deltaTime;
-            if (playTime > endTime)
+            int min = (int)(playTime / 60);
+            float sec = playTime - (min * 60);
+            if (playTime >= endTime)
             {
+                playTime = endTime;
+                min = (int)(playTime / 60);
+                sec = playTime - (min * 60);
+                playTimeText.text = string.Format("{0:00}:{1:00.00}", min, sec);
+
                 End();
                 KHHEditManager.Instance.StopButtonEvent();
                 return;
             }
+
+            playTimeText.text = string.Format("{0:00}:{1:00.00}", min, sec);
         }
     }
 
     //처음 로딩할 때 호출
-    public void Init()
+    void Init()
     {
         fileLoaded = false;
         initCount = 0;
@@ -137,7 +150,10 @@ public class KHHScreenEditor : MonoBehaviour
     {
         loadCount++;
         if (loadCount == initCount)
+        {
             fileLoaded = true;
+            SetEndTime();
+        }
     }
 
     //드롭 아이템이 편집 영역에 드랍되었을 때 호출
@@ -179,6 +195,8 @@ public class KHHScreenEditor : MonoBehaviour
             if (item is KHHEditItemSound) if (((KHHEditItemSound)item).IsVoice) item.transform.SetSiblingIndex(1);
             if (item is KHHEditItemBackground) item.transform.SetAsLastSibling();
         }
+
+        SetEndTime();
     }
 
     void RemoveCurMotion()
@@ -249,42 +267,53 @@ public class KHHScreenEditor : MonoBehaviour
         editItemList.Add(editItem);
     }
 
-    public void Play()
+    public void RemoveItem(KHHEditItem item)
     {
-        playTime = 0.0f;
+        editItemList.Remove(item);
+        SetEndTime();
+    }
+
+    public void SetEndTime()
+    {
         endTime = 0.0f;
-        if (fileLoaded)
+        for (int i = 0; i < editItemList.Count; i++)
+            if (endTime < editItemList[i].EndTime)
+                endTime = editItemList[i].EndTime;
+
+        int min = (int)(endTime / 60);
+        float sec = endTime - (min * 60);
+        endTimeText.text = string.Format("{0:00}:{1:00.00}", min, sec);
+    }
+
+    public bool Play()
+    {
+        if (!fileLoaded)
+            return false;
+
+        playTime = 0.0f;
+        isPlaying = true;
+        for (int i = 0; i < editItemList.Count; i++)
         {
-            isPlaying = true;
-            for (int i = 0; i < editItemList.Count; i++)
-            {
-                editItemList[i].PlayStart();
-                if (endTime < editItemList[i].EndTime) endTime = editItemList[i].EndTime;
-            }
+            editItemList[i].PlayStart();
         }
+        return true;
     }
 
     public void Stop()
     {
-        if (fileLoaded)
+        isPlaying = false;
+        for (int i = 0; i < editItemList.Count; i++)
         {
-            isPlaying = false;
-            for (int i = 0; i < editItemList.Count; i++)
-            {
-                editItemList[i].PlayStop();
-            }
+            editItemList[i].PlayStop();
         }
     }
 
     public void End()
     {
-        if (fileLoaded)
+        isPlaying = false;
+        for (int i = 0; i < editItemList.Count; i++)
         {
-            isPlaying = false;
-            for (int i = 0; i < editItemList.Count; i++)
-            {
-                editItemList[i].PlayEnd();
-            }
+            editItemList[i].PlayEnd();
         }
     }
 }

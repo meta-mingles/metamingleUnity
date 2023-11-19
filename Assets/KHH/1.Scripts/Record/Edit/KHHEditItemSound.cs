@@ -83,7 +83,7 @@ public class KHHEditItemSound : KHHEditItem
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCLX");
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCRX");
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SV");
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
+        screenEditor.RemoveItem(this);
         Destroy(gameObject);
     }
 

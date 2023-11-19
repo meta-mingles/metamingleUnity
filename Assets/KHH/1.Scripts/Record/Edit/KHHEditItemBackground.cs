@@ -63,7 +63,7 @@ public class KHHEditItemBackground : KHHEditItem
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICX");
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICLX");
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICRX");
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
+        screenEditor.RemoveItem(this);
         Destroy(gameObject);
     }
 
