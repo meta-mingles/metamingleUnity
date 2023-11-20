@@ -14,7 +14,6 @@ public class KHHRecordManager : MonoBehaviour
 
     public Camera captureCamera;
     public GameObject captureScreen;
-    public RenderTexture captureRenderTexture;
 
     public Button recordExitButton;
     public Button recordStartButton;
@@ -32,6 +31,8 @@ public class KHHRecordManager : MonoBehaviour
     bool startRecord = false;
     public bool StartRecord { get { return startRecord; } set { startRecord = value; } }
 
+    RenderTexture captureRenderTexture;
+
     private void Awake()
     {
         Instance = this;
@@ -44,6 +45,7 @@ public class KHHRecordManager : MonoBehaviour
         if (recordStartButton != null) recordStartButton.onClick.AddListener(RecordStartButtonEvent);
         if (recordStopButton != null) recordStopButton.onClick.AddListener(RecordStopButtonEvent);
 
+        captureRenderTexture = captureCamera.targetTexture;
         //movieSender.CameraPlayStart();
     }
 

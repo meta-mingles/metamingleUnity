@@ -18,7 +18,6 @@ public class KHHEditManager : MonoBehaviour
     public KHHBackgroundDataManager backgroundDataMaanger;
 
     public Camera captureCamera;
-    public RenderTexture captureRenderTexture;
     public KHHScreenEditor screenEditor;
     public GameObject barracudaRunner;
 
@@ -52,6 +51,8 @@ public class KHHEditManager : MonoBehaviour
     {
         Instance = this;
         titleInputField.text = KHHEditData.VideoTitle;
+
+        VideoCaptureCtrl.instance.Set();
     }
 
     // Start is called before the first frame update

@@ -58,8 +58,8 @@ public class AITranscripts : MonoBehaviour
     //public Button yourButton2;
     //public RawImage yourRawImage;
 
-    bool isGeneratingBG = false;
-    bool isGeneratingTS = false;
+    //bool isGeneratingBG = false;
+    //bool isGeneratingTS = false;
 
     // btn, btn2 에 클릭 이벤트가 발생하면 TaskOnClick, TaskOnClick2를 각각 실행하라.
     void Start()
@@ -84,8 +84,8 @@ public class AITranscripts : MonoBehaviour
         aiTranscriptsButtonText.text = "작성중";
         aiTranscriptsButton.interactable = false;
 
-        isGeneratingBG = true;
-        isGeneratingTS = true;
+        //isGeneratingBG = true;
+        //isGeneratingTS = true;
 
         // JSON 데이터를 바이트 배열로 변환
         byte[] jsonData = Encoding.UTF8.GetBytes(json);

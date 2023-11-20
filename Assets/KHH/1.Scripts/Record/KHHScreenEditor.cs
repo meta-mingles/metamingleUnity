@@ -280,6 +280,9 @@ public class KHHScreenEditor : MonoBehaviour
             if (endTime < editItemList[i].EndTime)
                 endTime = editItemList[i].EndTime;
 
+        if (endTime > maxTime)
+            endTime = maxTime;
+
         int min = (int)(endTime / 60);
         float sec = endTime - (min * 60);
         endTimeText.text = string.Format("{0:00}:{1:00.00}", min, sec);
