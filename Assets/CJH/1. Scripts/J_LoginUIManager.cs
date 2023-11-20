@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -168,17 +169,21 @@ public class J_LoginUIManager : MonoBehaviour
             {
                 prevSceneName = SceneManager.GetActiveScene().name;
                 nextSceneName = "ToolSelect";
+
+                //씬이동
+                GlobalValue.PrevSceneName = prevSceneName;
+                GlobalValue.CurSceneName = nextSceneName;
+                SceneManager.LoadScene(nextSceneName);
             }
             else //platform
             {
                 prevSceneName = "Main_Platform";    //커스텀 존재 유무 확인 필요
                 nextSceneName = "Customization";    //커스텀 존재 유무 확인 필요
+                KHHPhotonInit.instance.Init(prevSceneName, nextSceneName, HttpManager.instance.nickname);
             }
 
             //여기서 씬이동
-            SceneChange(prevSceneName, nextSceneName);
             print("씬이동");
-
         });
 
         JObject jObject = new JObject();
@@ -234,7 +239,6 @@ public class J_LoginUIManager : MonoBehaviour
 
     public void SceneChange(string prevSceneName, string nextSceneName)
     {
-        KHHPhotonInit.instance.Init(prevSceneName, nextSceneName, HttpManager.instance.nickname);
     }
 
     //#if UNITY_EDITOR
