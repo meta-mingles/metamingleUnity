@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -39,8 +40,13 @@ public class J_PlatformUIManager : MonoBehaviour
     public Button enterBt;//입장 버튼
     private float Distance; // 거리
     public float constDist = 3f; //일정거리
+
+
+    [Header("Name")]
+    public GameObject nameText; //
     private void Update()
     {
+        NickNameText();
         EnterUI();
     }
 
@@ -90,9 +96,17 @@ public class J_PlatformUIManager : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    public float temp = 1f;
+    //플레이어 머리 위에 플레이어의 닉네임 텍스트가 생성된다
+    public void NickNameText()
     {
-       // print("거리 : " + Distance);
+        nameText.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + temp, player.transform.position.z);
+
+        string name = nameText.GetComponentInChildren<TMP_Text>().text;
+
+        name = "밍글이";
+        //이름을 계속 업데이트해줘야한다.
+
     }
 
 
