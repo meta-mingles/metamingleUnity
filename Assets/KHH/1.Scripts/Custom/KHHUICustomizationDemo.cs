@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -267,9 +268,18 @@ public class KHHUICustomizationDemo : MonoBehaviour
         KHHUserCustom.SaveData(() =>
         {
             string newSceneName = GlobalValue.PrevSceneName;
-            GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
-            GlobalValue.CurSceneName = newSceneName;
-            SceneManager.LoadScene(newSceneName);
+            if (newSceneName.Contains("Tool"))
+            {
+                GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+                GlobalValue.CurSceneName = newSceneName;
+                SceneManager.LoadScene(newSceneName);
+            }
+            else
+            {
+                GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+                GlobalValue.CurSceneName = newSceneName;
+                PhotonNetwork.LoadLevel(newSceneName);
+            }
         });
     }
 }
