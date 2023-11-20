@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class J_PlatformUIManager : MonoBehaviour
 {
     public static J_PlatformUIManager Instance;
-
     private void Awake()
     {
         Instance = this;
@@ -15,7 +14,9 @@ public class J_PlatformUIManager : MonoBehaviour
         //사운드 키기
         SoundManager.instance.BGMVolume = -5;
         SoundManager.instance.PlayBGM("PlatformBGM");
+
     }
+
     [Header("Platform")]
 
     public Button videoBt; //영상보러가기 버튼
@@ -31,13 +32,6 @@ public class J_PlatformUIManager : MonoBehaviour
     string videoSceneName = "VideoScene";
     string customizationSceneName = "Customization";
 
-
-
-    public void Update()
-    {
-
-    }
-
     //씬이동 -- 비디오씬, 커스텀씬
     public void SceneChange(string sceneName)
     {
@@ -46,13 +40,17 @@ public class J_PlatformUIManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-    //탭 열기
-    public void OpenCloseTab(GameObject tabName)
+    //설정 탭 열기
+    public void OpenTab()
     {
-        tabName.SetActive(true);
+        settingTab.SetActive(true);
         Debug.Log("Tab열림");
-        if (closeBt.onClick != null )
-            tabName.SetActive(false);
+    }
+    //설정 탭 닫기
+    public void CloseTab()
+    {
+        if (closeBt.onClick != null)
+            settingTab.SetActive(false);
         Debug.Log("Tab닫힘");
     }
 
@@ -67,9 +65,6 @@ public class J_PlatformUIManager : MonoBehaviour
             UnityEditor.Events.UnityEventTools.AddStringPersistentListener(videoBt.onClick, SceneChange, videoSceneName);
         if (customizeBt != null &&customizeBt.onClick.GetPersistentEventCount() == 0)
             UnityEditor.Events.UnityEventTools.AddStringPersistentListener(customizeBt.onClick, SceneChange, customizationSceneName);
-        if (settingBt != null && settingBt.onClick.GetPersistentEventCount() == 0)
-            UnityEditor.Events.UnityEventTools.AddObjectPersistentListener(settingBt.onClick, OpenCloseTab, settingTab);
-
 
     }
 #endif
