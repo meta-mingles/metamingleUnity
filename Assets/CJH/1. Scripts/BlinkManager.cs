@@ -8,6 +8,8 @@ public class BlinkManager : MonoBehaviour
 {
     public LoopType loopType;
     public Button startButton;
+
+    
     // Start is called before the first frame update
     void Start()
     {
