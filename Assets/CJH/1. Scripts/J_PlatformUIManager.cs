@@ -103,8 +103,6 @@ public class J_PlatformUIManager : MonoBehaviour
             UnityEditor.Events.UnityEventTools.AddStringPersistentListener(videoBt.onClick, SceneChange, videoSceneName);
         if (customizeBt != null && customizeBt.onClick.GetPersistentEventCount() == 0)
             UnityEditor.Events.UnityEventTools.AddStringPersistentListener(customizeBt.onClick, SceneChange, customizationSceneName);
-        if (enterBt != null && Input.GetKeyDown(KeyCode.Alpha3))
-            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(enterBt.onClick, SceneChange, videoSceneName);
     }
 #endif
 }
