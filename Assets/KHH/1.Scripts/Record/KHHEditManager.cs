@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Device;
 using UnityEngine.UI;
 
 public class KHHEditManager : MonoBehaviour
@@ -16,9 +17,11 @@ public class KHHEditManager : MonoBehaviour
     public KHHMotionDataManager motionDataManager;
     public KHHSoundDataManager soundDataManager;
     public KHHBackgroundDataManager backgroundDataMaanger;
+    public RockVR.Video.VideoCapture videoCapture;
 
     public Camera captureCamera;
     public KHHScreenEditor screenEditor;
+    public RawImage screen;
     public GameObject barracudaRunner;
 
     [Header("Left")]
@@ -168,9 +171,9 @@ public class KHHEditManager : MonoBehaviour
 
     void PlayButtonEvent()
     {
-        if (!screenEditor.Play())
-            return;
+        if (!screenEditor.Play()) return;
 
+        screen.texture = videoCapture.FrameRenderTexture;
         playButton.gameObject.SetActive(false);
         stopButton.gameObject.SetActive(true);
     }
@@ -180,6 +183,7 @@ public class KHHEditManager : MonoBehaviour
         playButton.gameObject.SetActive(true);
         stopButton.gameObject.SetActive(false);
         screenEditor.Stop();
+        screen.texture = null;
     }
 
     void ExportButtonEvent()

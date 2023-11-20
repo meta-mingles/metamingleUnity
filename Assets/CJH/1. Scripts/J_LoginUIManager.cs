@@ -231,7 +231,7 @@ public class J_LoginUIManager : MonoBehaviour
     //회원가입 버튼
     public void SigUp_Bt()
     {
-        if (signUpBt.onClick != null)
+        if (signUpBt != null)
         {
             signUpBt.onClick.AddListener(SignUpPost);
         }

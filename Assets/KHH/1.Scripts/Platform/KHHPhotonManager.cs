@@ -14,10 +14,4 @@ public class KHHPhotonManager : MonoBehaviour
         m_CinemachineVirtualCamera.Follow = player.transform.GetChild(0);
         m_CinemachineVirtualCamera.enabled = true;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

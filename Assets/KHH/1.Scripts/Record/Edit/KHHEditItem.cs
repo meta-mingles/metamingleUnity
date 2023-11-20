@@ -167,10 +167,6 @@ public class KHHEditItem : Selectable
     {
     }
 
-    public virtual void PlayEnd()
-    {
-    }
-
     public bool CheckFile()
     {
         return System.IO.File.Exists(filePath);

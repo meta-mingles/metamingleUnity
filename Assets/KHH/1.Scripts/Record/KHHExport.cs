@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Device;
 using UnityEngine.UI;
 
 public class KHHExport : MonoBehaviour
@@ -28,6 +29,7 @@ public class KHHExport : MonoBehaviour
     Outline interacitveOutline;
 
     public KHHScreenEditor screenEditor;
+    public RawImage screen;
     public Camera captureCamera;
     //complete
     public TMP_InputField titleInputField;
@@ -36,6 +38,7 @@ public class KHHExport : MonoBehaviour
     bool isInterActive = false;
 
     public KHHVideoDataManager videoDataManager;
+    public RockVR.Video.VideoCapture videoCapture;
 
     // Start is called before the first frame update
     void Awake()
@@ -64,6 +67,8 @@ public class KHHExport : MonoBehaviour
 
     void GenerateVideo()
     {
+        if (!screenEditor.Play()) return;
+
         exportState = ExportState.Exporting;
         uploadButton.interactable = false;
 
@@ -72,7 +77,7 @@ public class KHHExport : MonoBehaviour
 
     IEnumerator CoGenerateVideo()
     {
-        screenEditor.Play();
+        screen.texture = videoCapture.FrameRenderTexture;
         VideoCaptureCtrl.instance.StartCapture();
         yield return null;
 
@@ -98,6 +103,7 @@ public class KHHExport : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
+        screen.texture = null;
         //captureCamera.targetTexture = captureRenderTexture;
         exportState = ExportState.None;
         uploadButton.interactable = true;

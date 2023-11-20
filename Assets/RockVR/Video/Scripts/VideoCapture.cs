@@ -156,7 +156,8 @@ namespace RockVR.Video
         /// </summary>
         private Thread encodeThread;
 
-        public RawImage[] screens;
+        //public RawImage[] screens;
+        public RenderTexture FrameRenderTexture { get { return frameRenderTexture; } }
         public void Set()
         {
             frameRenderTexture = new RenderTexture(frameWidth, frameHeight, 24);
@@ -172,8 +173,8 @@ namespace RockVR.Video
                 captureCamera.targetTexture = frameRenderTexture;
             }
 
-            foreach (RawImage screen in screens)
-                screen.texture = frameRenderTexture;
+            //foreach (RawImage screen in screens)
+            //    screen.texture = frameRenderTexture;
         }
 
         /// <summary>

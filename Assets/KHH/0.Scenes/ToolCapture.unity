@@ -5163,7 +5163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: b57cffba5da218f46b32755661186b0f, type: 2}
+  m_Texture: {fileID: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -15630,8 +15630,10 @@ MonoBehaviour:
   motionDataManager: {fileID: 117738387}
   soundDataManager: {fileID: 1918387822}
   backgroundDataMaanger: {fileID: 668374378}
+  videoCapture: {fileID: 464984494}
   captureCamera: {fileID: 464984500}
   screenEditor: {fileID: 552315165}
+  screen: {fileID: 487042573}
   barracudaRunner: {fileID: 1875475999}
   recordButton: {fileID: 2031610878}
   motionButton: {fileID: 131490786}
@@ -16687,7 +16689,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: b57cffba5da218f46b32755661186b0f, type: 2}
+  m_Texture: {fileID: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -17780,10 +17782,12 @@ MonoBehaviour:
   interactiveButtonLeft: {fileID: 175979334}
   interactiveButtonRight: {fileID: 1147241751}
   screenEditor: {fileID: 552315165}
+  screen: {fileID: 1656319250}
   captureCamera: {fileID: 464984500}
   titleInputField: {fileID: 268985788}
   descriptionInputField: {fileID: 372147275}
   videoDataManager: {fileID: 1011461774}
+  videoCapture: {fileID: 464984494}
 --- !u!114 &1742543097
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -54,7 +54,6 @@ public class KHHScreenEditor : MonoBehaviour
                 sec = playTime - (min * 60);
                 playTimeText.text = string.Format("{0:00}:{1:00.00}", min, sec);
 
-                End();
                 KHHEditManager.Instance.StopButtonEvent();
                 return;
             }
@@ -308,15 +307,6 @@ public class KHHScreenEditor : MonoBehaviour
         for (int i = 0; i < editItemList.Count; i++)
         {
             editItemList[i].PlayStop();
-        }
-    }
-
-    public void End()
-    {
-        isPlaying = false;
-        for (int i = 0; i < editItemList.Count; i++)
-        {
-            editItemList[i].PlayEnd();
         }
     }
 }

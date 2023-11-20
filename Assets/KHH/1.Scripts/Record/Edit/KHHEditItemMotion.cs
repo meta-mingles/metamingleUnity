@@ -111,12 +111,6 @@ public class KHHEditItemMotion : KHHEditItem
         //audioSource.Stop();
     }
 
-    public override void PlayEnd()
-    {
-        base.PlayEnd();
-        //audioSource.Stop();
-    }
-
     public override void Remove()
     {
         PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}M");

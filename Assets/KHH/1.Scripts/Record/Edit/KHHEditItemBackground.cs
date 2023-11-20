@@ -42,12 +42,6 @@ public class KHHEditItemBackground : KHHEditItem
     public override void PlayStop()
     {
         base.PlayStop();
-        screenEditor.backgroundImage.texture = null;
-    }
-
-    public override void PlayEnd()
-    {
-        base.PlayEnd();
         StartCoroutine(RemoveBackground());
     }
 
