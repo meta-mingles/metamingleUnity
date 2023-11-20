@@ -9799,6 +9799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopType: 1
   startButton: {fileID: 1544587489}
+  count: 1
 --- !u!1 &1636565741
 GameObject:
   m_ObjectHideFlags: 0

@@ -122,7 +122,7 @@ public class HttpManager : MonoBehaviour
     IEnumerator Post(HttpInfo httpInfo)
     {
         string str = JsonUtility.ToJson(httpInfo.body);
-        using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.testUrl, str))
+        using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.url, str))
         {
             byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
             req.uploadHandler.Dispose();

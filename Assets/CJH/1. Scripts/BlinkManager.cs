@@ -9,6 +9,7 @@ public class BlinkManager : MonoBehaviour
     public LoopType loopType;
     public Button startButton;
 
+    public float count;
     
     // Start is called before the first frame update
     void Start()
@@ -26,7 +27,7 @@ public class BlinkManager : MonoBehaviour
     {
         if (startButton.interactable == true)
         {
-            startButton.GetComponent<CanvasGroup>().DOFade(0.1f, 1f).SetLoops(-1, loopType);
+            startButton.GetComponent<CanvasGroup>().DOFade(0.1f, count).SetLoops(-1, loopType);
         }
     }
 }
