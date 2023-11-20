@@ -56,7 +56,7 @@ public class KHHCustomizationDemo : MonoBehaviour
         m_UI.OnChangeColor += OnChangeColor;
     }
 
-    IEnumerator Start()
+    async void Start()
     {
         //init categories UI
         m_UI.SetCategories(CustomCategories.ToArray());
@@ -65,8 +65,12 @@ public class KHHCustomizationDemo : MonoBehaviour
 
         //load data
         KHHUserCustom.Init();
-        KHHUserCustomData data = KHHUserCustom.LoadData();
+        KHHUserCustomData data = await KHHUserCustom.LoadData();
+        StartCoroutine(InitLoadCustom(data));
+    }
 
+    IEnumerator InitLoadCustom(KHHUserCustomData data)
+    {
         if (data == null || data.datas == null || data.datas.Count == 0)
         {
             m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody("f"));

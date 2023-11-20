@@ -180,7 +180,7 @@ public class J_LoginUIManager : MonoBehaviour
             print("씬이동");
 
         });
-        
+
         JObject jObject = new JObject();
         jObject["email"] = inputId.text;
         jObject["password"] = inputPW.text;
@@ -234,9 +234,7 @@ public class J_LoginUIManager : MonoBehaviour
 
     public void SceneChange(string prevSceneName, string nextSceneName)
     {
-        GlobalValue.PrevSceneName = prevSceneName;
-        GlobalValue.CurSceneName = nextSceneName;
-        SceneManager.LoadScene(nextSceneName);
+        KHHPhotonInit.instance.Init(prevSceneName, nextSceneName, HttpManager.instance.nickname);
     }
 
     //#if UNITY_EDITOR

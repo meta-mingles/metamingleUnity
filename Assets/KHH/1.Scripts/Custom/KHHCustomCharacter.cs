@@ -33,12 +33,16 @@ public class KHHCustomCharacter : MonoBehaviour
         m_MaterialProperties = new Dictionary<Material, MaterialPropertyBlock>();
     }
 
-    IEnumerator Start()
+    async void Start()
     {
         //load data
         KHHUserCustom.Init();
-        KHHUserCustomData data = KHHUserCustom.LoadData();
+        KHHUserCustomData data = await KHHUserCustom.LoadData();
+        StartCoroutine(InitLoadCustom(data));
+    }
 
+    IEnumerator InitLoadCustom(KHHUserCustomData data)
+    {
         if (data == null || data.datas == null || data.datas.Count == 0)
         {
             m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody("f"));

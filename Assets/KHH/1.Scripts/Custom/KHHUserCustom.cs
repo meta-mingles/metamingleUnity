@@ -2,8 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [System.Serializable]
 public class KHHColorlData
@@ -125,12 +130,13 @@ public static class KHHUserCustom
     public static async void SaveData(Action action)
     {
         var json = JsonUtility.ToJson(customData);
-        FileStream fileStream = null;
+        //FileStream fileStream = null;
         try
         {
-            fileStream = new FileStream(Application.persistentDataPath + "/customData.json", FileMode.Create);
+            //fileStream = new FileStream(Application.persistentDataPath + "/customData.json", FileMode.Create);
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
-            await fileStream.WriteAsync(bytes, 0, bytes.Length);
+            await PostJson(bytes);
+            //await fileStream.WriteAsync(bytes, 0, bytes.Length);
         }
         catch (Exception e)
         {
@@ -138,21 +144,86 @@ public static class KHHUserCustom
         }
         finally
         {
-            if (fileStream != null)
-                fileStream.Close();
+            //if (fileStream != null)
+            //    fileStream.Close();
             action?.Invoke();
         }
     }
 
-    public static KHHUserCustomData LoadData()
+    static async Task PostJson(byte[] jsonData)
     {
-        if (!System.IO.File.Exists(Application.persistentDataPath + "/customData.json"))
-            return null;
+        // HttpClient 객체 생성
+        using (HttpClient client = new HttpClient())
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "http://metaverse.ohgiraffers.com:8080/avatar");
 
-        byte[] bytes = System.IO.File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
+            //request.Headers.Add("Authorization", HttpManager.instance.token);
+            request.Content = new ByteArrayContent(jsonData);
+            request.Content.Headers.Add("Content-Type", "application/json");
 
-        var json = System.Text.Encoding.UTF8.GetString(bytes);
+            // POST 요청 전송
+            using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            // 응답 처리
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseContent);
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode}");
+            }
+        }
+    }
+
+    public static async Task<KHHUserCustomData> LoadData()
+    {
+        string json = await GetJson();
+
+        //if (!System.IO.File.Exists(Application.persistentDataPath + "/customData.json"))
+        //    return null;
+
+        //byte[] bytes = System.IO.File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
+
+        //var json = System.Text.Encoding.UTF8.GetString(bytes);
         JsonUtility.FromJsonOverwrite(json, customData);
         return customData;
+    }
+
+    static async Task<string> GetJson()
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            using var response = await client.GetAsync("http://metaverse.ohgiraffers.com:8080/avatar");
+            //await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            // 응답 처리
+            if (response.IsSuccessStatusCode)
+            {
+                string data = await response.Content.ReadAsStringAsync();
+                //Debug.Log(bytestr);
+                //byte[] bytes = string_to_hex_array(bytestr);
+                //string data = Convert.ToBase64String(bytes);
+                //Debug.Log(data);
+                return data;
+            }
+            else
+            {
+                Debug.Log($"Error: {response.StatusCode}");
+            }
+        }
+
+        return string.Empty;
+    }
+
+    public static byte[] string_to_hex_array(string charstr)
+    {
+        string[] split = charstr.Split(new char[] { ' ' });
+        List<byte> bList = new List<byte>();
+
+        foreach (string str in split) bList.Add(byte.Parse(str, NumberStyles.HexNumber));
+
+        return bList.ToArray();
     }
 }

@@ -28,13 +28,13 @@ public class J_CustomCharacter : MonoBehaviour
     //신발 메터리얼
     public Material[] matShoes;
 
-    void Start()
+    async void Start()
     {
         fakeLoader = GetComponent<FakeLoader>();
 
         //load data
         KHHUserCustom.Init();
-        KHHUserCustomData data = KHHUserCustom.LoadData();
+        KHHUserCustomData data = await KHHUserCustom.LoadData();
 
         KHHCategoryData categoryData;
         for(int i = 0; i < data.datas.Count; i++)
