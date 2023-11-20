@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -38,16 +39,16 @@ public class J_LoginUIManager : MonoBehaviour
     public Button prev_LoginBt; //로그인 버튼
     public Button signUpBt; //회원가입 버튼
     public Button close_Bt2; //닫기 버튼
-
-
-    [Header("Popup_ CheckCode")]
-    public GameObject PopUp_checkCode; //인증코드팝업
+    public TMP_InputField inputId2; //로그인 아이디 입력
+    public TMP_InputField inputPW2; //로그인 패스워드 입력
+    public TMP_InputField inputNickName; //로그인 닉네임 입력
 
 
     [Header("Popup_ CheckSignUp")]
-    public GameObject PopUp_checkSignUp; //회원가입 성공 창
+    public GameObject PopUp_checkSignUp; //회원가입창
     public Button prev_SignUp;
     public Button close_Bt4; //닫기 버튼
+    public TMP_Text signUpMessage; //회원가입 상태
 
     Action onChange;
     //string customizationSceneName = "Customization";
@@ -78,6 +79,7 @@ public class J_LoginUIManager : MonoBehaviour
         system = EventSystem.current;
 
         Login_Bt();
+        SigUp_Bt();
         //사운드매니저로 브금 실행
         if (!SceneManager.GetActiveScene().name.Contains("Tool"))
             SoundManager.instance.PlayBGM("Bgm");
@@ -148,26 +150,18 @@ public class J_LoginUIManager : MonoBehaviour
         if (move_SignUpBt != null) move_SignUpBt.gameObject.SetActive(page < panels.Count - 1);
         if (signUpBt != null) signUpBt.gameObject.SetActive(page < panels.Count - 1);
     }
-    //현재 로그인 포스트 통신 함수 => 추후 함수 이름 변경
+    //현재 로그인 포스트 통신 함수 
     public void LoginPost()
     {
-        //string text = " {\r\n    \"apiStatus\": \"SUCCESS\",\r\n    \"message\": \"성공적으로 로그인되었습니다.\",\r\n    \"data\": {\r\n        \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2x8c\"\r\n    }}";
-        //SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(text);
-        //HttpManager.Get().token = signInInfo.data.token;
-
-
         HttpInfo info = new HttpInfo();
-        string login = "/member/login";
-        string signUp = "/member/signup";
-
-
         info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) =>
         {
             //Post 데이터 전송했을 때 서버로부터 응답온다
-            Debug.Log("Signup : " + downloadHandler.text);
-
-            SignInInfo signInInfo = JsonUtility.FromJson<SignInInfo>(downloadHandler.text);
-            HttpManager.instance.token = signInInfo.data.token;
+            Debug.Log("Login : " + downloadHandler.text);
+            //Netownjson
+            JObject jObject = JObject.Parse(downloadHandler.text);
+            JObject data = jObject["data"].ToObject<JObject>();
+            HttpManager.instance.token = data["token"].ToObject<string>();
 
             string prevSceneName, nextSceneName;
             if (SceneManager.GetActiveScene().name.Contains("Tool")) //tool
@@ -186,14 +180,16 @@ public class J_LoginUIManager : MonoBehaviour
             print("씬이동");
 
         });
-        SignUpInfo signUpInfo = new SignUpInfo();
-        signUpInfo.email = inputId.text;
-        signUpInfo.password = inputPW.text;
+        
+        JObject jObject = new JObject();
+        jObject["email"] = inputId.text;
+        jObject["password"] = inputPW.text;
 
-        info.body = JsonUtility.ToJson(signUpInfo);
+        info.body = jObject.ToString();
 
         HttpManager.instance.SendRequest(info);
     }
+
     //로그인 버튼
     public void Login_Bt()
     {
@@ -203,7 +199,38 @@ public class J_LoginUIManager : MonoBehaviour
         }
 
     }
+    //회원가입 포스트
+    public void SignUpPost()
+    {
+        HttpInfo info = new HttpInfo();
+        info.Set(RequestType.POST, "/member/signup", (DownloadHandler downloadHandler) =>
+        {
+            //Post 데이터 전송했을 때 서버로부터 응답온다
+            Debug.Log("Signup : " + downloadHandler.text);
 
+
+            JObject jObject = JObject.Parse(downloadHandler.text);
+            JObject data = jObject["data"].ToObject<JObject>();
+            HttpManager.instance.email = data["email"].ToObject<string>();
+            HttpManager.instance.nickname = data["nickname"].ToObject<string>();
+        });
+
+        JObject jObject = new JObject();
+        jObject["email"] = inputId2.text;
+        jObject["password"] = inputPW2.text;
+        jObject["nickname"] = inputNickName.text;
+
+        info.body = jObject.ToString();
+        HttpManager.instance.SendRequest(info);
+    }
+    //회원가입 버튼
+    public void SigUp_Bt()
+    {
+        if (signUpBt.onClick != null)
+        {
+            signUpBt.onClick.AddListener(SignUpPost);
+        }
+    }
 
     public void SceneChange(string prevSceneName, string nextSceneName)
     {
