@@ -5,16 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/KHH/0.Scenes/ToolLoginScene.unity
     guid: 32d09ad97044df74ba8d0434c40d2444
-  - enabled: 1
+  - enabled: 0
     path: Assets/KHH/0.Scenes/ToolSelect.unity
     guid: 4bdb912eb595a804dac0b13de4cdacc0
-  - enabled: 1
+  - enabled: 0
     path: Assets/KHH/0.Scenes/ToolCapture.unity
     guid: deeddd9199426d543ac1c508183458c9
   - enabled: 1
+    path: Assets/CJH/2. Scenes/LoginScene.unity
+    guid: 0a83774c663f40f4499cdc21e81569e4
+  - enabled: 1
     path: Assets/KHH/0.Scenes/Customization.unity
     guid: 254009f053b7d8f47afb3ea60b045299
+  - enabled: 1
+    path: Assets/CJH/2. Scenes/Main_Platform.unity
+    guid: 43edbbd2f8f4ec741892a1e30a8a53ee
+  - enabled: 1
+    path: Assets/CJH/2. Scenes/VideoScene.unity
+    guid: 917331368a381b14a8f48ec10b633358
   m_configObjects: {}

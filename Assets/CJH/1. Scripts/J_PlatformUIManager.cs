@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class J_PlatformUIManager : MonoBehaviour
         //사운드 키기
         //SoundManager.instance.BGMVolume = -5;
         //SoundManager.instance.PlayBGM("PlatformBGM");
-
     }
 
     [Header("Platform")]
@@ -43,10 +43,14 @@ public class J_PlatformUIManager : MonoBehaviour
 
 
     [Header("Name")]
-    public GameObject nameText; //
+    public GameObject nameText;
+    [SerializeField] public float temp = 1.8f;
+
     private void Update()
     {
-        NickNameText();
+        UpdateNickNamePosition();
+        //로그인씬에서 받았던 닉네임의 값을 불러와야한다.
+        SetNickNameText();
         EnterUI();
     }
 
@@ -96,19 +100,27 @@ public class J_PlatformUIManager : MonoBehaviour
         }
     }
 
-    public float temp = 1f;
     //플레이어 머리 위에 플레이어의 닉네임 텍스트가 생성된다
-    public void NickNameText()
+    public void SetNickNameText()
     {
-        nameText.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + temp, player.transform.position.z);
+        nameText.GetComponentInChildren<TMP_Text>().text = HttpManager.instance.nickname;
 
-        string name = nameText.GetComponentInChildren<TMP_Text>().text;
-
-        name = "밍글이";
-        //이름을 계속 업데이트해줘야한다.
-
+        //위치
+        UpdateNickNamePosition();
     }
 
+    private void UpdateNickNamePosition()
+    {
+        //위치 업데이트
+        nameText.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + temp, player.transform.position.z);
+        //카메라의 Y 축 회전값을 사용하여 텍스트의 회전 업데이트
+        Vector3 cameraRotation = Camera.main.transform.eulerAngles;
+        nameText.transform.eulerAngles = new Vector3(0,cameraRotation.y, 0);
+
+
+        ////카메라를 향하도록 회전 업데이트
+        //nameText.transform.LookAt(Camera.main.transform);
+    }
 
 #if UNITY_EDITOR
     private void OnValidate()
