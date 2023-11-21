@@ -7,26 +7,52 @@ public class J_CustomCharacter : MonoBehaviour
 {
     //
     FakeLoader fakeLoader;
+    bool isMale = true;
 
-    //몸 기본 구조
-    public GameObject[] basicBody;
+    public Avatar[] avatars;
+
+    //기본 몸
+    public GameObject[] body;
+
+    [Header("Male")]
+    //몸 구조
+    public GameObject[] m_BasicBody;
     //머리카락의 부모
-    public Transform trBaseHead;
-
+    public Transform m_TrBaseHead;
+    //머리
+    public SkinnedMeshRenderer m_Head;
     //상의
-    public SkinnedMeshRenderer top;
-    //상의 메터리얼
-    public Material[] matTops;
-
-    //바지
-    public SkinnedMeshRenderer pants;
-    //바지 메터리얼
-    public Material[] matPants;
-
+    public SkinnedMeshRenderer m_Top;
+    public Material[] m_MatTops;
+    //하의
+    public SkinnedMeshRenderer m_Bottom;
+    public Material[] m_MatBottom;
     //신발
-    public SkinnedMeshRenderer shoes;
-    //신발 메터리얼
-    public Material[] matShoes;
+    public SkinnedMeshRenderer m_Shoes;
+    public Material[] m_MatShoes;
+    //한벌옷
+    public SkinnedMeshRenderer m_Outfit;
+    public Material[] m_MatOutfit;
+
+    [Header("Female")]
+    //몸 구조
+    public GameObject[] f_BasicBody;
+    //머리카락의 부모
+    public Transform f_TrBaseHead;
+    //머리
+    public SkinnedMeshRenderer f_Head;
+    //상의
+    public SkinnedMeshRenderer f_Top;
+    public Material[] f_MatTops;
+    //하의
+    public SkinnedMeshRenderer f_Bottom;
+    public Material[] f_MatBottom;
+    //신발
+    public SkinnedMeshRenderer f_Shoes;
+    public Material[] f_MatShoes;
+    //한벌옷
+    public SkinnedMeshRenderer f_Outfit;
+    public Material[] f_MatOutfit;
 
     async void Start()
     {
@@ -40,40 +66,92 @@ public class J_CustomCharacter : MonoBehaviour
         {
             categoryData = data.datas[i];
 
+            FakeLoader.ItemGroup itemGroup = isMale ? fakeLoader.m_MaleItems : fakeLoader.m_FemaleItems;
             if (categoryData.category.Equals("body"))
             {
-
+                isMale = categoryData.itemIndex == 0;
+                body[0].SetActive(isMale);
+                body[1].SetActive(!isMale);
+                GetComponent<Animator>().avatar = isMale ? avatars[0] : avatars[1];
             }
-            else if (categoryData.category.Equals("head"))
+            else if (categoryData.category.Equals("head") && categoryData.itemIndex > 0)
             {
-
+                SkinnedMeshRenderer head = isMale ? m_Head : f_Head;
+                head.sharedMesh = itemGroup.m_Heads[categoryData.itemIndex - 1].meshes[0].sharedMesh;
+                //head.material = matHeads[categoryData.itemIndex - 1];
+                int catNum = 0;
+                for (int j = 0; j < head.materials.Length; j++)
+                {
+                    if (categoryData.materialDatas.Count == 0) break;
+                    if (head.materials[j].name.Contains(categoryData.materialDatas[catNum].name))
+                    {
+                        SetColor(head.materials[j], categoryData.materialDatas[catNum]);
+                        catNum++;
+                        if (catNum == categoryData.materialDatas.Count) break;
+                    }
+                }
+                SetBasicBody(itemGroup.m_Heads[categoryData.itemIndex - 1].bodyParts);
             }
             else if (categoryData.category.Equals("top") && categoryData.itemIndex > 0)
             {
-                top.sharedMesh = fakeLoader.m_MaleItems.m_Tops[categoryData.itemIndex - 1].meshes[0].sharedMesh;
-                top.material = matTops[categoryData.itemIndex - 1];
-                if (categoryData.materialDatas.Count > 0) SetColor(top.material, categoryData.materialDatas[0]);
-                SetBasicBody(fakeLoader.m_MaleItems.m_Tops[categoryData.itemIndex - 1].bodyParts);
+                SkinnedMeshRenderer top = isMale ? m_Top : f_Top;
+                top.sharedMesh = itemGroup.m_Tops[categoryData.itemIndex - 1].meshes[0].sharedMesh;
+                top.material = m_MatTops[categoryData.itemIndex - 1];
+                int catNum = 0;
+                for (int j = 0; j < top.materials.Length; j++)
+                {
+                    if (categoryData.materialDatas.Count == 0) break;
+                    if (top.materials[j].name.Contains(categoryData.materialDatas[catNum].name))
+                    {
+                        SetColor(top.materials[j], categoryData.materialDatas[catNum]);
+                        catNum++;
+                        if (catNum == categoryData.materialDatas.Count) break;
+                    }
+                }
+                SetBasicBody(itemGroup.m_Tops[categoryData.itemIndex - 1].bodyParts);
             }
             else if (categoryData.category.Equals("bottom") && categoryData.itemIndex > 0)
             {
-                pants.sharedMesh = fakeLoader.m_MaleItems.m_Bottoms[categoryData.itemIndex - 1].meshes[0].sharedMesh;
-                pants.material = matPants[categoryData.itemIndex - 1];
-                if (categoryData.materialDatas.Count > 0) SetColor(pants.material, categoryData.materialDatas[0]);
-                SetBasicBody(fakeLoader.m_MaleItems.m_Bottoms[categoryData.itemIndex - 1].bodyParts);
+                SkinnedMeshRenderer bottom = isMale ? m_Bottom : f_Bottom;
+                bottom.sharedMesh = itemGroup.m_Bottoms[categoryData.itemIndex - 1].meshes[0].sharedMesh;
+                bottom.material = m_MatBottom[categoryData.itemIndex - 1];
+                int catNum = 0;
+                for (int j = 0; j < bottom.materials.Length; j++)
+                {
+                    if (categoryData.materialDatas.Count == 0) break;
+                    if (bottom.materials[j].name.Contains(categoryData.materialDatas[catNum].name))
+                    {
+                        SetColor(bottom.materials[j], categoryData.materialDatas[catNum]);
+                        catNum++;
+                        if (catNum == categoryData.materialDatas.Count) break;
+                    }
+                }
+                SetBasicBody(itemGroup.m_Bottoms[categoryData.itemIndex - 1].bodyParts);
             }
             else if (categoryData.category.Equals("shoes") && categoryData.itemIndex > 0)
             {
-                shoes.sharedMesh = fakeLoader.m_MaleItems.m_Shoes[categoryData.itemIndex - 1].meshes[0].sharedMesh;
-                shoes.material = matShoes[categoryData.itemIndex - 1];
-                if (categoryData.materialDatas.Count > 0) SetColor(shoes.material, categoryData.materialDatas[0]);
-                SetBasicBody(fakeLoader.m_MaleItems.m_Shoes[categoryData.itemIndex - 1].bodyParts);
+                SkinnedMeshRenderer shoes = isMale ? m_Shoes : f_Shoes;
+                shoes.sharedMesh = itemGroup.m_Shoes[categoryData.itemIndex - 1].meshes[0].sharedMesh;
+                shoes.material = m_MatShoes[categoryData.itemIndex - 1];
+                int catNum = 0;
+                for (int j = 0; j < shoes.materials.Length; j++)
+                {
+                    if (categoryData.materialDatas.Count == 0) break;
+                    if (shoes.materials[j].name.Contains(categoryData.materialDatas[catNum].name))
+                    {
+                        SetColor(shoes.materials[j], categoryData.materialDatas[catNum]);
+                        catNum++;
+                        if (catNum == categoryData.materialDatas.Count) break;
+                    }
+                }
+                SetBasicBody(itemGroup.m_Shoes[categoryData.itemIndex - 1].bodyParts);
             }
             else if (categoryData.category.Equals("hairstyle") && categoryData.itemIndex > 0)
             {
-                for (int j = 0; j < fakeLoader.m_MaleItems.m_Hairstyles[categoryData.itemIndex - 1].objects.Length; j++)
+                Transform baseHead = isMale ? m_TrBaseHead : f_TrBaseHead;
+                for (int j = 0; j < itemGroup.m_Hairstyles[categoryData.itemIndex - 1].objects.Length; j++)
                 {
-                    GameObject hair = Instantiate(fakeLoader.m_MaleItems.m_Hairstyles[categoryData.itemIndex - 1].objects[j].prefab, trBaseHead);
+                    GameObject hair = Instantiate(itemGroup.m_Hairstyles[categoryData.itemIndex - 1].objects[j].prefab, baseHead);
 
                     Renderer[] mr = hair.transform.GetComponentsInChildren<Renderer>();
                     for (int k = 0; k < categoryData.materialDatas.Count; k++)
@@ -92,6 +170,24 @@ public class J_CustomCharacter : MonoBehaviour
                         }
                     }
                 }
+            }
+            else if (categoryData.category.Equals("outfit") && categoryData.itemIndex > 0)
+            {
+                SkinnedMeshRenderer outfit = isMale ? m_Outfit : f_Outfit;
+                outfit.sharedMesh = itemGroup.m_Outfits[categoryData.itemIndex - 1].meshes[0].sharedMesh;
+                outfit.material = m_MatOutfit[categoryData.itemIndex - 1];
+                int catNum = 0;
+                for (int j = 0; j < outfit.materials.Length; j++)
+                {
+                    if (categoryData.materialDatas.Count == 0) break;
+                    if (outfit.materials[j].name.Contains(categoryData.materialDatas[catNum].name))
+                    {
+                        SetColor(outfit.materials[j], categoryData.materialDatas[catNum]);
+                        catNum++;
+                        if (catNum == categoryData.materialDatas.Count) break;
+                    }
+                }
+                SetBasicBody(itemGroup.m_Outfits[categoryData.itemIndex - 1].bodyParts);
             }
         }
     }
@@ -122,7 +218,10 @@ public class J_CustomCharacter : MonoBehaviour
             else if (BodyPartType.Legs_Upper <= bodyPartTypes[i] && bodyPartTypes[i] <= BodyPartType.Legs_Feet)
                 bodyIdx -= 22;
 
-            basicBody[bodyIdx].SetActive(false);
+            if (isMale)
+                m_BasicBody[bodyIdx].SetActive(false);
+            else
+                f_BasicBody[bodyIdx].SetActive(false);
         }
 
     }
