@@ -1,14 +1,10 @@
-﻿using Rukha93.ModularAnimeCharacter.Customization;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 
 [System.Serializable]
 public class KHHColorlData
@@ -54,6 +50,8 @@ public static class KHHUserCustom
 {
     static KHHUserCustomData customData;
     static KHHCategoryData curCatData;
+
+    static bool isLoaded = false;
 
     public static void Init()
     {
@@ -130,13 +128,13 @@ public static class KHHUserCustom
     public static async void SaveData(Action action)
     {
         var json = JsonUtility.ToJson(customData);
-        //FileStream fileStream = null;
+        FileStream fileStream = null;
         try
         {
-            //fileStream = new FileStream(Application.persistentDataPath + "/customData.json", FileMode.Create);
+            fileStream = new FileStream(Application.persistentDataPath + "/customData.json", FileMode.Create);
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
             await PostJson(bytes);
-            //await fileStream.WriteAsync(bytes, 0, bytes.Length);
+            await fileStream.WriteAsync(bytes, 0, bytes.Length);
         }
         catch (Exception e)
         {
@@ -144,8 +142,8 @@ public static class KHHUserCustom
         }
         finally
         {
-            //if (fileStream != null)
-            //    fileStream.Close();
+            if (fileStream != null)
+                fileStream.Close();
             action?.Invoke();
         }
     }
@@ -179,15 +177,16 @@ public static class KHHUserCustom
 
     public static async Task<KHHUserCustomData> LoadData()
     {
+        if (isLoaded) return customData;
+
         string json = await GetJson();
 
-        //if (!System.IO.File.Exists(Application.persistentDataPath + "/customData.json"))
-        //    return null;
+        if (string.IsNullOrEmpty(json))
+            return customData;
 
-        //byte[] bytes = System.IO.File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
-
-        //var json = System.Text.Encoding.UTF8.GetString(bytes);
         JsonUtility.FromJsonOverwrite(json, customData);
+        isLoaded = true;
+
         return customData;
     }
 
@@ -195,26 +194,39 @@ public static class KHHUserCustom
     {
         using (HttpClient client = new HttpClient())
         {
-            using var response = await client.GetAsync("http://metaverse.ohgiraffers.com:8080/avatar");
-            //await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            try
+            {
+                using var response = await client.GetAsync("http://metaverse.ohgiraffers.com:8080/avatar");
+                //await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-            // 응답 처리
-            if (response.IsSuccessStatusCode)
-            {
-                string data = await response.Content.ReadAsStringAsync();
-                //Debug.Log(bytestr);
-                //byte[] bytes = string_to_hex_array(bytestr);
-                //string data = Convert.ToBase64String(bytes);
-                //Debug.Log(data);
-                return data;
+                // 응답 처리
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = await response.Content.ReadAsStringAsync();
+                    return data;
+                }
+                else
+                {
+                    Debug.Log($"Error: {response.StatusCode}");
+                    if (!File.Exists(Application.persistentDataPath + "/customData.json"))
+                        return string.Empty;
+
+                    byte[] bytes = File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
+                    var json = System.Text.Encoding.UTF8.GetString(bytes);
+                    return json;
+                }
             }
-            else
+            catch (Exception e)
             {
-                Debug.Log($"Error: {response.StatusCode}");
+                Debug.Log($"Error: {e}");
+                if (!File.Exists(Application.persistentDataPath + "/customData.json"))
+                    return string.Empty;
+
+                byte[] bytes = File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
+                var json = System.Text.Encoding.UTF8.GetString(bytes);
+                return json;
             }
         }
-
-        return string.Empty;
     }
 
     public static byte[] string_to_hex_array(string charstr)
