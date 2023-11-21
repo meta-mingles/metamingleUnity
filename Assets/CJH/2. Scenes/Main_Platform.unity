@@ -30555,6 +30555,8 @@ MonoBehaviour:
   enterTab: {fileID: 208592911}
   enterBt: {fileID: 1276156577}
   constDist: 3
+  nameText: {fileID: 0}
+  temp: 10
 --- !u!114 &1317192465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51310,6 +51312,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 856624243938484007, guid: 87cac455fabb0f54d966f6e4143064b8,
+        type: 3}
+      propertyPath: ModelObject
+      value: 
+      objectReference: {fileID: 856624245509322627}
     - target: {fileID: 8777128720534162675, guid: 87cac455fabb0f54d966f6e4143064b8,
         type: 3}
       propertyPath: sceneViewId
@@ -51317,6 +51324,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87cac455fabb0f54d966f6e4143064b8, type: 3}
+--- !u!1 &856624245509322627 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 127996652651268452, guid: 87cac455fabb0f54d966f6e4143064b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 856624245509322626}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1326067515278512668
 Transform:
   m_ObjectHideFlags: 0

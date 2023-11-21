@@ -42,10 +42,8 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) testUrl = "http://192.168.0.20:8080";  //로그인 임시 url
         if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
         url += u;
-        testUrl += u;
         onReceive = callback;
     }
 }
