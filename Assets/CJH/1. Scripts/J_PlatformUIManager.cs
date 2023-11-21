@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System;
+using Newtonsoft.Json.Linq;
+using UnityEngine.Networking;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -14,9 +16,14 @@ public class J_PlatformUIManager : MonoBehaviour
         Instance = this;
 
         //사운드 키기
-        //SoundManager.instance.BGMVolume = -5;
-        //SoundManager.instance.PlayBGM("PlatformBGM");
+        SoundManager.instance.BGMVolume = -5;
+        SoundManager.instance.PlayBGM("PlatformBGM");
     }
+
+    [Header("Quiz")]
+    public TMP_Text questionKorean; //한국질문
+    public TMP_Text questionEnglish;//영어질문
+
 
     [Header("Platform")]
 
@@ -45,12 +52,42 @@ public class J_PlatformUIManager : MonoBehaviour
     public GameObject nameText;
     [SerializeField] public float temp = 1.8f;
 
+    private void Start()
+    {
+        GetQuiz();
+    }
+
     private void Update()
     {
         UpdateNickNamePosition();
-        //로그인씬에서 받았던 닉네임의 값을 불러와야한다.
         SetNickNameText();
         EnterUI();
+    }
+    
+    //퀴즈 통신
+    public void GetQuiz()
+    {
+        //퀴즈 겟
+        HttpInfo info = new HttpInfo();
+        info.Set(RequestType.GET, "/quiz-rank", (DownloadHandler downloadHandler) =>
+        {
+            //Get 데이터 전송했을 때 서버로부터 응답온다
+            Debug.Log("quiz : " + downloadHandler.text);
+
+            JObject jObject = JObject.Parse(downloadHandler.text);
+            JObject data = jObject["data"].ToObject<JObject>();
+            HttpManager.instance.rankNo = data["rankNo"].ToObject<int>();
+            HttpManager.instance.english = data["english"].ToObject<string>();
+            HttpManager.instance.korean = data["korean"].ToObject<string>();
+            HttpManager.instance.shortFormNo = data["shortFormNo"].ToObject<int>();
+        });
+
+        JObject jObject = new JObject();
+        jObject["english"] = questionEnglish.text;
+        jObject["korean"] = questionKorean.text;
+
+        info.body = jObject.ToString();
+        HttpManager.instance.SendRequest(info);
     }
 
 
@@ -76,8 +113,6 @@ public class J_PlatformUIManager : MonoBehaviour
             settingTab.SetActive(false);
         Debug.Log("Tab닫힘");
     }
-
-
     //플레이어가 전광판의 일정거리안에 들어가면 EnterUI가 생성된다.
     public void EnterUI()
     {
@@ -99,7 +134,7 @@ public class J_PlatformUIManager : MonoBehaviour
         }
     }
 
-    //플레이어 머리 위에 플레이어의 닉네임 텍스트가 생성된다
+    //로그인씬의 저장된 닉네임 플레이어 위에 생성
     public void SetNickNameText()
     {
         nameText.GetComponentInChildren<TMP_Text>().text = HttpManager.instance.nickname;
@@ -115,10 +150,6 @@ public class J_PlatformUIManager : MonoBehaviour
         //카메라의 Y 축 회전값을 사용하여 텍스트의 회전 업데이트
         Vector3 cameraRotation = Camera.main.transform.eulerAngles;
         nameText.transform.eulerAngles = new Vector3(0,cameraRotation.y, 0);
-
-
-        ////카메라를 향하도록 회전 업데이트
-        //nameText.transform.LookAt(Camera.main.transform);
     }
 
 #if UNITY_EDITOR
