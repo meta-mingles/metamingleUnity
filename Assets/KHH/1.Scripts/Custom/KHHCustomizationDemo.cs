@@ -64,7 +64,6 @@ public class KHHCustomizationDemo : MonoBehaviour
             m_UI.SetCategoryValue(i, "");
 
         //load data
-        KHHUserCustom.Init();
         KHHUserCustomData data = await KHHUserCustom.LoadData();
         StartCoroutine(InitLoadCustom(data));
     }

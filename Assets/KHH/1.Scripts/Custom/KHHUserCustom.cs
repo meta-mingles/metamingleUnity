@@ -53,7 +53,7 @@ public static class KHHUserCustom
 
     static bool isLoaded = false;
 
-    public static void Init()
+    static void Init()
     {
         customData = new KHHUserCustomData();
         customData.datas = new List<KHHCategoryData>();
@@ -179,6 +179,7 @@ public static class KHHUserCustom
     {
         if (isLoaded) return customData;
 
+        Init();
         string json = await GetJson();
 
         if (string.IsNullOrEmpty(json))

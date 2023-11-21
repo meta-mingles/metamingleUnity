@@ -36,7 +36,6 @@ public class KHHCustomCharacter : MonoBehaviour
     async void Start()
     {
         //load data
-        KHHUserCustom.Init();
         KHHUserCustomData data = await KHHUserCustom.LoadData();
         StartCoroutine(InitLoadCustom(data));
     }

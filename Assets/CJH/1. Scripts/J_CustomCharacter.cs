@@ -33,7 +33,6 @@ public class J_CustomCharacter : MonoBehaviour
         fakeLoader = GetComponent<FakeLoader>();
 
         //load data
-        KHHUserCustom.Init();
         KHHUserCustomData data = await KHHUserCustom.LoadData();
 
         KHHCategoryData categoryData;
@@ -41,7 +40,15 @@ public class J_CustomCharacter : MonoBehaviour
         {
             categoryData = data.datas[i];
 
-            if (categoryData.category.Equals("top") && categoryData.itemIndex > 0)
+            if (categoryData.category.Equals("body"))
+            {
+
+            }
+            else if (categoryData.category.Equals("head"))
+            {
+
+            }
+            else if (categoryData.category.Equals("top") && categoryData.itemIndex > 0)
             {
                 top.sharedMesh = fakeLoader.m_MaleItems.m_Tops[categoryData.itemIndex - 1].meshes[0].sharedMesh;
                 top.material = matTops[categoryData.itemIndex - 1];
