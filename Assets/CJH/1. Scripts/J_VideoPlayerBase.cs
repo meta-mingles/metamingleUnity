@@ -22,14 +22,21 @@ public class J_VideoPlayerBase : MonoBehaviour
     public TMP_Text currentTimeText;
     public TMP_Text totalTimeText;
 
+    private void Start()
+    {
+        KHHCanvasShield.Instance.Show();
+    }
     private void Update()
     {
-        if(videoPlayer.isPlaying)
+
+        if (videoPlayer.isPlaying)
         {
+            //비디오 준비 완료되면 로딩UI 비활성화
             UpdateTimeText();
             UpdateProgressSlider();
         }
     }
+
     //현재 시간 텍스트 
     private void UpdateTimeText()
     {
@@ -42,13 +49,15 @@ public class J_VideoPlayerBase : MonoBehaviour
         {
             float progress = (float)videoPlayer.frame / (float)videoPlayer.frameCount;
             progressSlider.value = progress;
-            //progressSlider.GetComponentInChildren<Image>().color = Color.red;
-
         }
     }
-
     public virtual void SetItem(ShortVideoInfo Info)
     {
+
+        RenderTexture rt = new RenderTexture(1920, 1080, 24);
+        videoPlayer.targetTexture = rt;
+        videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
+
         videoInfo = Info;
 
         // 영상 다운로드
@@ -57,19 +66,23 @@ public class J_VideoPlayerBase : MonoBehaviour
         httpInfo.Set(RequestType.GET, videoInfo.url, (downloadHandler) =>
         {
             byte[] videoBytes = downloadHandler.data;
-            RenderTexture rt = new RenderTexture(1920, 1080, 24);
-
-            videoPlayer.targetTexture = rt;
-            videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
             videoPlayer.url = videoInfo.url;
             videoPlayer.prepareCompleted += OnVideoPrepared; //비디오 준비 완료 이벤트
             videoPlayer.Play();
             videoPlayer.loopPointReached += MakeInteractiveUI;
             videoPlayer.loopPointReached += MakeRestartUI;
+
+            //비디오 준비 완료되면 로딩UI 비활성화
+            KHHCanvasShield.Instance.Close();
+            UpdateTimeText();
+            UpdateProgressSlider();
+
         }, false);
 
         HttpManager.instance.SendRequest(httpInfo);
     }
+
+
     //비디오 준비
     private void OnVideoPrepared(VideoPlayer source)
     {

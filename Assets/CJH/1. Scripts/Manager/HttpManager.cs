@@ -53,9 +53,16 @@ public class HttpManager : MonoBehaviour
 {
     public static HttpManager instance;
 
+    //로그인,회원가입
     public string email= "";
     public string password = "";
     public string nickname = "";
+
+    //퀴즈
+    public int rankNo;
+    public string english = "";
+    public string korean = "";
+    public int shortFormNo;
 
     public string token = "";
     private void Awake()
