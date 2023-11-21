@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
@@ -18,6 +19,7 @@ public class J_LoginUIManager : MonoBehaviour
     private bool canContinue = false;
     EventSystem system;
 
+    private bool isRemember = false;
     [SerializeField] private Transform panelTransform;
 
     [Header("Title")]
@@ -33,7 +35,7 @@ public class J_LoginUIManager : MonoBehaviour
     public Button loginBt; //로그인 버튼
     public TMP_InputField inputId; //로그인 아이디 입력
     public TMP_InputField inputPW; //로그인 패스워드 입력
-    public Selectable firstInput;
+    public Toggle rememberMeToggle; // 로그인 정보 저장
 
     [Header("Popup_ SignUp")]
     public GameObject PopUp_signUp; //회원가입 창
@@ -50,9 +52,6 @@ public class J_LoginUIManager : MonoBehaviour
     public Button prev_SignUp;
     public Button close_Bt4; //닫기 버튼
     public TMP_Text signUpMessage; //회원가입 상태
-
-    Action onChange;
-    //string customizationSceneName = "Customization";
     // Start is called before the first frame update
     void Start()
     {
@@ -81,6 +80,41 @@ public class J_LoginUIManager : MonoBehaviour
 
         Login_Bt();
         SigUp_Bt();
+
+
+        //설정은 언제하냐 toggle bool 값이 체크 될때
+
+        ////설정
+        //PlayerPrefs.SetString("email", inputId2.text);
+        //PlayerPrefs.SetString("pw", inputPW2.text);
+        ////접근
+        //PlayerPrefs.GetString("email");
+        //PlayerPrefs.GetString("pw");
+
+
+
+
+        isRemember = PlayerPrefs.GetInt("IsRemember", 0) == 1;
+        rememberMeToggle.isOn = isRemember;
+
+        rememberMeToggle.onValueChanged.AddListener(OnToggleValueChanged);
+
+
+
+        //ison일때 playerprefs의 데이터 값을 가져온다
+        if (rememberMeToggle.isOn)
+        {
+            //로드
+           inputId.text = PlayerPrefs.GetString("email");
+           inputPW.text = PlayerPrefs.GetString("pw");
+        }
+        else
+        {
+            inputId.text = "";
+            inputPW.text = "";
+        }
+
+
         //사운드매니저로 브금 실행
         if (!SceneManager.GetActiveScene().name.Contains("Tool"))
             SoundManager.instance.PlayBGM("Bgm");
@@ -91,6 +125,9 @@ public class J_LoginUIManager : MonoBehaviour
     {
         ChangeInput();
     }
+
+
+
 
     public void IntroductionText()
     {
@@ -157,6 +194,10 @@ public class J_LoginUIManager : MonoBehaviour
         HttpInfo info = new HttpInfo();
         info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) =>
         {
+
+            PlayerPrefs.SetString("email", inputId.text);
+            PlayerPrefs.SetString("pw", inputPW.text);
+
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Login : " + downloadHandler.text);
             //Netownjson
@@ -170,6 +211,8 @@ public class J_LoginUIManager : MonoBehaviour
             {
                 prevSceneName = SceneManager.GetActiveScene().name;
                 nextSceneName = "ToolSelect";
+
+                
 
                 //씬이동
                 GlobalValue.PrevSceneName = prevSceneName;
@@ -186,6 +229,8 @@ public class J_LoginUIManager : MonoBehaviour
             //여기서 씬이동
             print("씬이동");
         });
+
+
 
         JObject jObject = new JObject();
         jObject["email"] = inputId.text;
@@ -278,6 +323,21 @@ public class J_LoginUIManager : MonoBehaviour
             Debug.Log("Button pressed!");
         }
     }
+    public void OnToggleValueChanged(bool value)
+    {
+        //toggle버튼 isOn일 때 
+        if (value)
+        {
+            PlayerPrefs.SetInt("IsRemember",1);
+            //설정
+        }
+        else
+        {
+            PlayerPrefs.SetInt("IsRemember",0);
 
+        }
+
+
+    }
 
 }

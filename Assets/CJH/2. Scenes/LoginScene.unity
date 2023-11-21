@@ -8176,7 +8176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1353440688
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9863,6 +9863,10 @@ MonoBehaviour:
   email: 
   password: 
   nickname: 
+  rankNo: 0
+  english: 
+  korean: 
+  shortFormNo: 0
   token: 
 --- !u!1 &1721820698
 GameObject:
@@ -11876,7 +11880,7 @@ MonoBehaviour:
   loginBt: {fileID: 756601090}
   inputId: {fileID: 65331017}
   inputPW: {fileID: 78928933}
-  firstInput: {fileID: 0}
+  rememberMeToggle: {fileID: 953221443}
   PopUp_signUp: {fileID: 1330878747}
   prev_LoginBt: {fileID: 970929105}
   signUpBt: {fileID: 375913929}
