@@ -155,7 +155,7 @@ public class J_LoginUIManager : MonoBehaviour
     public void LoginPost()
     {
         HttpInfo info = new HttpInfo();
-        info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) =>
+        info.Set(RequestType.POST, "/member/login", async (DownloadHandler downloadHandler) =>
         {
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Login : " + downloadHandler.text);
@@ -178,8 +178,17 @@ public class J_LoginUIManager : MonoBehaviour
             }
             else //platform
             {
-                prevSceneName = "Main_Platform";    //커스텀 존재 유무 확인 필요
-                nextSceneName = "Customization";    //커스텀 존재 유무 확인 필요
+                await KHHUserCustom.LoadData();
+                if (KHHUserCustom.HasData)
+                {
+                    prevSceneName = SceneManager.GetActiveScene().name;
+                    nextSceneName = "Main_Platform";
+                }
+                else
+                {
+                    prevSceneName = "Main_Platform";    //커스텀 존재 유무 확인 필요
+                    nextSceneName = "Customization";    //커스텀 존재 유무 확인 필요
+                }
                 KHHPhotonInit.instance.Init(prevSceneName, nextSceneName, HttpManager.instance.nickname);
             }
 

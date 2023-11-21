@@ -52,6 +52,7 @@ public static class KHHUserCustom
     static KHHCategoryData curCatData;
 
     static bool isLoaded = false;
+    public static bool HasData { get; set; } 
 
     static void Init()
     {
@@ -142,6 +143,7 @@ public static class KHHUserCustom
         }
         finally
         {
+            HasData = true;
             if (fileStream != null)
                 fileStream.Close();
             action?.Invoke();
@@ -183,10 +185,14 @@ public static class KHHUserCustom
         string json = await GetJson();
 
         if (string.IsNullOrEmpty(json))
+        {
+            HasData = false;
             return customData;
+        }
 
         JsonUtility.FromJsonOverwrite(json, customData);
         isLoaded = true;
+        HasData = true;
 
         return customData;
     }

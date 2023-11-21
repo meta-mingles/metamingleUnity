@@ -1,14 +1,16 @@
-﻿using Rukha93.ModularAnimeCharacter.Customization;
+﻿using Photon.Pun;
+using Rukha93.ModularAnimeCharacter.Customization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class J_CustomCharacter : MonoBehaviour
+public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
 {
-    //
+    KHHUserCustomData data;
+    string dataStr;
+
     FakeLoader fakeLoader;
     bool isMale = true;
-
     public Avatar[] avatars;
 
     //기본 몸
@@ -56,11 +58,19 @@ public class J_CustomCharacter : MonoBehaviour
 
     async void Start()
     {
+
+        dataStr = "";
+        if (photonView.IsMine)
+        {
+            data = await KHHUserCustom.LoadData();
+            SetAvatar();
+            dataStr = JsonUtility.ToJson(data);
+        }
+    }
+
+    void SetAvatar()
+    {
         fakeLoader = GetComponent<FakeLoader>();
-
-        //load data
-        KHHUserCustomData data = await KHHUserCustom.LoadData();
-
         KHHCategoryData categoryData;
         for (int i = 0; i < data.datas.Count; i++)
         {
@@ -190,6 +200,7 @@ public class J_CustomCharacter : MonoBehaviour
                 SetBasicBody(itemGroup.m_Outfits[categoryData.itemIndex - 1].bodyParts);
             }
         }
+
     }
 
     void SetColor(Material mat, KHHMaterialData matData)
@@ -226,8 +237,17 @@ public class J_CustomCharacter : MonoBehaviour
 
     }
 
-    void Update()
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-
+        if (stream.IsWriting)
+        {
+            stream.SendNext(dataStr);
+        }
+        else
+        {
+            dataStr = (string)stream.ReceiveNext();
+            data = JsonUtility.FromJson<KHHUserCustomData>(dataStr);
+            SetAvatar();
+        }
     }
 }
