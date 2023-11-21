@@ -163,6 +163,7 @@ public class J_LoginUIManager : MonoBehaviour
             JObject jObject = JObject.Parse(downloadHandler.text);
             JObject data = jObject["data"].ToObject<JObject>();
             HttpManager.instance.token = data["token"].ToObject<string>();
+            HttpManager.instance.nickname = data["nickname"].ToObject<string>();
 
             string prevSceneName, nextSceneName;
             if (SceneManager.GetActiveScene().name.Contains("Tool")) //tool

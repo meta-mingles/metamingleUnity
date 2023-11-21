@@ -167,6 +167,7 @@ public class HttpManager : MonoBehaviour
         }
         else
         {
+            //로그인 안될때
             print("네트워크 에러 : " + req.error);
         }
     }

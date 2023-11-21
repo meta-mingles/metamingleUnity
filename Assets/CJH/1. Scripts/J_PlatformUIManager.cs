@@ -34,7 +34,6 @@ public class J_PlatformUIManager : MonoBehaviour
     string customizationSceneName = "Customization";
 
     [Header("Enter")]
-    public GameObject player; //플레이어
     public GameObject billboard; //전광판
     public GameObject enterTab; // 입장 UI
     public Button enterBt;//입장 버튼
@@ -83,7 +82,7 @@ public class J_PlatformUIManager : MonoBehaviour
     public void EnterUI()
     {
         //플레이어와 전광판간의 거리를 잰다
-        Distance = Vector3.Distance(billboard.transform.position,player.transform.position);
+        Distance = Vector3.Distance(billboard.transform.position, KHHPhotonManager.Instance.player.transform.position);
 
         //일정거리 안에 들어가면
         if(Distance  < constDist)
@@ -104,7 +103,7 @@ public class J_PlatformUIManager : MonoBehaviour
     public void SetNickNameText()
     {
         nameText.GetComponentInChildren<TMP_Text>().text = HttpManager.instance.nickname;
-
+        
         //위치
         UpdateNickNamePosition();
     }
@@ -112,7 +111,7 @@ public class J_PlatformUIManager : MonoBehaviour
     private void UpdateNickNamePosition()
     {
         //위치 업데이트
-        nameText.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + temp, player.transform.position.z);
+        nameText.transform.position = new Vector3(KHHPhotonManager.Instance.player.transform.position.x, KHHPhotonManager.Instance.player.transform.position.y + temp, KHHPhotonManager.Instance.player.transform.position.z);
         //카메라의 Y 축 회전값을 사용하여 텍스트의 회전 업데이트
         Vector3 cameraRotation = Camera.main.transform.eulerAngles;
         nameText.transform.eulerAngles = new Vector3(0,cameraRotation.y, 0);
