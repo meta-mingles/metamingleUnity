@@ -16,6 +16,7 @@ public class J_LoginUIManager : MonoBehaviour
     private int page = 0;
     private bool isReady = false;
     private bool canContinue = false;
+    private bool isRemember = false;
     EventSystem system;
 
     [Header("Title")]
@@ -36,7 +37,7 @@ public class J_LoginUIManager : MonoBehaviour
     public Button loginBt; //로그인 버튼
     public TMP_InputField inputId; //로그인 아이디 입력
     public TMP_InputField inputPW; //로그인 패스워드 입력
-    //public Selectable firstInput;
+    public Toggle rememberMeToggle; // 로그인 정보 저장
 
     [Header("Popup_ SignUp")]
     public GameObject PopUp_signUp; //회원가입 창
@@ -82,6 +83,23 @@ public class J_LoginUIManager : MonoBehaviour
         CheckControl();
         system = EventSystem.current;
 
+        isRemember = PlayerPrefs.GetInt("IsRemember", 0) == 1;
+        rememberMeToggle.isOn = isRemember;
+        rememberMeToggle.onValueChanged.AddListener(OnToggleValueChanged);
+
+        //ison일때 playerprefs의 데이터 값을 가져온다
+        if (rememberMeToggle.isOn)
+        {
+            //로드
+            inputId.text = PlayerPrefs.GetString("email");
+            inputPW.text = PlayerPrefs.GetString("pw");
+        }
+        else
+        {
+            inputId.text = "";
+            inputPW.text = "";
+        }
+
         Login_Bt();
         SigUp_Bt();
         //사운드매니저로 브금 실행
@@ -109,13 +127,6 @@ public class J_LoginUIManager : MonoBehaviour
         popupCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => popupCG.blocksRaycasts = true);
     }
 
-    //public void IntroductionText()
-    //{
-    //    string IntroText = "메타 밍글은 숏폼, 인터랙티브 무비를 통한 문화 교류 커뮤니티 메타버스 플랫폼입니다.";
-
-    //    introductionText.GetComponent<TMP_Text>().text = IntroText;
-    //    IntroText = introductionText.text;
-    //}
     //이전으로 이동하는 버튼
     public void Click_Prev()
     {
@@ -168,12 +179,16 @@ public class J_LoginUIManager : MonoBehaviour
         if (move_SignUpBt != null) move_SignUpBt.gameObject.SetActive(page < popups.Count - 1);
         if (signUpBt != null) signUpBt.gameObject.SetActive(page < popups.Count - 1);
     }
+
     //현재 로그인 포스트 통신 함수 
     public void LoginPost()
     {
         HttpInfo info = new HttpInfo();
         info.Set(RequestType.POST, "/member/login", async (DownloadHandler downloadHandler) =>
         {
+            PlayerPrefs.SetString("email", inputId.text);
+            PlayerPrefs.SetString("pw", inputPW.text);
+
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Login : " + downloadHandler.text);
             //Netownjson
@@ -305,5 +320,17 @@ public class J_LoginUIManager : MonoBehaviour
         }
     }
 
-
+    public void OnToggleValueChanged(bool value)
+    {
+        //toggle버튼 isOn일 때 
+        if (value)
+        {
+            PlayerPrefs.SetInt("IsRemember", 1);
+            //설정
+        }
+        else
+        {
+            PlayerPrefs.SetInt("IsRemember", 0);
+        }
+    }
 }

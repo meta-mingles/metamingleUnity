@@ -8118,6 +8118,7 @@ MonoBehaviour:
   loginBt: {fileID: 756601090}
   inputId: {fileID: 65331017}
   inputPW: {fileID: 78928933}
+  rememberMeToggle: {fileID: 953221443}
   PopUp_signUp: {fileID: 1330878747}
   signUpBt: {fileID: 375913929}
   prev_LoginBt: {fileID: 866905976}
