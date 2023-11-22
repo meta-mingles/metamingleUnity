@@ -113,7 +113,7 @@ public class J_PlatformUIManager : MonoBehaviour
         {
             enterTab.SetActive(false);
         }
-        if(enterBt != null && Input.GetKeyDown(KeyCode.E))
+        if(enterBt != null && Input.GetKeyDown(KeyCode.F))
         {
             SceneManager.LoadScene("VideoScene");
         }

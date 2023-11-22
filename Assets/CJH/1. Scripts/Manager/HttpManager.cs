@@ -141,7 +141,7 @@ public class HttpManager : MonoBehaviour
 
             if (token.Length > 0)
             {
-                req.SetRequestHeader("Authorization", token);
+                req.SetRequestHeader("Authentication", token);
             }
 
             yield return req.SendWebRequest();

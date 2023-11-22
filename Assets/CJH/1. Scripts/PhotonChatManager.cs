@@ -1,4 +1,4 @@
-using ExitGames.Client.Photon;
+ï»¿using ExitGames.Client.Photon;
 using Photon.Chat;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
@@ -17,31 +17,31 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     public GameObject chatItemFactory;
     public RectTransform trContent;
     public RectTransform rtScrollView;
-    float prevContentH;//Ã¤ÆÃÀÌ Ãß°¡µÇ±â ÀüÀÇ ContentÀÇ H °ªÀ» °¡Áö°í ÀÖ´Â º¯¼ö
+    float prevContentH;//ì±„íŒ…ì´ ì¶”ê°€ë˜ê¸° ì „ì˜ Contentì˜ H ê°’ì„ ê°€ì§€ê³  ìˆëŠ” ë³€ìˆ˜
 
 
     //photon Chat Setting
     ChatAppSettings chatAppSettings;
 
-    //Ã¤ÆÃ ÃÑ°ıÇÏ´Â °´Ã¼ 
+    //ì±„íŒ… ì´ê´„í•˜ëŠ” ê°ì²´ 
     ChatClient chatClient;
 
-    //±âº» Ã¤ÆÃ Ã¤³Î ¸ñ·Ï
+    //ê¸°ë³¸ ì±„íŒ… ì±„ë„ ëª©ë¡
     public List<string> channelNames = new List<string>();
 
-    //ÇöÀç ¼±ÅÃµÈ Ã¤³Î
+    //í˜„ì¬ ì„ íƒëœ ì±„ë„
     int currChannelIdx = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        //ÅØ½ºÆ®¸¦ ÀÛ¼ºÇÏ°í ¿£ÅÍ¸¦ ÃÆÀ» ¶§ È£ÃâµÇ´Â ÇÔ¼ö µî·Ï(onSubmit.AddListener)
+        //í…ìŠ¤íŠ¸ë¥¼ ì‘ì„±í•˜ê³  ì—”í„°ë¥¼ ì³¤ì„ ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜ ë“±ë¡(onSubmit.AddListener)
         inputChat.onSubmit.AddListener(OnSubmit);
 
-        //PhotonChat ÃÊ±â¼³Á¤
+        //PhotonChat ì´ˆê¸°ì„¤ì •
         PhotonChatSetting();
 
-        //Á¢¼Ó½Ãµµ
+        //ì ‘ì†ì‹œë„
         Connect();
     }
 
@@ -55,69 +55,69 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     }
     void OnSubmit(string text)
     {
-        //»õ·Î¿î Ã¤ÆÃÀÌ Ãß°¡µÇ±â ÀüÀÇ contentÀÇ H°ªÀ» ÀúÀå
+        //ìƒˆë¡œìš´ ì±„íŒ…ì´ ì¶”ê°€ë˜ê¸° ì „ì˜ contentì˜ Hê°’ì„ ì €ì¥
         prevContentH = trContent.sizeDelta.y;
 
 
 
-        //±Ó¼Ó¸»ÀÎÁö ÆÇ´Ü
-        // /w ¾ÆÀÌµğ ¸Ş½ÃÁö = > ¸Ş½ÃÁö¿¡ ¶ç¾î¾²±â¸¦ ±âÁØÀ¸·Î string ¹è¿­·Î ÆÇ´Ü
+        //ê·“ì†ë§ì¸ì§€ íŒë‹¨
+        // /w ì•„ì´ë”” ë©”ì‹œì§€ = > ë©”ì‹œì§€ì— ë„ì–´ì“°ê¸°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ string ë°°ì—´ë¡œ íŒë‹¨
         string[] s = text.Split(" ", 3);
-        //ÀÏ¹İ Ã¤ÆÃ
+        //ì¼ë°˜ ì±„íŒ…
         if (s[0] == "/w")
         {
-            //±Ó¼Ó¸»À» º¸³»ÀÚ
+            //ê·“ì†ë§ì„ ë³´ë‚´ì
             if (s[1].Length > 0 && s[2].Length > 0)
             {
                 chatClient.SendPrivateMessage(s[1], s[2]);
             }
         }
-        else //±Ó¼Ó¸»
+        else //ê·“ì†ë§
         {
-            //Ã¤ÆÃÀ» º¸³»ÀÚ
+            //ì±„íŒ…ì„ ë³´ë‚´ì
             chatClient.PublishMessage(channelNames[currChannelIdx], text);
         }
 
-        //inputChat ³»¿ë ÃÊ±âÈ­
+        //inputChat ë‚´ìš© ì´ˆê¸°í™”
         inputChat.text = "";
-        //inputChat °­Á¦·Î ¼±ÅÃµÇ°Ô ÇÔ
+        //inputChat ê°•ì œë¡œ ì„ íƒë˜ê²Œ í•¨
         inputChat.ActivateInputField();
 
-        //RpcÇÔ¼ö·Î ¸ğµç»ç¶÷ÇÑÅ× Ã¤ÆÃ ³»¿ë Àü´Ş
+        //Rpcí•¨ìˆ˜ë¡œ ëª¨ë“ ì‚¬ëŒí•œí…Œ ì±„íŒ… ë‚´ìš© ì „ë‹¬
         photonView.RPC(nameof(AddChatRpc), RpcTarget.All, text);
 
-        //ÀÚµ¿½ºÅ©·Ñ
+        //ìë™ìŠ¤í¬ë¡¤
         StartCoroutine(AutoScrollBottom());
     }
     [PunRPC]
     void AddChatRpc(string chat)
     {
-       //Ã¤ÆÃ ³»¿ë Ãß°¡
+       //ì±„íŒ… ë‚´ìš© ì¶”ê°€
     }
 
-    //ÀÚµ¿ ½ºÅ©·Ñ ´Ù¿î
+    //ìë™ ìŠ¤í¬ë¡¤ ë‹¤ìš´
     IEnumerator AutoScrollBottom()
     {
         yield return 0;
-        //½ºÅ©·ÑºäÀÇ Hº¸´Ù contentÀÇ H°ªÀÌ Å©´Ù¸é
+        //ìŠ¤í¬ë¡¤ë·°ì˜ Hë³´ë‹¤ contentì˜ Hê°’ì´ í¬ë‹¤ë©´
         if(rtScrollView.sizeDelta.y < trContent.sizeDelta.y)
         {
-            //ÀÌÀü¿¡ ¹Ù´Ú¿¡ ´ê¾ÆÀÖ¾ú´Ù¸é
+            //ì´ì „ì— ë°”ë‹¥ì— ë‹¿ì•„ìˆì—ˆë‹¤ë©´
             if(prevContentH - rtScrollView.sizeDelta.y <= trContent.anchoredPosition.y)
             {
-                //contentÀÇ y°ª Àç¼³Á¤
+                //contentì˜ yê°’ ì¬ì„¤ì •
                 trContent.anchoredPosition = new Vector2(0, trContent.sizeDelta.y - rtScrollView.sizeDelta.y);
 
             }
         }
     }
-    //½ºÅ¸µå ¶§ È£ÃâµÈ Æ÷ÅæÃª ¼³Á¤
+    //ìŠ¤íƒ€ë“œ ë•Œ í˜¸ì¶œëœ í¬í†¤ì±— ì„¤ì •
     void PhotonChatSetting()
     {
-        //Æ÷Åæ ¼³Á¤À» °¡Á®¿Í¼­ ChatAppSettings¿¡ ¼³Á¤ÇÏÀÚ
+        //í¬í†¤ ì„¤ì •ì„ ê°€ì ¸ì™€ì„œ ChatAppSettingsì— ì„¤ì •í•˜ì
         AppSettings photonSettings = PhotonNetwork.PhotonServerSettings.AppSettings;
 
-        //À§ ¼³Á¤À» °¡Áö°í ChatAppSettings ¼ÂÆÃ
+        //ìœ„ ì„¤ì •ì„ ê°€ì§€ê³  ChatAppSettings ì…‹íŒ…
         chatAppSettings = new ChatAppSettings();
         chatAppSettings.AppIdChat = photonSettings.AppIdChat;
         chatAppSettings.AppVersion = photonSettings.AppVersion;
@@ -130,25 +130,25 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
         chatAppSettings.ProxyServer = photonSettings.ProxyServer;
 
     }
-    //PhotonChat¿¡ Á¢¼ÓÇÏ´Â ÇÔ¼ö
+    //PhotonChatì— ì ‘ì†í•˜ëŠ” í•¨ìˆ˜
     void Connect()
     {
         chatClient = new ChatClient(this);
-        //Ã¤ÆÃÇÒ ¶§ NickName ¼³Á¤
-        chatClient.AuthValues = new Photon.Chat.AuthenticationValues("¹Ö±ÛÀÌ"); //ÃßÈÄ¿¡ È¸¿ø°¡ÀÔ¿¡¼­ ´Ğ³×ÀÓÀ» ¼­¹ö¿¡¼­ ºÒ·¯¿Í¾ßÇÔ 
+        //ì±„íŒ…í•  ë•Œ NickName ì„¤ì •
+        chatClient.AuthValues = new Photon.Chat.AuthenticationValues(HttpManager.instance.nickname); //ì¶”í›„ì— íšŒì›ê°€ì…ì—ì„œ ë‹‰ë„¤ì„ì„ ì„œë²„ì—ì„œ ë¶ˆëŸ¬ì™€ì•¼í•¨ 
 
-        //ÃÊ±â¼³Á¤À» ÀÌ¿ëÇØ¼­ Ã¤ÆÃ¼­¹ö¿¡ ¿¬°á ½Ãµµ
+        //ì´ˆê¸°ì„¤ì •ì„ ì´ìš©í•´ì„œ ì±„íŒ…ì„œë²„ì— ì—°ê²° ì‹œë„
         chatClient.ConnectUsingSettings(chatAppSettings);
     }
 
-    //Ãª »ı¼º ÇÔ¼ö
+    //ì±— ìƒì„± í•¨ìˆ˜
     void CreateChat(string sender, string message, Color color)
     {
-        //chatItem »ı¼ºÇÔ( scrollView -> contentÀÇ ÀÚ½ÄÀ¸·Î µî·Ï)
+        //chatItem ìƒì„±í•¨( scrollView -> contentì˜ ìì‹ìœ¼ë¡œ ë“±ë¡)
         GameObject go = Instantiate(chatItemFactory, trContent);
-        //»ı¼ºµÈ °ÔÀÓ¿ÀºêÁ§Æ®¿¡¼­ ChatItem ÄÄÆ÷³ÍÆ® °¡Á®¿Â´Ù
+        //ìƒì„±ëœ ê²Œì„ì˜¤ë¸Œì íŠ¸ì—ì„œ ChatItem ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¨ë‹¤
         PhotonChatItem item = go.GetComponent<PhotonChatItem>();
-        //°¡Á®¿Â ÄÄÆ÷³ÍÆ®¿¡¼­ SetText ÇÔ¼ö ½ÇÇà
+        //ê°€ì ¸ì˜¨ ì»´í¬ë„ŒíŠ¸ì—ì„œ SetText í•¨ìˆ˜ ì‹¤í–‰
         item.SetText(sender + " : " + message, color);
     }
 
@@ -156,21 +156,21 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     {
 
     }
-    //Á¢¼ÓÀÌ ²÷°åÀ» ¶§
+    //ì ‘ì†ì´ ëŠê²¼ì„ ë•Œ
     public void OnDisconnected()
     {
 
     }
-    //Á¢¼Ó ¼º°øÇßÀ» ¶§
+    //ì ‘ì† ì„±ê³µí–ˆì„ ë•Œ
     public void OnConnected()
     {
-        print("**** Ã¤ÆÃ ¼­¹ö Á¢¼Ó ¼º°ø*****");
-        //Ã¤³Î Ãß°¡
+        print("**** ì±„íŒ… ì„œë²„ ì ‘ì† ì„±ê³µ*****");
+        //ì±„ë„ ì¶”ê°€
         if (channelNames.Count > 0)
         {
             chatClient.Subscribe(channelNames.ToArray());
         }
-        //³ªÀÇ »óÅÂ¸¦ ¿Â¶óÀÎÀ¸·Î ÇÑ´Ù
+        //ë‚˜ì˜ ìƒíƒœë¥¼ ì˜¨ë¼ì¸ìœ¼ë¡œ í•œë‹¤
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
     }
 
@@ -178,7 +178,7 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     {
 
     }
-    //Æ¯Á¤Ã¤³Î¿¡ ¸Ş½ÃÁö°¡ ¿Ã¶§
+    //íŠ¹ì •ì±„ë„ì— ë©”ì‹œì§€ê°€ ì˜¬ë•Œ
     public void OnGetMessages(string channelName, string[] senders, object[] messages)
     {
         for (int i = 0; i < senders.Length; i++)
@@ -186,37 +186,37 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
             CreateChat(senders[i], messages[i].ToString(), Color.black);
         }
     }
-    //±Ó¼Ó¸» ¸Ş¼¼Áö°¡ ¿Ã¶§
+    //ê·“ì†ë§ ë©”ì„¸ì§€ê°€ ì˜¬ë•Œ
     public void OnPrivateMessage(string sender, object message, string channelName)
     {
         CreateChat(sender, message.ToString(), Color.green);
     }
-    //Ã¤ÆÃÃ¤³ÎÀ» Ãß°¡ÇßÀ» ¶§
+    //ì±„íŒ…ì±„ë„ì„ ì¶”ê°€í–ˆì„ ë•Œ
     public void OnSubscribed(string[] channels, bool[] results)
     {
         for (int i = 0; i < channels.Length; i++)
         {
-            Debug.Log("**** Ã¤³Î [" + channels[i] + "]Ãß°¡ ¼º°ø");
+            Debug.Log("**** ì±„ë„ [" + channels[i] + "]ì¶”ê°€ ì„±ê³µ");
 
         }
 
     }
-    //Ã¤ÆÃÃ¤³Î »èÁ¦ÇßÀ»¶§
+    //ì±„íŒ…ì±„ë„ ì‚­ì œí–ˆì„ë•Œ
     public void OnUnsubscribed(string[] channels)
     {
 
     }
-    //Ä£±¸ »óÅÂ°¡ ¿Â¶óÀÎ, ¿ÀÇÁ¶óÀÎ »óÅÂ·Î º¯°æÇßÀ» ¶§
+    //ì¹œêµ¬ ìƒíƒœê°€ ì˜¨ë¼ì¸, ì˜¤í”„ë¼ì¸ ìƒíƒœë¡œ ë³€ê²½í–ˆì„ ë•Œ
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
     {
 
     }
-    //Ä£±¸ Ãß°¡ ¼º°øÀûÀ¸·Î ÀÌ·ç¾îÁ³À» ¶§
+    //ì¹œêµ¬ ì¶”ê°€ ì„±ê³µì ìœ¼ë¡œ ì´ë£¨ì–´ì¡Œì„ ë•Œ
     public void OnUserSubscribed(string channel, string user)
     {
 
     }
-    //Ä£±¸ »èÁ¦°¡ ¼º°øÀûÀÏ ¶§
+    //ì¹œêµ¬ ì‚­ì œê°€ ì„±ê³µì ì¼ ë•Œ
     public void OnUserUnsubscribed(string channel, string user)
     {
 
