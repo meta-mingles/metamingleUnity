@@ -13,7 +13,6 @@ public class J_VideoPlayerBase : MonoBehaviour
 
     public Action onClickEvent;
     public Button playBt;
-    public Button playBt1;
     public Button pauseBt;
     public Button restartBt;
 
@@ -113,29 +112,6 @@ public class J_VideoPlayerBase : MonoBehaviour
     public void ClickRestartButton()
     {
         Destroy(gameObject);
-    }
-
-
-    //희미해지는 재생 버튼
-    public void FadePlayBt()
-    {
-        if(videoPlayer != null && playBt1 != null && playBt1.gameObject.activeSelf)
-        {
-            if (!videoPlayer.isPlaying) //멈췄을때
-            {
-                playBt1.interactable = false;
-
-                //투명도 변경
-                Image buttonImage = playBt1.GetComponent<Image>();
-                if(buttonImage != null)
-                {
-                    buttonImage.DOFade(0.5f, 1f).OnComplete(() => {
-                        playBt1.gameObject.SetActive(false);
-
-                    });
-                }
-            }
-        }
     }
 
 

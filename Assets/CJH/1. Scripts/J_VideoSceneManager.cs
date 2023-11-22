@@ -18,7 +18,7 @@ public class J_VideoSceneManager : MonoBehaviour
         //    soundManager.gameObject.SetActive(false);
         //}
         //브금 끄기
-        //SoundManager.instance.BGMVolume = -80;
+        SoundManager.instance.BGMVolume = -80;
 
     }
     public void SceneChange(string sceneName)
