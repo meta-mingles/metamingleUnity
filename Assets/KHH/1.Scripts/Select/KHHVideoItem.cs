@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class KHHVideoItem : MonoBehaviour
+public class KHHVideoItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     Button button;
     Button deleteButton;
@@ -43,5 +45,20 @@ public class KHHVideoItem : MonoBehaviour
     {
         System.IO.Directory.Delete(Application.persistentDataPath + "/" + nameText.text, true);
         Destroy(gameObject);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        deleteButton.gameObject.SetActive(true);
+        deleteButton.interactable = true;
+        deleteButton.image.DOKill();
+        deleteButton.image.DOFade(1, 0.2f);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        deleteButton.interactable = false;
+        deleteButton.image.DOKill();
+        deleteButton.image.DOFade(0, 0.2f).OnComplete(() => deleteButton.gameObject.SetActive(false));
     }
 }
