@@ -21,7 +21,7 @@ public class J_LoginUIManager : MonoBehaviour
     [SerializeField] private Transform panelTransform;
 
     [Header("Title")]
-    public TMP_Text introductionText;//소개 text
+    //public TMP_Text introductionText;//소개 text
     public Button move_startBt; //이동 버튼
 
 
@@ -56,7 +56,7 @@ public class J_LoginUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        IntroductionText();
+        //IntroductionText();
         //이전
         if (prev_LoginBt != null) prev_LoginBt.onClick.AddListener(Click_Prev);
         if (prev_SignUp != null) prev_SignUp.onClick.AddListener(OnChange);
@@ -92,13 +92,13 @@ public class J_LoginUIManager : MonoBehaviour
         ChangeInput();
     }
 
-    public void IntroductionText()
-    {
-        string IntroText = "메타 밍글은 숏폼, 인터랙티브 무비를 통한 문화 교류 커뮤니티 메타버스 플랫폼입니다.";
+    //public void IntroductionText()
+    //{
+    //    string IntroText = "메타 밍글은 숏폼, 인터랙티브 무비를 통한 문화 교류 커뮤니티 메타버스 플랫폼입니다.";
 
-        introductionText.GetComponent<TMP_Text>().text = IntroText;
-        IntroText = introductionText.text;
-    }
+    //    introductionText.GetComponent<TMP_Text>().text = IntroText;
+    //    IntroText = introductionText.text;
+    //}
     //이전으로 이동하는 버튼
     public void Click_Prev()
     {
