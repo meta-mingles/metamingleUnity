@@ -16,18 +16,20 @@ public class J_VideoPlayerBase : MonoBehaviour
     public Button pauseBt;
     public Button restartBt;
 
-    public Slider progressSlider;
+    public Slider progressSlider; //영상 진행 
+
+    public Slider soundSlider; //사운드 볼륨 조절 
 
     public TMP_Text currentTimeText;
     public TMP_Text totalTimeText;
 
     private void Start()
     {
-        KHHCanvasShield.Instance.Show();
+        soundSlider.onValueChanged.AddListener(HandleVolumeChange);
+        //KHHCanvasShield.Instance.Show();
     }
     private void Update()
     {
-
         if (videoPlayer.isPlaying)
         {
             //비디오 준비 완료되면 로딩UI 비활성화
@@ -36,20 +38,18 @@ public class J_VideoPlayerBase : MonoBehaviour
         }
     }
 
+    private void HandleVolumeChange(float volume)
+    {
+        videoPlayer.SetDirectAudioVolume(0, volume);
+    }
+
     //현재 시간 텍스트 
     private void UpdateTimeText()
     {
         currentTimeText.text = FormatTime((int)videoPlayer.time);
     }
-    //영상 진행률 슬라이더
-    private void UpdateProgressSlider()
-    {
-        if(videoPlayer.frameCount > 0)
-        {
-            float progress = (float)videoPlayer.frame / (float)videoPlayer.frameCount;
-            progressSlider.value = progress;
-        }
-    }
+
+
     public virtual void SetItem(ShortVideoInfo Info)
     {
 
@@ -139,6 +139,42 @@ public class J_VideoPlayerBase : MonoBehaviour
         onClickEvent?.Invoke();
 
         Destroy(gameObject);
+    }
+
+    //영상 소리 슬라이더
+    public void ControlVolume()
+    {
+        //영상 볼륨 가져와서 저장
+        float volume = videoPlayer.GetDirectAudioVolume(0);
+        //영상 볼륨 1로 지정
+        videoPlayer.SetDirectAudioVolume(0, 1);
+        //볼륨 0으로 지정
+        videoPlayer.SetDirectAudioVolume(0, 0);
+
+        if(videoPlayer.GetDirectAudioVolume(0) < 1)
+        {
+            //볼륨 0.1씩 올리기
+            videoPlayer.SetDirectAudioVolume(0, videoPlayer.GetDirectAudioVolume(0) + 0.1f);
+        }
+        if(videoPlayer.GetDirectAudioVolume(0) > 0)
+        {
+            //볼륨 0.1씩 줄이기
+            videoPlayer.SetDirectAudioVolume(0, videoPlayer.GetDirectAudioVolume(0) - 0.1f);
+        }
+
+        
+    }
+
+
+
+    //영상 진행률 슬라이더
+    private void UpdateProgressSlider()
+    {
+        if (videoPlayer.frameCount > 0)
+        {
+            float progress = (float)videoPlayer.frame / (float)videoPlayer.frameCount;
+            progressSlider.value = progress;
+        }
     }
 
 }

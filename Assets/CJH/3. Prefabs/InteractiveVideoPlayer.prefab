@@ -1590,6 +1590,7 @@ MonoBehaviour:
   pauseBt: {fileID: 4716325886846070895}
   restartBt: {fileID: 5912398922695926256}
   progressSlider: {fileID: 7132932341836651164}
+  soundSlider: {fileID: 8676730016998670000}
   currentTimeText: {fileID: 5254673287227135099}
   totalTimeText: {fileID: 3358705719038433881}
 --- !u!1 &8297754403029656384

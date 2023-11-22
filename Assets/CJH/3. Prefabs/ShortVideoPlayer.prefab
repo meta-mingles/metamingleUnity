@@ -650,8 +650,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -121, y: 412}
-  m_SizeDelta: {x: 237.13, y: 50}
+  m_AnchoredPosition: {x: 8, y: 412}
+  m_SizeDelta: {x: 468.57, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &153768330122941625
 CanvasRenderer:
@@ -3606,6 +3606,7 @@ MonoBehaviour:
   pauseBt: {fileID: 5053333890703886935}
   restartBt: {fileID: 1122079290244594985}
   progressSlider: {fileID: 6258171382910813833}
+  soundSlider: {fileID: 5314280837050430688}
   currentTimeText: {fileID: 987327921701908729}
   totalTimeText: {fileID: 499937523401695894}
   title: {fileID: 6496330016541824086}
