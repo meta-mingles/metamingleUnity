@@ -14,10 +14,14 @@ public class KHHEditItem : Selectable
     string filePath;
 
     protected bool isSelected = false;
-    public bool IsSelected { get { return isSelected; } set { isSelected = value; outline.enabled = value; } }
+    public bool IsSelected
+    {
+        get { return isSelected; }
+        set { isSelected = value; foreach (var outline in outlines) outline.enabled = value; }
+    }
     RectTransform rt;
     RectTransform item;
-    protected Outline outline;
+    protected Outline[] outlines;
 
     //재생
     protected float itemCorrectTime = 0.0f;
@@ -47,8 +51,9 @@ public class KHHEditItem : Selectable
     protected override void Awake()
     {
         base.Awake();
-        outline = GetComponentInChildren<Outline>();
-        outline.enabled = false;
+        outlines = GetComponentsInChildren<Outline>();
+        foreach (var outline in outlines)
+            outline.enabled = false;
     }
 
     public void Init(float cpx = 0f, float clx = 0f, float crx = 0f)
@@ -199,12 +204,14 @@ public class KHHEditItem : Selectable
     public override void OnSelect(BaseEventData eventData)
     {
         isSelected = true;
-        outline.enabled = true;
+        foreach (var outline in outlines)
+            outline.enabled = true;
     }
 
     public override void OnDeselect(BaseEventData eventData)
     {
         isSelected = false;
-        outline.enabled = false;
+        foreach (var outline in outlines)
+            outline.enabled = false;
     }
 }
