@@ -43,12 +43,14 @@ public class HttpInfo
     {
         requestType = type;
         if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
+        //if (useDefaultUrl) testUrl = "http://192.168.0.37:8080"; //기존 서버 url
         url += u;
+        testUrl += u;
         onReceive = callback;
     }
 }
 
-
+ 
 public class HttpManager : MonoBehaviour
 {
     public static HttpManager instance;
@@ -100,7 +102,9 @@ public class HttpManager : MonoBehaviour
         {
             case RequestType.GET:
                 //Debug.Log(httpInfo.url);
+                //req = UnityWebRequest.Get(httpInfo.testUrl);
                 req = UnityWebRequest.Get(httpInfo.url);
+
                 break;
            
             case RequestType.PUT:
@@ -116,7 +120,7 @@ public class HttpManager : MonoBehaviour
 
         if(token.Length > 0)
         {
-            req.SetRequestHeader("Authorization", token);
+            req.SetRequestHeader("Authentication", token);
         }
 
         yield return req.SendWebRequest();

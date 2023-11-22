@@ -49,10 +49,10 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         title.text = videoInfo.title;
         //날짜 
         string[] temp = videoInfo.date.Split('T');
-        date.text = temp[0];
+        date.text  = "DATE : " + temp[0];
 
         //영상 설명
-        description.text = videoInfo.description;
+        description.text = "DESCRIPTION : " + videoInfo.description;
         //크리에이터
         membername.text = videoInfo.memberName;
 
