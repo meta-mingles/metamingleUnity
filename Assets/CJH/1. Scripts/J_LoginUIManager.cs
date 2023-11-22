@@ -80,7 +80,6 @@ public class J_LoginUIManager : MonoBehaviour
 
         popups[page].SetActive(true);
         isReady = true;
-        CheckControl();
         system = EventSystem.current;
 
         isRemember = PlayerPrefs.GetInt("IsRemember", 0) == 1;
@@ -135,7 +134,6 @@ public class J_LoginUIManager : MonoBehaviour
 
         popups[page].SetActive(false);
         popups[page -= 1].SetActive(true);
-        CheckControl();
     }
 
     //2칸 뒤로 이동
@@ -144,7 +142,6 @@ public class J_LoginUIManager : MonoBehaviour
         if (page <= 0 || !isReady) return;
         popups[page].SetActive(false);
         popups[page -= 2].SetActive(true);
-        CheckControl();
     }
     //자신 비활성화
     public void OnClose()
@@ -158,26 +155,6 @@ public class J_LoginUIManager : MonoBehaviour
         if (page >= popups.Count - 1) return;
         popups[page].SetActive(false);
         popups[page += 1].SetActive(true);
-        CheckControl();
-    }
-
-    private void CheckControl()
-    {
-        SetArrowActive();
-    }
-
-    private void SetArrowActive()
-    {
-        //이전
-        if (prev_LoginBt != null) prev_LoginBt.gameObject.SetActive(page > 0);
-        if (prev_SignUp != null) prev_SignUp.gameObject.SetActive(page > 0);
-        //if (close_Bt1 != null) close_Bt1.gameObject.SetActive(page > 0);
-        //if (close_Bt2 != null) close_Bt2.gameObject.SetActive(page > 0);
-        if (close_Bt4 != null) close_Bt4.gameObject.SetActive(page > 0);
-        //다음
-        if (move_startBt != null) move_startBt.gameObject.SetActive(page < popups.Count - 1);
-        if (move_SignUpBt != null) move_SignUpBt.gameObject.SetActive(page < popups.Count - 1);
-        if (signUpBt != null) signUpBt.gameObject.SetActive(page < popups.Count - 1);
     }
 
     //현재 로그인 포스트 통신 함수 
