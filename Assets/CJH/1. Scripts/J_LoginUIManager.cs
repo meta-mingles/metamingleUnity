@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DG.Tweening;
+using Newtonsoft.Json.Linq;
 using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
@@ -13,108 +13,77 @@ using UnityEngine.UI;
 
 public class J_LoginUIManager : MonoBehaviour
 {
-    public List<GameObject> panels = new List<GameObject>(); //패널 오브젝트 이름 배열
     private int page = 0;
     private bool isReady = false;
     private bool canContinue = false;
     EventSystem system;
 
-    private bool isRemember = false;
-    [SerializeField] private Transform panelTransform;
-
     [Header("Title")]
-    public TMP_Text introductionText;//소개 text
-    public Button move_startBt; //이동 버튼
+    [SerializeField] private CanvasGroup titleCG; //타이틀
+    //public TMP_Text introductionText;//소개 text
+    [SerializeField] private Button move_startBt; //이동 버튼
 
+    [Header("Popup")]
+    [SerializeField] private GameObject panel;
+    [SerializeField] private CanvasGroup popupCG;
+    List<GameObject> popups = new List<GameObject>(); //패널 오브젝트 이름 배열
 
     [Header("Popup_Login")]
     public GameObject PopUp_Login; //로그인 창
     public Button move_SignUpBt; //이동 버튼
-    public Button close_Bt1; //닫기 버튼
+    //public Button close_Bt1; //닫기 버튼
 
     public Button loginBt; //로그인 버튼
     public TMP_InputField inputId; //로그인 아이디 입력
     public TMP_InputField inputPW; //로그인 패스워드 입력
-    public Toggle rememberMeToggle; // 로그인 정보 저장
+    //public Selectable firstInput;
 
     [Header("Popup_ SignUp")]
     public GameObject PopUp_signUp; //회원가입 창
-    public Button prev_LoginBt; //로그인 버튼
     public Button signUpBt; //회원가입 버튼
-    public Button close_Bt2; //닫기 버튼
+    public Button prev_LoginBt; //로그인 버튼
+    //public Button close_Bt2; //닫기 버튼
     public TMP_InputField inputId2; //로그인 아이디 입력
-    public TMP_InputField inputPW2; //로그인 패스워드 입력
     public TMP_InputField inputNickName; //로그인 닉네임 입력
-
+    public TMP_InputField inputPW2; //로그인 패스워드 입력
 
     [Header("Popup_ CheckSignUp")]
     public GameObject PopUp_checkSignUp; //회원가입창
     public Button prev_SignUp;
     public Button close_Bt4; //닫기 버튼
     public TMP_Text signUpMessage; //회원가입 상태
+
+    Action onChange;
+    //string customizationSceneName = "Customization";
     // Start is called before the first frame update
     void Start()
     {
-        IntroductionText();
+        Init();
+        //IntroductionText();
         //이전
         if (prev_LoginBt != null) prev_LoginBt.onClick.AddListener(Click_Prev);
         if (prev_SignUp != null) prev_SignUp.onClick.AddListener(OnChange);
-        if (close_Bt1 != null) close_Bt1.onClick.AddListener(Click_Prev);
-        if (close_Bt2 != null) close_Bt2.onClick.AddListener(Click_Prev);
+        //if (close_Bt1 != null) close_Bt1.onClick.AddListener(Click_Prev);
+        //if (close_Bt2 != null) close_Bt2.onClick.AddListener(Click_Prev);
         if (close_Bt4 != null) close_Bt4.onClick.AddListener(OnChange);
 
         //다음
-        if (move_startBt != null) move_startBt.onClick.AddListener(Click_Next);
+        if (move_startBt != null) move_startBt.onClick.AddListener(Click_Start);
         if (move_SignUpBt != null) move_SignUpBt.onClick.AddListener(Click_Next);
         if (signUpBt != null) signUpBt.onClick.AddListener(Click_Next);
-        foreach (Transform t in panelTransform)
+        foreach (Transform t in popupCG.transform)
         {
-            panels.Add(t.gameObject);
+            popups.Add(t.gameObject);
             t.gameObject.SetActive(false);
         }
 
-        panels[page].SetActive(true);
+        popups[page].SetActive(true);
         isReady = true;
         CheckControl();
         system = EventSystem.current;
 
         Login_Bt();
         SigUp_Bt();
-
-
-        //설정은 언제하냐 toggle bool 값이 체크 될때
-
-        ////설정
-        //PlayerPrefs.SetString("email", inputId2.text);
-        //PlayerPrefs.SetString("pw", inputPW2.text);
-        ////접근
-        //PlayerPrefs.GetString("email");
-        //PlayerPrefs.GetString("pw");
-
-
-
-
-        isRemember = PlayerPrefs.GetInt("IsRemember", 0) == 1;
-        rememberMeToggle.isOn = isRemember;
-
-        rememberMeToggle.onValueChanged.AddListener(OnToggleValueChanged);
-
-
-
-        //ison일때 playerprefs의 데이터 값을 가져온다
-        if (rememberMeToggle.isOn)
-        {
-            //로드
-           inputId.text = PlayerPrefs.GetString("email");
-           inputPW.text = PlayerPrefs.GetString("pw");
-        }
-        else
-        {
-            inputId.text = "";
-            inputPW.text = "";
-        }
-
-
         //사운드매니저로 브금 실행
         if (!SceneManager.GetActiveScene().name.Contains("Tool"))
             SoundManager.instance.PlayBGM("Bgm");
@@ -126,24 +95,35 @@ public class J_LoginUIManager : MonoBehaviour
         ChangeInput();
     }
 
-
-
-
-    public void IntroductionText()
+    void Init()
     {
-        string IntroText = "메타 밍글은 숏폼, 인터랙티브 무비를 통한 문화 교류 커뮤니티 메타버스 플랫폼입니다.";
-
-        introductionText.GetComponent<TMP_Text>().text = IntroText;
-        IntroText = introductionText.text;
+        titleCG.gameObject.SetActive(true);
+        titleCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
+        titleCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => titleCG.blocksRaycasts = true);
     }
+
+    void Click_Start()
+    {
+        panel.SetActive(true);
+        popupCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
+        popupCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => popupCG.blocksRaycasts = true);
+    }
+
+    //public void IntroductionText()
+    //{
+    //    string IntroText = "메타 밍글은 숏폼, 인터랙티브 무비를 통한 문화 교류 커뮤니티 메타버스 플랫폼입니다.";
+
+    //    introductionText.GetComponent<TMP_Text>().text = IntroText;
+    //    IntroText = introductionText.text;
+    //}
     //이전으로 이동하는 버튼
     public void Click_Prev()
     {
 
         if (page <= 0 || !isReady) return;
 
-        panels[page].SetActive(false);
-        panels[page -= 1].SetActive(true);
+        popups[page].SetActive(false);
+        popups[page -= 1].SetActive(true);
         CheckControl();
     }
 
@@ -151,8 +131,8 @@ public class J_LoginUIManager : MonoBehaviour
     public void OnChange()
     {
         if (page <= 0 || !isReady) return;
-        panels[page].SetActive(false);
-        panels[page -= 2].SetActive(true);
+        popups[page].SetActive(false);
+        popups[page -= 2].SetActive(true);
         CheckControl();
     }
     //자신 비활성화
@@ -164,9 +144,9 @@ public class J_LoginUIManager : MonoBehaviour
     //다음으로 이동하는 버튼
     public void Click_Next()
     {
-        if (page >= panels.Count - 1) return;
-        panels[page].SetActive(false);
-        panels[page += 1].SetActive(true);
+        if (page >= popups.Count - 1) return;
+        popups[page].SetActive(false);
+        popups[page += 1].SetActive(true);
         CheckControl();
     }
 
@@ -180,24 +160,20 @@ public class J_LoginUIManager : MonoBehaviour
         //이전
         if (prev_LoginBt != null) prev_LoginBt.gameObject.SetActive(page > 0);
         if (prev_SignUp != null) prev_SignUp.gameObject.SetActive(page > 0);
-        if (close_Bt1 != null) close_Bt1.gameObject.SetActive(page > 0);
-        if (close_Bt2 != null) close_Bt2.gameObject.SetActive(page > 0);
+        //if (close_Bt1 != null) close_Bt1.gameObject.SetActive(page > 0);
+        //if (close_Bt2 != null) close_Bt2.gameObject.SetActive(page > 0);
         if (close_Bt4 != null) close_Bt4.gameObject.SetActive(page > 0);
         //다음
-        if (move_startBt != null) move_startBt.gameObject.SetActive(page < panels.Count - 1);
-        if (move_SignUpBt != null) move_SignUpBt.gameObject.SetActive(page < panels.Count - 1);
-        if (signUpBt != null) signUpBt.gameObject.SetActive(page < panels.Count - 1);
+        if (move_startBt != null) move_startBt.gameObject.SetActive(page < popups.Count - 1);
+        if (move_SignUpBt != null) move_SignUpBt.gameObject.SetActive(page < popups.Count - 1);
+        if (signUpBt != null) signUpBt.gameObject.SetActive(page < popups.Count - 1);
     }
     //현재 로그인 포스트 통신 함수 
     public void LoginPost()
     {
         HttpInfo info = new HttpInfo();
-        info.Set(RequestType.POST, "/member/login", (DownloadHandler downloadHandler) =>
+        info.Set(RequestType.POST, "/member/login", async (DownloadHandler downloadHandler) =>
         {
-
-            PlayerPrefs.SetString("email", inputId.text);
-            PlayerPrefs.SetString("pw", inputPW.text);
-
             //Post 데이터 전송했을 때 서버로부터 응답온다
             Debug.Log("Login : " + downloadHandler.text);
             //Netownjson
@@ -212,8 +188,6 @@ public class J_LoginUIManager : MonoBehaviour
                 prevSceneName = SceneManager.GetActiveScene().name;
                 nextSceneName = "ToolSelect";
 
-                
-
                 //씬이동
                 GlobalValue.PrevSceneName = prevSceneName;
                 GlobalValue.CurSceneName = nextSceneName;
@@ -221,16 +195,23 @@ public class J_LoginUIManager : MonoBehaviour
             }
             else //platform
             {
-                prevSceneName = "Main_Platform";    //커스텀 존재 유무 확인 필요
-                nextSceneName = "Customization";    //커스텀 존재 유무 확인 필요
+                await KHHUserCustom.LoadData();
+                if (KHHUserCustom.HasData)
+                {
+                    prevSceneName = SceneManager.GetActiveScene().name;
+                    nextSceneName = "Main_Platform";
+                }
+                else
+                {
+                    prevSceneName = "Main_Platform";    //커스텀 존재 유무 확인 필요
+                    nextSceneName = "Customization";    //커스텀 존재 유무 확인 필요
+                }
                 KHHPhotonInit.instance.Init(prevSceneName, nextSceneName, HttpManager.instance.nickname);
             }
 
             //여기서 씬이동
             print("씬이동");
         });
-
-
 
         JObject jObject = new JObject();
         jObject["email"] = inputId.text;
@@ -323,21 +304,6 @@ public class J_LoginUIManager : MonoBehaviour
             Debug.Log("Button pressed!");
         }
     }
-    public void OnToggleValueChanged(bool value)
-    {
-        //toggle버튼 isOn일 때 
-        if (value)
-        {
-            PlayerPrefs.SetInt("IsRemember",1);
-            //설정
-        }
-        else
-        {
-            PlayerPrefs.SetInt("IsRemember",0);
 
-        }
-
-
-    }
 
 }

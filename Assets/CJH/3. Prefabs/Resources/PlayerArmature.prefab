@@ -6038,7 +6038,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: f6b4633c3120a4a4fa0ed2e242d77b0a, type: 2}
     - {fileID: 11400000, guid: 18c851dfe17892340b03a405eae2dad0, type: 2}
   m_FemaleItems:
-    m_BaseBody: {fileID: 0}
+    m_BaseBody: {fileID: 856653539303209591}
     m_Heads:
     - {fileID: 11400000, guid: 61e7010fd905b8246b21c414dda8132c, type: 2}
     - {fileID: 11400000, guid: 6aecdc6566888c546973cbc39da1395b, type: 2}
@@ -6120,6 +6120,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 856624243767127512}
   - {fileID: 5198495127945849679}
   - {fileID: 3784713637857109980}
   sceneViewId: 0
@@ -6157,22 +6158,22 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Speed
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Jump
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Grounded
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: FreeFall
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: MotionSpeed
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 2
     LayerIndex: 0
 --- !u!1 &856624243790736232
 GameObject:
@@ -12865,7 +12866,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &856653539111750720
 Transform:
   m_ObjectHideFlags: 0

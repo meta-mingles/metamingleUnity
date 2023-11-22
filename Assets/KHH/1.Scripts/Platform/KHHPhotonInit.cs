@@ -15,7 +15,12 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
     }
 
     public void Init(string prev, string next, string nick)
@@ -42,23 +47,26 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
     {
         base.OnJoinedLobby();
 
-        //방 참여 시도
-        for (int i = 0; i < roomInfos.Count; i++)
-        {
-            if (roomInfos[i].Name == $"Platform{i}")
-            {
-                if (roomInfos[i].PlayerCount < roomInfos[i].MaxPlayers)
-                {
-                    PhotonNetwork.JoinRoom($"Platform{i}");
-                    return;
-                }
-            }
-        }
+        //랜덤방 입장 시도
+        PhotonNetwork.JoinRandomRoom();
 
-        string roomName = $"Platform{roomInfos.Count}";
-        RoomOptions roomOptioin = new RoomOptions();
-        roomOptioin.MaxPlayers = 20;
-        PhotonNetwork.CreateRoom(roomName, roomOptioin, TypedLobby.Default);
+        ////방 참여 시도
+        //for (int i = 0; i < roomInfos.Count; i++)
+        //{
+        //    if (roomInfos[i].Name == $"Platform{i}")
+        //    {
+        //        if (roomInfos[i].PlayerCount < roomInfos[i].MaxPlayers)
+        //        {
+        //            PhotonNetwork.JoinRoom($"Platform{i}");
+        //            return;
+        //        }
+        //    }
+        //}
+
+        //string roomName = $"Platform{roomInfos.Count}";
+        //RoomOptions roomOptioin = new RoomOptions();
+        //roomOptioin.MaxPlayers = 20;
+        //PhotonNetwork.CreateRoom(roomName, roomOptioin, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
@@ -68,7 +76,8 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
         //씬이동
         GlobalValue.PrevSceneName = prevSceneName;
         GlobalValue.CurSceneName = nextSceneName;
-        PhotonNetwork.LoadLevel(nextSceneName);
+        if (nextSceneName.Equals("Customization")) SceneManager.LoadScene(nextSceneName);
+        else PhotonNetwork.LoadLevel(nextSceneName);
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
