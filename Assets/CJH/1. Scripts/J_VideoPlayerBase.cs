@@ -161,8 +161,6 @@ public class J_VideoPlayerBase : MonoBehaviour
             //볼륨 0.1씩 줄이기
             videoPlayer.SetDirectAudioVolume(0, videoPlayer.GetDirectAudioVolume(0) - 0.1f);
         }
-
-        
     }
 
 

@@ -7,6 +7,8 @@ using TMPro;
 using System;
 using Newtonsoft.Json.Linq;
 using UnityEngine.Networking;
+using System.Security.Policy;
+using Unity.VisualScripting;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -19,39 +21,28 @@ public class J_PlatformUIManager : MonoBehaviour
         SoundManager.instance.BGMVolume = -5;
         SoundManager.instance.PlayBGM("PlatformBGM");
     }
-
     [Header("Quiz")]
     public TMP_Text questionKorean; //한국질문
     public TMP_Text questionEnglish;//영어질문
-
-
     [Header("Platform")]
-
     public Button videoBt; //영상보러가기 버튼
     public Button customizeBt; //아바타 커스터마이징 가기 버튼
     public Button chatBt; //채팅 버튼
-
     [Header("Setting")]
-
     public Button settingBt; //설정 버튼
     public GameObject settingTab; //설정창
     public Button closeBt; //닫기 버튼
-
     string videoSceneName = "VideoScene";
     string customizationSceneName = "Customization";
-
     [Header("Enter")]
     public GameObject billboard; //전광판
     public GameObject enterTab; // 입장 UI
     public Button enterBt;//입장 버튼
     private float Distance; // 거리
     public float constDist = 3f; //일정거리
-
-
     [Header("Name")]
     public GameObject nameText;
     [SerializeField] public float temp = 1.8f;
-
     private void Start()
     {
         GetQuiz();
@@ -63,38 +54,34 @@ public class J_PlatformUIManager : MonoBehaviour
         SetNickNameText();
         EnterUI();
     }
-    
+
     //퀴즈 통신
     public void GetQuiz()
     {
         //퀴즈 겟
         HttpInfo info = new HttpInfo();
-        info.Set(RequestType.GET, "/quiz-rank", (DownloadHandler downloadHandler) =>
+        string url = "/quiz-rank";
+        info.Set(RequestType.GET, url, (DownloadHandler downloadHandler) =>
         {
             //Get 데이터 전송했을 때 서버로부터 응답온다
-            Debug.Log("quiz : " + downloadHandler.text);
-
             JObject jObject = JObject.Parse(downloadHandler.text);
-            JObject data = jObject["data"].ToObject<JObject>();
-            HttpManager.instance.rankNo = data["rankNo"].ToObject<int>();
-            HttpManager.instance.english = data["english"].ToObject<string>();
-            HttpManager.instance.korean = data["korean"].ToObject<string>();
-            HttpManager.instance.shortFormNo = data["shortFormNo"].ToObject<int>();
+            JArray dataArray = jObject["data"].ToObject<JArray>();
+
+            foreach(var item in dataArray)
+            {
+                string english = item["english"].ToString();
+                string korean = item["korean"].ToString();
+
+                questionEnglish.text = english;
+                questionKorean.text = korean;
+            }
         });
-
-        JObject jObject = new JObject();
-        jObject["english"] = questionEnglish.text;
-        jObject["korean"] = questionKorean.text;
-
-        info.body = jObject.ToString();
         HttpManager.instance.SendRequest(info);
     }
-
 
     //씬이동 -- 비디오씬, 커스텀씬
     public void SceneChange(string sceneName)
     {
-
         GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
         GlobalValue.CurSceneName = sceneName;
         SceneManager.LoadScene(sceneName);
@@ -104,14 +91,12 @@ public class J_PlatformUIManager : MonoBehaviour
     public void OpenTab()
     {
         settingTab.SetActive(true);
-        Debug.Log("Tab열림");
     }
     //설정 탭 닫기
     public void CloseTab()
     {
         if (closeBt.onClick != null)
             settingTab.SetActive(false);
-        Debug.Log("Tab닫힘");
     }
     //플레이어가 전광판의 일정거리안에 들어가면 EnterUI가 생성된다.
     public void EnterUI()
