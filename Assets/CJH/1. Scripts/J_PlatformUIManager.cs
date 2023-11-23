@@ -50,11 +50,14 @@ public class J_PlatformUIManager : MonoBehaviour
     {
 
         //언어를 선택하면 변하는 값들 : image의 SourceImage , 비디오씬의 자막 언어 
-
         languageBt.transform.GetChild(0).GetComponentInChildren<Image>().sprite = languageBox;
         languageBt.transform.GetChild(1).GetComponentInChildren<Image>().sprite = null;
         //한쪽은 sprite가 바뀌고 나머지 한쪽은 null값으로 바꿔야한다
         //초기화를 시켜줘야되나
+    }
+    private void EnglishToKorean()
+    {
+        //처음부터 KTE함수여야하고
 
     }
 
