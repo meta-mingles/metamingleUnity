@@ -57,7 +57,6 @@ public class KHHCustomCharacter : MonoBehaviour
             }
             else
             {
-                if (d.itemIndex == 0) continue;
                 m_LoadingCoroutine = StartCoroutine(Co_LoadAndEquip(d.category, m_CustomizationOptions[d.category][d.itemIndex], d.materialDatas));
             }
             yield return m_LoadingCoroutine;
@@ -142,6 +141,7 @@ public class KHHCustomCharacter : MonoBehaviour
 
     public void Equip(string cat, string path, CustomizationItemAsset item, List<KHHMaterialData> materialDatas = null)
     {
+        if (string.IsNullOrEmpty(path) || item == null) return;
         //if outfit, remove all othet pieces
 
         ////unequip previous item

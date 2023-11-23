@@ -8,6 +8,7 @@ public class KHHEditItemBackground : KHHEditItem
 {
     Texture2D texture;
 
+    Coroutine coroutine;
     // Update is called once per frame
     protected override void Update()
     {
@@ -36,19 +37,21 @@ public class KHHEditItemBackground : KHHEditItem
     public override void PlayStart()
     {
         base.PlayStart();
+        if (coroutine != null) StopCoroutine(coroutine);
         screenEditor.backgroundImage.texture = texture;
     }
 
     public override void PlayStop()
     {
         base.PlayStop();
-        StartCoroutine(RemoveBackground());
+        coroutine = StartCoroutine(RemoveBackground());
     }
 
     IEnumerator RemoveBackground()
     {
         yield return new WaitForSeconds(0.05f);
         screenEditor.backgroundImage.texture = null;
+        coroutine = null;
     }
 
     public override void Remove()

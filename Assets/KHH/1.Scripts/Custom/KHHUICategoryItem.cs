@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class KHHUICategoryItem : MonoBehaviour
 {
-    [SerializeField] private Text m_CategoryTitle;
-    [SerializeField] private Text m_EquipedItemTitle;
+    [SerializeField] private TextMeshProUGUI m_CategoryTitle;
+    [SerializeField] private TextMeshProUGUI m_EquipedItemTitle;
     [SerializeField] private Button m_Button;
 
     public System.Action OnClick;

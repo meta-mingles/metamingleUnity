@@ -85,7 +85,6 @@ public class KHHCustomizationDemo : MonoBehaviour
             }
             else
             {
-                if (d.itemIndex == 0) continue;
                 m_LoadingCoroutine = StartCoroutine(Co_LoadAndEquip(d.category, m_CustomizationOptions[d.category][d.itemIndex], d.materialDatas));
             }
             yield return m_LoadingCoroutine;
@@ -467,6 +466,14 @@ public class KHHCustomizationDemo : MonoBehaviour
 
         block.SetColor(property, color);
         renderer.SetPropertyBlock(block, materialIndex);
+
+        if (renderer.name.Contains("head.001_mesh") && materialIndex == 0)
+        {
+            MaterialPropertyBlock block2 = new MaterialPropertyBlock();
+            renderer.GetPropertyBlock(block2, 1);
+            block2.SetColor(property, color);
+            renderer.SetPropertyBlock(block2, 1);
+        }
 
         //store the properties for this material in case a new equip needs it
         var sharedMaterial = renderer.sharedMaterials[materialIndex];

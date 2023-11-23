@@ -60,13 +60,12 @@ namespace RockVR.Video
             if (filePath == null || filePath == string.Empty)
             {
                 int count = 0;
-                filePath = PathConfig.SaveFolder + KHHEditData.VideoTitle + count.ToString() + ".mp4"; //StringUtils.GetMp4FileName(StringUtils.GetRandomString(5));
+                filePath = PathConfig.SaveFolder + KHHEditData.VideoTitle + "Audio" + count.ToString() + ".wav";
                 while (File.Exists(filePath))
                 {
                     count++;
-                    filePath = PathConfig.SaveFolder + KHHEditData.VideoTitle + count.ToString() + ".wav";
+                    filePath = PathConfig.SaveFolder + KHHEditData.VideoTitle + "Audio" + count.ToString() + ".wav";
                 }
-                //filePath = PathConfig.SaveFolder + StringUtils.GetWavFileName(StringUtils.GetRandomString(5));
             }
             libAPI = AudioCaptureLib_Get(
                 AudioSettings.outputSampleRate,

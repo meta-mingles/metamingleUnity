@@ -154,6 +154,8 @@ public class KHHUICustomizationDemo : MonoBehaviour
             {
                 if (sharedMaterials[j].name.Contains("mouth"))
                     continue;
+                if (sharedMaterials[j].name.Contains("face"))
+                    continue;
                 if (materials.Contains(sharedMaterials[j]))
                     continue;
                 materials.Add(sharedMaterials[j]);

@@ -29,7 +29,6 @@ public class KHHEditManager : MonoBehaviour
     public Button motionButton;
     public Button soundButton;
     public Button backgroundButton;
-    public Button captionButton;
 
     public Button settingButton;
     public Button homeButton;

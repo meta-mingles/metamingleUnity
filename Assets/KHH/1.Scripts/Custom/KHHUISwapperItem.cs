@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class KHHUISwapperItem : MonoBehaviour
 {
-    [SerializeField] private Text m_Text;
+    [SerializeField] private TextMeshProUGUI m_Text;
     [SerializeField] private Button m_LeftButton;
     [SerializeField] private Button m_RightButton;
 
