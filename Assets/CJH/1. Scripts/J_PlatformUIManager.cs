@@ -36,6 +36,9 @@ public class J_PlatformUIManager : MonoBehaviour
         {
             GlobalValue.myLanguage = SystemLanguage.English;
         }
+        //언어설정 초기값
+        koreanBt.GetComponent<Image>().sprite = languageBox;
+        englishBt.GetComponent<Image>().sprite = alpha;
         //사운드 키기
         SoundManager.instance.BGMVolume = LinearToDecibel(0.3f); // 30 %로 시작
         SoundManager.instance.PlayBGM("PlatformBGM");
@@ -82,14 +85,39 @@ public class J_PlatformUIManager : MonoBehaviour
     private void Start()
     {
         //언어
-        koreanBt.onClick.AddListener(() => ChangeLanguage("Korean"));
+        koreanBt.onClick.AddListener(() => ChangeLanguage("Korean", "?language=kr"));
+        englishBt.onClick.AddListener(() => ChangeLanguage("English","?language=eng"));
 
         //퀴즈
         GetQuiz();
     }
 
-    private void ChangeLanguage(string v)
+    private void ChangeLanguage(string language, string subTitleVideoUrl)
     {
+        //한국어 버튼일때
+        if(language == "Korean")
+        {
+            koreanBt.GetComponent<Image>().sprite = languageBox;
+            englishBt.GetComponent<Image>().sprite = alpha;
+
+            //한국어자막 영상 통신
+            subTitleVideoUrl = "?language=kr";
+            HttpInfo info = new HttpInfo();
+
+            info.Set(RequestType.GET, subTitleVideoUrl, (DownloadHandler downloadHandler) =>
+            {
+
+            });
+            HttpManager.instance.SendRequest(info);
+        }
+        //영어 버튼일때
+        else if (language == "English")
+        {
+            koreanBt.GetComponent<Image>().sprite = alpha;
+            englishBt.GetComponent<Image>().sprite = languageBox;
+
+            //외국어자막 영상 통신
+        }
 
     }
 
