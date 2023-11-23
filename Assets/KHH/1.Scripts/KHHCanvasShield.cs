@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,9 +8,7 @@ public class KHHCanvasShield : MonoBehaviour
     public static KHHCanvasShield Instance;
     Transform loadingImage;
 
-    float rotateAngle = 45f;
-    float rotateTime = 0f;
-    float rotateDelay = 0.1f;
+    float rotateSpeed = 180f;
 
     void Awake()
     {
@@ -18,15 +17,15 @@ public class KHHCanvasShield : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void OnDisable()
+    {
+        loadingImage.DOKill();
+    }
+
     // Update is called once per frame
     void Update()
     {
-        rotateTime += Time.deltaTime;
-        if (rotateTime > rotateDelay)
-        {
-            rotateTime = 0f;
-            loadingImage.Rotate(0f, 0f, -rotateAngle);
-        }
+        loadingImage.DOLocalRotate(new Vector3(0, 0, -180), 1f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1);
     }
 
     public void Show()

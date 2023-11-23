@@ -4,6 +4,7 @@ using Unity.Barracuda;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class KHHEditItemSound : KHHEditItem
 {
@@ -25,6 +26,9 @@ public class KHHEditItemSound : KHHEditItem
             audioSource.volume = value;
         }
     }
+
+    public Image itemImage;
+    public Sprite[] sprites;
 
     protected override void Awake()
     {
@@ -85,6 +89,9 @@ public class KHHEditItemSound : KHHEditItem
     {
         base.LoadItemData(editor, filePath, fileName, action);
 
+        if (isVoice) itemImage.sprite = sprites[0];
+        else itemImage.sprite = sprites[1];
+
         //오디오 로드
         StartCoroutine(CoLoadAudioData(filePath, action));
     }
@@ -127,14 +134,16 @@ public class KHHEditItemSound : KHHEditItem
         KHHEditManager.Instance.SoundButtonEvent();
         KHHEditManager.Instance.soundDataManager.SetSelectedData(this);
         isSelected = true;
-        outline.enabled = true;
+        foreach (var outline in outlines)
+            outline.enabled = true;
         if (pairMotion != null) pairMotion.IsSelected = true;
     }
 
     public override void OnDeselect(BaseEventData eventData)
     {
         isSelected = false;
-        outline.enabled = false;
+        foreach (var outline in outlines)
+            outline.enabled = false;
         if (pairMotion != null) pairMotion.IsSelected = false;
     }
 }

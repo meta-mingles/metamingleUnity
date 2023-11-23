@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,8 @@ public class KHHEditSetting : MonoBehaviour
 
     string microphoneName;
 
+    [SerializeField] CanvasGroup canvasGroup;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -27,6 +30,8 @@ public class KHHEditSetting : MonoBehaviour
     public void Open()
     {
         gameObject.SetActive(true);
+        canvasGroup.transform.DOLocalMoveY(0, 0.5f).SetEase(Ease.Linear);
+        canvasGroup.DOFade(1f, 0.5f).SetEase(Ease.Linear).OnComplete(() => canvasGroup.blocksRaycasts = true);
         StartCoroutine(SetDropDownList());
     }
 
@@ -61,7 +66,9 @@ public class KHHEditSetting : MonoBehaviour
         MicrophoneRecorder.Instance.MicrophoneName = microphoneName;
         PlayerPrefs.SetString("MicrophoneName", microphoneName);
 
-        gameObject.SetActive(false);
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.transform.DOLocalMoveY(-100f, 0.5f).SetEase(Ease.Linear);
+        canvasGroup.DOFade(0f, 0.5f).SetEase(Ease.Linear).OnComplete(() => gameObject.SetActive(false));
     }
 
     void CostomButtonEvent()

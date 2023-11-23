@@ -22,6 +22,8 @@ public class KHHExport : MonoBehaviour
 
     [Header("Interactive")]
     public Button interactiveButton;
+    public GameObject interactiveOff;
+    public GameObject interactiveOn;
     public GameObject interactive;
     public KHHInteractiveButton interactiveButtonLeft;
     public KHHInteractiveButton interactiveButtonRight;
@@ -40,11 +42,14 @@ public class KHHExport : MonoBehaviour
     public KHHVideoDataManager videoDataManager;
     public RockVR.Video.VideoCapture videoCapture;
 
+    [Header("Upload")]
+    [SerializeField] KHHExportUpload upload;
+
     // Start is called before the first frame update
     void Awake()
     {
         if (backButton != null) backButton.onClick.AddListener(() => { gameObject.SetActive(false); });  //에디터로 돌아가기
-        if (uploadButton != null) uploadButton.onClick.AddListener(ExportButtonEvent);
+        if (uploadButton != null) uploadButton.onClick.AddListener(UploadButtonEvent);
         if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
 
         interacitveOutline = interactiveButton.GetComponent<Outline>();
@@ -116,27 +121,31 @@ public class KHHExport : MonoBehaviour
         //System.IO.File.WriteAllBytes(KHHEditData.FilePath + "/thumbnail.png", bytes);
     }
 
-    void ExportButtonEvent()
+    void UploadButtonEvent()
     {
         if (exportState != ExportState.None)
             return;
 
-        KHHCanvasShield.Instance.Show();
-        if (isInterActive)
-            StartCoroutine(CoExportInteractiveVideo());
-        else
-            StartCoroutine(CoExportShortformVideo());
+        upload.Open(isInterActive ? UploadInteractiveVideo : UploadShortformVideo);
     }
 
     void InteractiveButtonEvent()
     {
         isInterActive = !isInterActive;
+        interactiveOff.SetActive(!isInterActive);
+        interactiveOn.SetActive(isInterActive);
         interactive.SetActive(isInterActive);
         interacitveOutline.enabled = isInterActive;
         //interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
     }
 
-    IEnumerator CoExportInteractiveVideo()
+
+    void UploadInteractiveVideo()
+    {
+        StartCoroutine(CoUploadInteractiveVideo());
+    }
+
+    IEnumerator CoUploadInteractiveVideo()
     {
         exportState = ExportState.Uploading;
 
@@ -146,11 +155,16 @@ public class KHHExport : MonoBehaviour
             yield return null;
 
         exportState = ExportState.Complete;
-        KHHCanvasShield.Instance.Close();
+        upload.Complete();
         Debug.Log("Interactive Finish");
     }
 
-    IEnumerator CoExportShortformVideo()
+    void UploadShortformVideo()
+    {
+        StartCoroutine(CoUploadShortformVideo());
+    }
+
+    IEnumerator CoUploadShortformVideo()
     {
         exportState = ExportState.Uploading;
         //upload
@@ -159,7 +173,7 @@ public class KHHExport : MonoBehaviour
             yield return null;
 
         exportState = ExportState.Complete;
-        KHHCanvasShield.Instance.Close();
+        upload.Complete();
         Debug.Log("Finish");
     }
 }

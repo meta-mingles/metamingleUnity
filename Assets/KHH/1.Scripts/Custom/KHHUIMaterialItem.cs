@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class KHHUIMaterialItem : MonoBehaviour
 {
-    [SerializeField] private Text m_Title;
+    [SerializeField] private TextMeshProUGUI m_Title;
     [SerializeField] private LayoutGroup m_ColorPanel;
     [SerializeField] private KHHUIColorItem m_ColorItemPrefab;
 
@@ -60,6 +61,10 @@ public class KHHUIMaterialItem : MonoBehaviour
                 item.LightColor = c;
                 onChangeColor?.Invoke(c);
                 KHHUserCustom.SetColor(Title, item.Index, c);
+                if (Title.Equals("mat_base_M_body"))
+                    KHHUserCustom.SetColor("mat_base_M_face", item.Index, c);
+                if (Title.Equals("mat_base_F_body"))
+                    KHHUserCustom.SetColor("mat_base_F_face", item.Index, c);
             });
         };
     }

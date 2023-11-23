@@ -45,10 +45,24 @@ public class AITranscripts : MonoBehaviour
         public string soundUrl;
     }
 
+    [System.Serializable]
+    public class ApiResponseQuiz
+    {
+        public string apiStatus;
+        public string message;
+        public QuizData data;
+    }
+
+    [System.Serializable]
+    public class QuizData
+    {
+        public string uuid;
+    }
 
     private string apiUrl_chat = "http://metaverse.ohgiraffers.com:8080/scenario/streaming";
     private string apiUrl_image = "http://metaverse.ohgiraffers.com:8080/creative/image";
     private string apiUrl_sound = "http://metaverse.ohgiraffers.com:8080/creative/sound";
+    private string apiUrl_quiz = "http://localhost:8080/scenario/quiz";
 
     public Button aiTranscriptsButton;
     public TextMeshProUGUI aiTranscriptsButtonText;
@@ -100,6 +114,7 @@ public class AITranscripts : MonoBehaviour
         {
             StartCoroutine(PostImage(jsonData));
             StartCoroutine(PostSound(jsonData));
+            StartCoroutine(PostQuiz(jsonData));   //퀴즈 생성 요청 추가
             await PostJson(jsonData);
         }
         catch (Exception ex)
@@ -312,6 +327,38 @@ public class AITranscripts : MonoBehaviour
                 }
 
                 KHHEditManager.Instance.SoundButtonEvent();
+            }
+        }
+    }
+
+    IEnumerator PostQuiz(byte[] jsonData)
+    {
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl_quiz, "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(jsonData);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                string jsonString = www.downloadHandler.text;
+                ApiResponseQuiz apiResponse = JsonUtility.FromJson<ApiResponseQuiz>(jsonString);
+
+                if (apiResponse != null && apiResponse.apiStatus == "SUCCESS")
+                {
+                    PlayerPrefs.SetString($"{KHHEditData.VideoTitle}uuid", apiResponse.data.uuid);  //반환된 UUID PlayerPrefs 저장
+                }
+                else
+                {
+                    Debug.LogError("QUIZ 저장 실패");
+                }
+
             }
         }
     }

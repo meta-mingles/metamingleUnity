@@ -191,14 +191,16 @@ public class KHHEditItemMotion : KHHEditItem
     public override void OnSelect(BaseEventData eventData)
     {
         isSelected = true;
-        outline.enabled = true;
+        foreach (var outline in outlines)
+            outline.enabled = true;
         if (pairSound != null) pairSound.IsSelected = true;
     }
 
     public override void OnDeselect(BaseEventData eventData)
     {
         isSelected = false;
-        outline.enabled = false;
+        foreach (var outline in outlines)
+            outline.enabled = false;
         if (pairSound != null) pairSound.IsSelected = false;
     }
 }

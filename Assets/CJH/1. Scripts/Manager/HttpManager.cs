@@ -45,7 +45,7 @@ public class HttpInfo
         if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
         //if (useDefaultUrl) testUrl = "http://192.168.0.37:8080"; //기존 서버 url
         url += u;
-        testUrl += u;
+        //testUrl += u;
         onReceive = callback;
     }
 }

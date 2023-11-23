@@ -45,7 +45,8 @@ public class KHHVideoData : KHHData
         videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
         videoPlayer.url = filePath;
         videoPlayer.SetDirectAudioVolume(0, 0);
-        videoPlayer.Stop();
+        videoPlayer.Play();
+        videoPlayer.Pause();
     }
 
     public override void OnSelect(BaseEventData eventData)
