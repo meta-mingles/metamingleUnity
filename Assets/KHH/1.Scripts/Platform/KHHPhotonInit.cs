@@ -13,6 +13,8 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
 
     string prevSceneName, nextSceneName, nickName;
 
+    public string RoomName { get; set; }
+
     private void Awake()
     {
         if (instance == null)
@@ -28,6 +30,8 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
         prevSceneName = prev;
         nextSceneName = next;
+        GlobalValue.PrevSceneName = prev;
+        GlobalValue.CurSceneName = next;
         nickName = nick;
     }
 
@@ -47,8 +51,11 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
     {
         base.OnJoinedLobby();
 
+        if (nextSceneName.Equals("Customization"))
+            SceneManager.LoadScene(nextSceneName);
         //랜덤방 입장 시도
-        PhotonNetwork.JoinRandomRoom();
+        else if (SceneManager.GetActiveScene().name.Equals("LoginScene"))
+            PhotonNetwork.JoinRandomRoom();
 
         ////방 참여 시도
         //for (int i = 0; i < roomInfos.Count; i++)
@@ -69,15 +76,19 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
         //PhotonNetwork.CreateRoom(roomName, roomOptioin, TypedLobby.Default);
     }
 
+    public void ReJoinRoom(string prevSceneName, string nextSceneName)
+    {
+        this.prevSceneName = prevSceneName;
+        this.nextSceneName = nextSceneName;
+        PhotonNetwork.JoinRandomRoom();
+    }
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
 
-        //씬이동
-        GlobalValue.PrevSceneName = prevSceneName;
-        GlobalValue.CurSceneName = nextSceneName;
-        if (nextSceneName.Equals("Customization")) SceneManager.LoadScene(nextSceneName);
-        else PhotonNetwork.LoadLevel(nextSceneName);
+        RoomName = PhotonNetwork.CurrentRoom.Name;
+        PhotonNetwork.LoadLevel(nextSceneName);
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -85,10 +96,10 @@ public class KHHPhotonInit : MonoBehaviourPunCallbacks
         base.OnJoinRandomFailed(returnCode, message);
 
         //방 생성
-        string roomName = $"Platform{roomInfos.Count}";
+        RoomName = $"Platform{roomInfos.Count}";
         RoomOptions roomOptioin = new RoomOptions();
         roomOptioin.MaxPlayers = 20;
-        PhotonNetwork.CreateRoom(roomName, roomOptioin, TypedLobby.Default);
+        PhotonNetwork.CreateRoom(RoomName, roomOptioin, TypedLobby.Default);
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

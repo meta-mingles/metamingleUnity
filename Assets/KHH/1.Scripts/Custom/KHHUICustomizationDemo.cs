@@ -280,7 +280,8 @@ public class KHHUICustomizationDemo : MonoBehaviour
             {
                 GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
                 GlobalValue.CurSceneName = newSceneName;
-                PhotonNetwork.LoadLevel(newSceneName);
+                KHHPhotonInit.instance.ReJoinRoom(SceneManager.GetActiveScene().name, newSceneName);
+                //PhotonNetwork.LoadLevel(newSceneName);
             }
         });
     }

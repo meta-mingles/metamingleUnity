@@ -170,6 +170,8 @@ public class KHHCustomizationDemo : MonoBehaviour
 
     public void Equip(string cat, string path, CustomizationItemAsset item, List<KHHMaterialData> materialDatas = null)
     {
+        if (string.IsNullOrEmpty(path) || item == null) return;
+
         //if outfit, remove all othet pieces
         if (cat.Equals("outfit"))
         {

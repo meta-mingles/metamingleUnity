@@ -39,7 +39,7 @@ public class J_PlatformUIManager : MonoBehaviour
         soundSlider.onValueChanged.AddListener(HandleVolumeChange);
         soundSlider.value = 0.5f; //기본값 설정
     }
-        //사운드 설정
+    //사운드 설정
     private void HandleVolumeChange(float volume)
     {
         SoundManager.instance.BGMVolume = LinearToDecibel(volume);
@@ -112,7 +112,7 @@ public class J_PlatformUIManager : MonoBehaviour
             JObject jObject = JObject.Parse(downloadHandler.text);
             JArray dataArray = jObject["data"].ToObject<JArray>();
 
-            foreach(var item in dataArray)
+            foreach (var item in dataArray)
             {
                 string english = item["english"].ToString();
                 string korean = item["korean"].ToString();
@@ -150,7 +150,7 @@ public class J_PlatformUIManager : MonoBehaviour
         Distance = Vector3.Distance(billboard.transform.position, KHHPhotonManager.Instance.player.transform.position);
 
         //일정거리 안에 들어가면
-        if(Distance  < constDist)
+        if (Distance < constDist)
         {
             enterTab.SetActive(true);
         }
@@ -158,7 +158,7 @@ public class J_PlatformUIManager : MonoBehaviour
         {
             enterTab.SetActive(false);
         }
-        if(enterBt != null && Input.GetKeyDown(KeyCode.F))
+        if (enterBt != null && Input.GetKeyDown(KeyCode.F))
         {
             SceneManager.LoadScene("VideoScene");
         }
@@ -168,7 +168,7 @@ public class J_PlatformUIManager : MonoBehaviour
     public void SetNickNameText()
     {
         nameText.GetComponentInChildren<TMP_Text>().text = HttpManager.instance.nickname;
-        
+
         //위치
         UpdateNickNamePosition();
     }
@@ -179,7 +179,7 @@ public class J_PlatformUIManager : MonoBehaviour
         nameText.transform.position = new Vector3(KHHPhotonManager.Instance.player.transform.position.x, KHHPhotonManager.Instance.player.transform.position.y + temp, KHHPhotonManager.Instance.player.transform.position.z);
         //카메라의 Y 축 회전값을 사용하여 텍스트의 회전 업데이트
         Vector3 cameraRotation = Camera.main.transform.eulerAngles;
-        nameText.transform.eulerAngles = new Vector3(0,cameraRotation.y, 0);
+        nameText.transform.eulerAngles = new Vector3(0, cameraRotation.y, 0);
     }
 
 #if UNITY_EDITOR
