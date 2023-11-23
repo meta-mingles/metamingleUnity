@@ -10,23 +10,18 @@ public class J_VideoPlayerBase : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
     public ShortVideoInfo videoInfo;
-
     public Action onClickEvent;
     public Button playBt;
     public Button pauseBt;
     public Button restartBt;
-
     public Slider progressSlider; //영상 진행 
-
     public Slider soundSlider; //사운드 볼륨 조절 
-
     public TMP_Text currentTimeText;
     public TMP_Text totalTimeText;
 
-    private void Start()
+    private void Awake()
     {
         soundSlider.onValueChanged.AddListener(HandleVolumeChange);
-        //KHHCanvasShield.Instance.Show();
     }
     private void Update()
     {
@@ -37,19 +32,16 @@ public class J_VideoPlayerBase : MonoBehaviour
             UpdateProgressSlider();
         }
     }
-
+    //사운드 조정
     private void HandleVolumeChange(float volume)
     {
         videoPlayer.SetDirectAudioVolume(0, volume);
     }
-
     //현재 시간 텍스트 
     private void UpdateTimeText()
     {
         currentTimeText.text = FormatTime((int)videoPlayer.time);
     }
-
-
     public virtual void SetItem(ShortVideoInfo Info)
     {
 
@@ -71,17 +63,13 @@ public class J_VideoPlayerBase : MonoBehaviour
             videoPlayer.loopPointReached += MakeInteractiveUI;
             videoPlayer.loopPointReached += MakeRestartUI;
 
-            //비디오 준비 완료되면 로딩UI 비활성화
-            KHHCanvasShield.Instance.Close();
-            UpdateTimeText();
-            UpdateProgressSlider();
 
         }, false);
 
         HttpManager.instance.SendRequest(httpInfo);
+        UpdateTimeText();
+        UpdateProgressSlider();
     }
-
-
     //비디오 준비
     private void OnVideoPrepared(VideoPlayer source)
     {
@@ -95,8 +83,6 @@ public class J_VideoPlayerBase : MonoBehaviour
         TimeSpan timeSpan = TimeSpan.FromSeconds(timeInSeconds);
         return string.Format("{0:D2}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
     }
-
-
     //영상이 끝날때 인터렉티브 UI 생성
     protected virtual void MakeInteractiveUI(VideoPlayer source)
     {
@@ -107,14 +93,11 @@ public class J_VideoPlayerBase : MonoBehaviour
     {
 
     }
-
     //RestartButton으로 여는 함수
     public void ClickRestartButton()
     {
         Destroy(gameObject);
     }
-
-
     //영상 재생
     public void PlayPauseVideo()
     {
@@ -138,33 +121,11 @@ public class J_VideoPlayerBase : MonoBehaviour
     {
         onClickEvent?.Invoke();
 
+        //InteractiveDTOS.ReferenceEquals(gameObject, null);
+
+
         Destroy(gameObject);
     }
-
-    //영상 소리 슬라이더
-    public void ControlVolume()
-    {
-        //영상 볼륨 가져와서 저장
-        float volume = videoPlayer.GetDirectAudioVolume(0);
-        //영상 볼륨 1로 지정
-        videoPlayer.SetDirectAudioVolume(0, 1);
-        //볼륨 0으로 지정
-        videoPlayer.SetDirectAudioVolume(0, 0);
-
-        if(videoPlayer.GetDirectAudioVolume(0) < 1)
-        {
-            //볼륨 0.1씩 올리기
-            videoPlayer.SetDirectAudioVolume(0, videoPlayer.GetDirectAudioVolume(0) + 0.1f);
-        }
-        if(videoPlayer.GetDirectAudioVolume(0) > 0)
-        {
-            //볼륨 0.1씩 줄이기
-            videoPlayer.SetDirectAudioVolume(0, videoPlayer.GetDirectAudioVolume(0) - 0.1f);
-        }
-    }
-
-
-
     //영상 진행률 슬라이더
     private void UpdateProgressSlider()
     {

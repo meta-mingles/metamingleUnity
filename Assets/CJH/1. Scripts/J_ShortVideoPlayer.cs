@@ -16,19 +16,12 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public TMP_Text membername;
     public TMP_Text like_Count;
     public RawImage profilecolor;
-
     public Button like_Button; // 좋아요 버튼
-
     public Button Sound_Button; //사운드 버튼
     public float colorChangeDuration = 0.5f;//색상변경시간
     int likeCnt;
-
     private Color[] rainbowColor = new Color[] { Color.green, Color.magenta, Color.yellow, Color.blue, Color.cyan, Color.red }; //무지개 색상 변화
-
     public J_InteractiveMovieItem interactiveMovieList;
-
-
-
     private void Start()
     {
         like_Button.onClick.AddListener(() => StartCoroutine(ChangeToRainbowAndThenBlack()));
@@ -58,9 +51,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
 
         //좋아요 수
         like_Count.text = videoInfo.shortFormLikeCnt.ToString();
-
     }
-
     //영상이 끝날때 인터렉티브 UI 생성
     protected override void MakeInteractiveUI(VideoPlayer source)
     {
@@ -72,7 +63,6 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         //interactiveMovieList.onClickInteractive = ClickInteractiveMovieBt;
         //interactiveMovieList.SetInteractiveItem(videoInfo.interactiveMovieDTOS[0].choice, videoInfo.interactiveMovieDTOS[1].choice);
     }
-
     //인터렉티브 버튼
     void ClickInteractiveMovieBt(int index)
     {
@@ -114,7 +104,6 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         //최종 색깔 검정색으로 바뀐다./
         yield return like_Button.GetComponent<Image>().color = Color.black;
     }
-
     //색상변경
     IEnumerator ChangeColor(Image image, Color newColor, float duration)
     {
@@ -125,9 +114,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
             elapsedTime += Time.deltaTime;
             image.color = Color.Lerp(orignColor,newColor,elapsedTime/duration);
             yield return null;
-
         }
         image.color = newColor;
-
     }
 }

@@ -9,18 +9,55 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.Networking;
 using System.Security.Policy;
 using Unity.VisualScripting;
+using UnityEngine.Audio;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
     public static J_PlatformUIManager Instance;
+
+    //db로 변환하는 함수
+    private float LinearToDecibel(float linear)
+    {
+        return linear != 0 ? 20f * Mathf.Log10(linear) : -144.0f;
+    }
+
+
     private void Awake()
     {
         Instance = this;
 
+        //언어 
+        languageBt.transform.GetChild(0).GetComponentInChildren<Button>().onClick.AddListener(KoreanToEnglish);
+        languageBt.transform.GetChild(0).GetComponentInChildren<Button>().onClick.AddListener(KoreanToEnglish);
+
+        //기본값 설정
+
         //사운드 키기
-        SoundManager.instance.BGMVolume = -5;
+        SoundManager.instance.BGMVolume = LinearToDecibel(0.3f); // 30 %로 시작
         SoundManager.instance.PlayBGM("PlatformBGM");
+
+        soundSlider.onValueChanged.AddListener(HandleVolumeChange);
+        soundSlider.value = 0.5f; //기본값 설정
     }
+        //사운드 설정
+    private void HandleVolumeChange(float volume)
+    {
+        SoundManager.instance.BGMVolume = LinearToDecibel(volume);
+
+    }
+    //언어 변경
+    private void KoreanToEnglish()
+    {
+
+        //언어를 선택하면 변하는 값들 : image의 SourceImage , 비디오씬의 자막 언어 
+
+        languageBt.transform.GetChild(0).GetComponentInChildren<Image>().sprite = languageBox;
+        languageBt.transform.GetChild(1).GetComponentInChildren<Image>().sprite = null;
+        //한쪽은 sprite가 바뀌고 나머지 한쪽은 null값으로 바꿔야한다
+        //초기화를 시켜줘야되나
+
+    }
+
     [Header("Quiz")]
     public TMP_Text questionKorean; //한국질문
     public TMP_Text questionEnglish;//영어질문
@@ -32,8 +69,12 @@ public class J_PlatformUIManager : MonoBehaviour
     public Button settingBt; //설정 버튼
     public GameObject settingTab; //설정창
     public Button closeBt; //닫기 버튼
+    public Slider soundSlider; //사운드 슬라이더
     string videoSceneName = "VideoScene";
     string customizationSceneName = "Customization";
+    [Header("Language")]
+    public GameObject languageBt;
+    public Sprite languageBox;
     [Header("Enter")]
     public GameObject billboard; //전광판
     public GameObject enterTab; // 입장 UI
@@ -45,6 +86,7 @@ public class J_PlatformUIManager : MonoBehaviour
     [SerializeField] public float temp = 1.8f;
     private void Start()
     {
+
         GetQuiz();
     }
 
