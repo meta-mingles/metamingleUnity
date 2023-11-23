@@ -22,16 +22,19 @@ public class J_PlatformUIManager : MonoBehaviour
     }
 
 
+
     private void Awake()
     {
         Instance = this;
-
-        //언어 
-        languageBt.transform.GetChild(0).GetComponentInChildren<Button>().onClick.AddListener(KoreanToEnglish);
-        languageBt.transform.GetChild(0).GetComponentInChildren<Button>().onClick.AddListener(KoreanToEnglish);
-
-        //기본값 설정
-
+        //초기 언어설정
+        if(Application.systemLanguage == SystemLanguage.Korean)
+        {
+            GlobalValue.myLanguage = SystemLanguage.Korean;
+        }
+        else
+        {
+            GlobalValue.myLanguage = SystemLanguage.English;
+        }
         //사운드 키기
         SoundManager.instance.BGMVolume = LinearToDecibel(0.3f); // 30 %로 시작
         SoundManager.instance.PlayBGM("PlatformBGM");
@@ -43,21 +46,6 @@ public class J_PlatformUIManager : MonoBehaviour
     private void HandleVolumeChange(float volume)
     {
         SoundManager.instance.BGMVolume = LinearToDecibel(volume);
-
-    }
-    //언어 변경
-    private void KoreanToEnglish()
-    {
-
-        //언어를 선택하면 변하는 값들 : image의 SourceImage , 비디오씬의 자막 언어 
-        languageBt.transform.GetChild(0).GetComponentInChildren<Image>().sprite = languageBox;
-        languageBt.transform.GetChild(1).GetComponentInChildren<Image>().sprite = null;
-        //한쪽은 sprite가 바뀌고 나머지 한쪽은 null값으로 바꿔야한다
-        //초기화를 시켜줘야되나
-    }
-    private void EnglishToKorean()
-    {
-        //처음부터 KTE함수여야하고
 
     }
 
@@ -77,7 +65,10 @@ public class J_PlatformUIManager : MonoBehaviour
     string customizationSceneName = "Customization";
     [Header("Language")]
     public GameObject languageBt;
+    public Button koreanBt;
+    public Button englishBt;
     public Sprite languageBox;
+    public Sprite alpha;
     [Header("Enter")]
     public GameObject billboard; //전광판
     public GameObject enterTab; // 입장 UI
@@ -89,8 +80,16 @@ public class J_PlatformUIManager : MonoBehaviour
     [SerializeField] public float temp = 1.8f;
     private void Start()
     {
+        //언어
+        koreanBt.onClick.AddListener(() => ChangeLanguage("Korean"));
 
+        //퀴즈
         GetQuiz();
+    }
+
+    private void ChangeLanguage(string v)
+    {
+
     }
 
     private void Update()
