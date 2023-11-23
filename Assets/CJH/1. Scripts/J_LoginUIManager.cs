@@ -21,6 +21,7 @@ public class J_LoginUIManager : MonoBehaviour
 
     [Header("Title")]
     [SerializeField] private CanvasGroup titleCG; //타이틀
+    [SerializeField] private Transform titleLogo; //타이틀 로고
     //public TMP_Text introductionText;//소개 text
     [SerializeField] private Button move_startBt; //이동 버튼
 
@@ -117,6 +118,8 @@ public class J_LoginUIManager : MonoBehaviour
         titleCG.gameObject.SetActive(true);
         titleCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
         titleCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => titleCG.blocksRaycasts = true);
+        titleLogo.DOScale(Vector3.one * 0.7f, 0.1f).SetDelay(0.4f).SetEase(Ease.Linear).OnComplete(() =>
+        { titleLogo.DOScale(Vector3.one, 0.8f).SetEase(Ease.OutElastic); });
     }
 
     void Click_Start()

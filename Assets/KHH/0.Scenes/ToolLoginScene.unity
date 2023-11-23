@@ -4085,6 +4085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titleCG: {fileID: 1313436025}
+  titleLogo: {fileID: 431462491}
   move_startBt: {fileID: 1544587489}
   panel: {fileID: 238115192}
   popupCG: {fileID: 2009032060}
