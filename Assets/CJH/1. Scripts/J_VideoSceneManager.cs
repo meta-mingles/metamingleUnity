@@ -23,13 +23,15 @@ public class J_VideoSceneManager : MonoBehaviour
     }
     public void SceneChange(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+        GlobalValue.CurSceneName = sceneName;
+        KHHPhotonInit.instance.ReJoinRoom(GlobalValue.PrevSceneName, sceneName);
     }
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
-      
+
         if (homeBt.onClick.GetPersistentEventCount() == 0)
             UnityEditor.Events.UnityEventTools.AddStringPersistentListener(homeBt.onClick, SceneChange, platformSceneName);
     }

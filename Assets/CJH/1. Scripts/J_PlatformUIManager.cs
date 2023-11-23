@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 using System.Security.Policy;
 using Unity.VisualScripting;
 using UnityEngine.Audio;
+using Photon.Pun;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class J_PlatformUIManager : MonoBehaviour
     {
         Instance = this;
         //초기 언어설정
-        if(Application.systemLanguage == SystemLanguage.Korean)
+        if (Application.systemLanguage == SystemLanguage.Korean)
         {
             GlobalValue.myLanguage = SystemLanguage.Korean;
         }
@@ -128,6 +129,7 @@ public class J_PlatformUIManager : MonoBehaviour
     {
         GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
         GlobalValue.CurSceneName = sceneName;
+        PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene(sceneName);
     }
 
@@ -159,6 +161,9 @@ public class J_PlatformUIManager : MonoBehaviour
         }
         if (enterBt != null && Input.GetKeyDown(KeyCode.F))
         {
+            GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+            GlobalValue.CurSceneName = "VideoScene";
+            PhotonNetwork.LeaveRoom();
             SceneManager.LoadScene("VideoScene");
         }
     }
