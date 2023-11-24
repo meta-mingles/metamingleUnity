@@ -22655,6 +22655,8 @@ MonoBehaviour:
   closeBt: {fileID: 369376465}
   soundSlider: {fileID: 503102708}
   languageBt: {fileID: 1470261725}
+  koreanBt: {fileID: 1029590784}
+  englishBt: {fileID: 144559561}
   languageBox: {fileID: 21300000, guid: e6c922fe62df60e42b844b49d420f6d9, type: 3}
   alpha: {fileID: 21300000, guid: f9a99526cd62bd64d81c848fca55651e, type: 3}
   billboard: {fileID: 8296172668381030793}

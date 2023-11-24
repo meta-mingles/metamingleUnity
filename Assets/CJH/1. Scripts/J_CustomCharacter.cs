@@ -84,10 +84,9 @@ public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
                 body[1].SetActive(!isMale);
                 GetComponent<Animator>().avatar = isMale ? avatars[0] : avatars[1];
             }
-            else if (categoryData.category.Equals("head") && categoryData.itemIndex > 0)
+            else if (categoryData.category.Equals("head"))
             {
                 SkinnedMeshRenderer head = isMale ? m_Head : f_Head;
-                head.sharedMesh = itemGroup.m_Heads[categoryData.itemIndex - 1].meshes[0].sharedMesh;
                 //head.material = matHeads[categoryData.itemIndex - 1];
                 int catNum = 0;
                 for (int j = 0; j < head.materials.Length; j++)
@@ -100,7 +99,12 @@ public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
                         if (catNum == categoryData.materialDatas.Count) break;
                     }
                 }
-                SetBasicBody(itemGroup.m_Heads[categoryData.itemIndex - 1].bodyParts);
+
+                if (categoryData.itemIndex > 0)
+                {
+                    head.sharedMesh = itemGroup.m_Heads[categoryData.itemIndex - 1].meshes[0].sharedMesh;
+                    SetBasicBody(itemGroup.m_Heads[categoryData.itemIndex - 1].bodyParts);
+                }
             }
             else if (categoryData.category.Equals("top") && categoryData.itemIndex > 0)
             {
