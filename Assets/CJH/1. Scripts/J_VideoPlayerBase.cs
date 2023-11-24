@@ -18,6 +18,8 @@ public class J_VideoPlayerBase : MonoBehaviour
     public Slider soundSlider; //사운드 볼륨 조절 
     public TMP_Text currentTimeText;
     public TMP_Text totalTimeText;
+    //영상 관련
+    private bool isDirect;
 
     private void Awake()
     {
@@ -44,6 +46,10 @@ public class J_VideoPlayerBase : MonoBehaviour
     }
     public virtual void SetItem(ShortVideoInfo Info)
     {
+        if (isDirect)
+        {
+
+        }
 
         RenderTexture rt = new RenderTexture(1920, 1080, 24);
         videoPlayer.targetTexture = rt;
@@ -53,8 +59,17 @@ public class J_VideoPlayerBase : MonoBehaviour
 
         // 영상 다운로드
         HttpInfo httpInfo = new HttpInfo();
-
-        httpInfo.Set(RequestType.GET, videoInfo.url, (downloadHandler) =>
+        string subTitleurl = "";
+        if (GlobalValue.myLanguage == SystemLanguage.Korean)
+        {
+            subTitleurl = "?language=kr";
+        }
+        else if (GlobalValue.myLanguage == SystemLanguage.English)
+        {
+            subTitleurl = "?language=eng";
+        }
+        
+        httpInfo.Set(RequestType.GET, videoInfo.url + subTitleurl, (downloadHandler) =>
         {
             byte[] videoBytes = downloadHandler.data;
             videoPlayer.url = videoInfo.url;
@@ -62,10 +77,7 @@ public class J_VideoPlayerBase : MonoBehaviour
             videoPlayer.Play();
             videoPlayer.loopPointReached += MakeInteractiveUI;
             videoPlayer.loopPointReached += MakeRestartUI;
-
-
         }, false);
-
         HttpManager.instance.SendRequest(httpInfo);
         UpdateTimeText();
         UpdateProgressSlider();
@@ -106,24 +118,19 @@ public class J_VideoPlayerBase : MonoBehaviour
             videoPlayer.Pause();
             playBt.gameObject.SetActive(false);
             pauseBt.gameObject.SetActive(true);
-
         }
         else
         {
             videoPlayer.Play();
             pauseBt.gameObject.SetActive(false);
             playBt.gameObject.SetActive(true);
-
         }
     }
     //영상 끄기
     public void CloseVideo()
     {
         onClickEvent?.Invoke();
-
         //InteractiveDTOS.ReferenceEquals(gameObject, null);
-
-
         Destroy(gameObject);
     }
     //영상 진행률 슬라이더

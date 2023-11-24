@@ -7,31 +7,21 @@ using Unity.VisualScripting;
 
 public class Test_deepl : MonoBehaviour
 {
-
     public Change_language get_language;
-
-
-
     private Translator translator;
-
-
     public Button KEButton;
     public Button EKButton;
- 
-
     public TMP_InputField inputText;
     public TMP_InputField outputText;
-
     string input_language;
     string output_language;
 
-    async void StartTranslation(string text,string selected_language)
+    async void StartTranslation(string text, string selected_language)
     {
         string translatedText = await Translate(text);
         outputText.text = translatedText;
         Debug.Log("번역된 텍스트: " + translatedText);
     }
-
     async Task<string> Translate(string text)
     {
         var translations = await translator.TranslateTextAsync(
@@ -42,15 +32,9 @@ public class Test_deepl : MonoBehaviour
 
         return translations[0].Text;
     }
-
-
-
     string selected_language;
-    
     void KEOnButtonClicked()
     {
-
-
         if (get_language.iskorea)
         {
             selected_language = "ko";
@@ -59,8 +43,6 @@ public class Test_deepl : MonoBehaviour
         {
             selected_language = "EN-GB";
         }
-
-        
         Debug.Log("버튼출력");
         Debug.Log(get_language.iskorea);
 
@@ -68,25 +50,12 @@ public class Test_deepl : MonoBehaviour
 
         Debug.Log("Button Clicked! Text is: " + textValue);
         StartTranslation(textValue, selected_language);
-
     }
-
-
-
-
-    // Start is called before the first frame update
     void Start()
     {
         var authKey = "39774928-946a-9d79-a580-148a5a61b7b5:fx"; // Replace with your key
         translator = new Translator(authKey);
-
         KEButton.onClick.AddListener(KEOnButtonClicked);
         Debug.Log("테스트 시작");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
