@@ -127,9 +127,9 @@ public class KHHCustomCharacter : MonoBehaviour
         var bodyPath = GetAssetPath(bodyType, "body");
         yield return m_AssetLoader.LoadAsset<GameObject>(bodyPath, res => InitBody(bodyPath, res));
 
-        //initialize the head with the first available
-        string assetPath = m_CustomizationOptions["head"][0];
-        yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(assetPath, res => Equip("head", assetPath, res));
+        ////initialize the head with the first available
+        //string assetPath = m_CustomizationOptions["head"][0];
+        //yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(assetPath, res => Equip("head", assetPath, res));
 
         m_LoadingCoroutine = null;
     }

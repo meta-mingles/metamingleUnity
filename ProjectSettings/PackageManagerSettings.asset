@@ -26,6 +26,22 @@ MonoBehaviour:
     m_IsDefault: 1
     m_Capabilities: 7
     m_ConfigSource: 0
+  - m_Id: scoped:project:Keijiro
+    m_Name: Keijiro
+    m_Url: https://registry.npmjs.com
+    m_Scopes:
+    - jp.keijiro
+    m_IsDefault: 0
+    m_Capabilities: 0
+    m_ConfigSource: 4
+  - m_Id: scoped:project:creativeikep
+    m_Name: creativeikep
+    m_Url: https://registry.npmjs.com
+    m_Scopes:
+    - jp.ikep
+    m_IsDefault: 0
+    m_Capabilities: 0
+    m_ConfigSource: 4
   - m_Id: scoped:project:package.openupm.com
     m_Name: package.openupm.com
     m_Url: https://package.openupm.com
@@ -34,7 +50,7 @@ MonoBehaviour:
     m_IsDefault: 0
     m_Capabilities: 0
     m_ConfigSource: 4
-  m_UserSelectedRegistryName: package.openupm.com
+  m_UserSelectedRegistryName: Keijiro
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_Modified: 0

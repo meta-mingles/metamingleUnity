@@ -297,19 +297,19 @@ public class VNectModel : MonoBehaviour
         head.Inverse = Quaternion.Inverse(Quaternion.LookRotation(gaze));
         head.InverseRotation = head.Inverse * head.InitRotation;
 
-        // hand 정의(forward 자리에 손바닥 향하는 위치인 lf 대체)
-        var lHand = jointPoints[PositionIndex.lHand.Int()];
-        var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
-        lHand.InitRotation = lHand.Transform.rotation;
-        lHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Transform.position - jointPoints[PositionIndex.lMid1.Int()].Transform.position, lf));
-        lHand.InverseRotation = lHand.Inverse * lHand.InitRotation;
+        //// hand 정의(forward 자리에 손바닥 향하는 위치인 lf 대체)
+        //var lHand = jointPoints[PositionIndex.lHand.Int()];
+        //var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
+        //lHand.InitRotation = lHand.Transform.rotation;
+        //lHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Transform.position - jointPoints[PositionIndex.lMid1.Int()].Transform.position, lf));
+        //lHand.InverseRotation = lHand.Inverse * lHand.InitRotation;
 
-        // hand 정의(forward 자리에 손바닥 향하는 위치인 rf 대체)
-        var rHand = jointPoints[PositionIndex.rHand.Int()];
-        var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
-        rHand.InitRotation = jointPoints[PositionIndex.rHand.Int()].Transform.rotation;
-        rHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Transform.position - jointPoints[PositionIndex.rMid1.Int()].Transform.position, rf));
-        rHand.InverseRotation = rHand.Inverse * rHand.InitRotation;
+        //// hand 정의(forward 자리에 손바닥 향하는 위치인 rf 대체)
+        //var rHand = jointPoints[PositionIndex.rHand.Int()];
+        //var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
+        //rHand.InitRotation = jointPoints[PositionIndex.rHand.Int()].Transform.rotation;
+        //rHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Transform.position - jointPoints[PositionIndex.rMid1.Int()].Transform.position, rf));
+        //rHand.InverseRotation = rHand.Inverse * rHand.InitRotation;
 
         // 3DScore는 모두 1로 통일
         jointPoints[PositionIndex.hip.Int()].score3D = 1f;
@@ -374,15 +374,15 @@ public class VNectModel : MonoBehaviour
         var head = jointPoints[PositionIndex.head.Int()];
         head.Transform.rotation = Quaternion.LookRotation(gaze, f) * head.InverseRotation;
 
-        // Wrist rotation (Test code)
-        var lHand = jointPoints[PositionIndex.lHand.Int()];
-        var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
-        lHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Pos3D - jointPoints[PositionIndex.lMid1.Int()].Pos3D, lf) * lHand.InverseRotation;
+        //// Wrist rotation (Test code)
+        //var lHand = jointPoints[PositionIndex.lHand.Int()];
+        //var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
+        //lHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Pos3D - jointPoints[PositionIndex.lMid1.Int()].Pos3D, lf) * lHand.InverseRotation;
 
-        var rHand = jointPoints[PositionIndex.rHand.Int()];
-        var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
+        //var rHand = jointPoints[PositionIndex.rHand.Int()];
+        //var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
+        ////rHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Pos3D - jointPoints[PositionIndex.rMid1.Int()].Pos3D, rf) * rHand.InverseRotation;
         //rHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Pos3D - jointPoints[PositionIndex.rMid1.Int()].Pos3D, rf) * rHand.InverseRotation;
-        rHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Pos3D - jointPoints[PositionIndex.rMid1.Int()].Pos3D, rf) * rHand.InverseRotation;
 
         foreach (var sk in Skeletons)
         {
