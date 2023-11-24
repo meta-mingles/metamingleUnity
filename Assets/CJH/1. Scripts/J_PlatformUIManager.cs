@@ -76,9 +76,7 @@ public class J_PlatformUIManager : MonoBehaviour
     public Button enterBt;//입장 버튼
     private float Distance; // 거리
     public float constDist = 3f; //일정거리
-    [Header("Name")]
-    public GameObject nameText;
-    [SerializeField] public float temp = 1.8f;
+
     private void Start()
     {
         //언어
@@ -95,8 +93,6 @@ public class J_PlatformUIManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateNickNamePosition();
-        SetNickNameText();
         EnterUI();
     }
 
@@ -166,24 +162,6 @@ public class J_PlatformUIManager : MonoBehaviour
             PhotonNetwork.LeaveRoom();
             SceneManager.LoadScene("VideoScene");
         }
-    }
-
-    //로그인씬의 저장된 닉네임 플레이어 위에 생성
-    public void SetNickNameText()
-    {
-        nameText.GetComponentInChildren<TMP_Text>().text = HttpManager.instance.nickname;
-
-        //위치
-        UpdateNickNamePosition();
-    }
-
-    private void UpdateNickNamePosition()
-    {
-        //위치 업데이트
-        nameText.transform.position = new Vector3(KHHPhotonManager.Instance.player.transform.position.x, KHHPhotonManager.Instance.player.transform.position.y + temp, KHHPhotonManager.Instance.player.transform.position.z);
-        //카메라의 Y 축 회전값을 사용하여 텍스트의 회전 업데이트
-        Vector3 cameraRotation = Camera.main.transform.eulerAngles;
-        nameText.transform.eulerAngles = new Vector3(0, cameraRotation.y, 0);
     }
 
 #if UNITY_EDITOR
