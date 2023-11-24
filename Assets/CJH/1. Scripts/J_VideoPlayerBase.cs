@@ -68,7 +68,7 @@ public class J_VideoPlayerBase : MonoBehaviour
         {
             subTitleurl = "?language=eng";
         }
-        
+
         httpInfo.Set(RequestType.GET, videoInfo.url + subTitleurl, (downloadHandler) =>
         {
             byte[] videoBytes = downloadHandler.data;
@@ -77,7 +77,7 @@ public class J_VideoPlayerBase : MonoBehaviour
             videoPlayer.Play();
             videoPlayer.loopPointReached += MakeInteractiveUI;
             videoPlayer.loopPointReached += MakeRestartUI;
-        }, false);
+        }, null, false);
         HttpManager.instance.SendRequest(httpInfo);
         UpdateTimeText();
         UpdateProgressSlider();

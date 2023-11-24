@@ -71,7 +71,7 @@ public class J_ThumItem : MonoBehaviour
         memberName.text = videoInfo.memberName;
 
         HttpInfo info = new HttpInfo();
-        info.Set(RequestType.TEXTURE, videoInfo.thumbnailUrl, null,false);
+        info.Set(RequestType.TEXTURE, videoInfo.thumbnailUrl, null, null, false);
         info.onReceiveImage = OnCompleteDownloadTexture;
         HttpManager.instance.SendRequest(info);
     }

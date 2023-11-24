@@ -35,7 +35,7 @@ public class J_VideoReceiver : MonoBehaviour
             thumbnailUrl = "?language=eng";
         }
         string url = "/short-form";
-        httpInfo.Set(RequestType.GET, url+ thumbnailUrl, OnCompleteSearchVideo, true);
+        httpInfo.Set(RequestType.GET, url+ thumbnailUrl, OnCompleteSearchVideo);
         HttpManager.instance.SendRequest(httpInfo);
     }
     //숏폼 다운

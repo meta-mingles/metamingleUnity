@@ -22,6 +22,7 @@ public class HttpInfo
     public string testUrl = "";
     public string body = "{}";
     public Action<DownloadHandler> onReceive;
+    public Action onReceiveFail;
     public Action<DownloadHandler, int> onReceiveImage;
     public string loginId;
     public string loginPW;
@@ -31,6 +32,7 @@ public class HttpInfo
         RequestType type,
         string u,
         Action<DownloadHandler> callback,
+        Action callbackFail = null,
         bool useDefaultUrl = true)
     {
         requestType = type;
@@ -39,6 +41,7 @@ public class HttpInfo
         url += u;
         //testUrl += u;
         onReceive = callback;
+        onReceiveFail = callbackFail;
     }
 }
 public class HttpManager : MonoBehaviour
@@ -46,7 +49,7 @@ public class HttpManager : MonoBehaviour
     public static HttpManager instance;
 
     //로그인,회원가입
-    public string email= "";
+    public string email = "";
     public string password = "";
     public string nickname = "";
 
@@ -70,7 +73,7 @@ public class HttpManager : MonoBehaviour
     }
     public void SendRequest(HttpInfo httpInfo)
     {
-        if(httpInfo.requestType == RequestType.POST)
+        if (httpInfo.requestType == RequestType.POST)
         {
             StartCoroutine(Post(httpInfo));
         }
@@ -91,7 +94,7 @@ public class HttpManager : MonoBehaviour
                 //req = UnityWebRequest.Get(httpInfo.testUrl);
                 req = UnityWebRequest.Get(httpInfo.url);
                 break;
-           
+
             case RequestType.PUT:
                 req = UnityWebRequest.Put(httpInfo.url, httpInfo.body);
                 break;
@@ -102,7 +105,7 @@ public class HttpManager : MonoBehaviour
                 req = UnityWebRequestTexture.GetTexture(httpInfo.url);
                 break;
         }
-        if(token.Length > 0)
+        if (token.Length > 0)
         {
             req.SetRequestHeader("Authentication", token);
         }
@@ -157,6 +160,7 @@ public class HttpManager : MonoBehaviour
         }
         else
         {
+            httpInfo.onReceiveFail?.Invoke();
             //로그인 안될때
             print("네트워크 에러 : " + req.error);
         }

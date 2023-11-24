@@ -25,10 +25,10 @@ public class J_LoginUIManager : MonoBehaviour
     //public TMP_Text introductionText;//소개 text
     [SerializeField] private Button move_startBt; //이동 버튼
 
-    [Header("Popup")]
+    [Header("Window")]
     [SerializeField] private GameObject panel;
-    [SerializeField] private CanvasGroup popupCG;
-    List<GameObject> popups = new List<GameObject>(); //패널 오브젝트 이름 배열
+    [SerializeField] private CanvasGroup windowCG;
+    List<GameObject> pages = new List<GameObject>(); //패널 오브젝트 이름 배열
 
     [Header("Popup_Login")]
     public GameObject PopUp_Login; //로그인 창
@@ -49,11 +49,15 @@ public class J_LoginUIManager : MonoBehaviour
     public TMP_InputField inputNickName; //로그인 닉네임 입력
     public TMP_InputField inputPW2; //로그인 패스워드 입력
 
-    [Header("Popup_ CheckSignUp")]
-    public GameObject PopUp_checkSignUp; //회원가입창
-    public Button prev_SignUp;
-    public Button close_Bt4; //닫기 버튼
-    public TMP_Text signUpMessage; //회원가입 상태
+    [Header("LoginFail")]
+    public GameObject loginFail;
+    public Transform loginFailPopUp;
+    public Button loginFailCloseButton; //닫기 버튼
+
+    [Header("CheckSignUp")]
+    public GameObject checkSignUp; //회원가입창
+    public Transform checkSignUpPopUp;
+    public Button checkSignUpCloseButton; //닫기 버튼
 
     Action onChange;
     //string customizationSceneName = "Customization";
@@ -63,19 +67,19 @@ public class J_LoginUIManager : MonoBehaviour
         Init();
         //이전
         if (prev_LoginBt != null) prev_LoginBt.onClick.AddListener(Click_Prev);
-        if (prev_SignUp != null) prev_SignUp.onClick.AddListener(OnChange);
-        if (close_Bt4 != null) close_Bt4.onClick.AddListener(OnChange);
+        if (loginFailCloseButton != null) loginFailCloseButton.onClick.AddListener(LoginFailClose);
+        if (checkSignUpCloseButton != null) checkSignUpCloseButton.onClick.AddListener(CheckSignUpClose);
 
         //다음
         if (move_startBt != null) move_startBt.onClick.AddListener(Click_Start);
         if (move_SignUpBt != null) move_SignUpBt.onClick.AddListener(Click_Next);
         if (signUpBt != null) signUpBt.onClick.AddListener(Click_Next);
-        foreach (Transform t in popupCG.transform)
+        foreach (Transform t in windowCG.transform)
         {
-            popups.Add(t.gameObject);
+            pages.Add(t.gameObject);
             t.gameObject.SetActive(false);
         }
-        popups[page].SetActive(true);
+        pages[page].SetActive(true);
         isReady = true;
         system = EventSystem.current;
         isRemember = PlayerPrefs.GetInt("IsRemember", 0) == 1;
@@ -117,29 +121,48 @@ public class J_LoginUIManager : MonoBehaviour
     void Click_Start()
     {
         panel.SetActive(true);
-        popupCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
-        popupCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => popupCG.blocksRaycasts = true);
+        windowCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
+        windowCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => windowCG.blocksRaycasts = true);
     }
     //이전으로 이동하는 버튼
     public void Click_Prev()
     {
         if (page <= 0 || !isReady) return;
-        popups[page].SetActive(false);
-        popups[page -= 1].SetActive(true);
+        pages[page].SetActive(false);
+        pages[page -= 1].SetActive(true);
     }
-    //2칸 뒤로 이동
-    public void OnChange()
+
+    ////2칸 뒤로 이동
+    //public void OnChange()
+    //{
+    //    if (page <= 0 || !isReady) return;
+    //    pages[page].SetActive(false);
+    //    pages[page -= 2].SetActive(true);
+    //}
+
+    void LoginFailClose()
     {
-        if (page <= 0 || !isReady) return;
-        popups[page].SetActive(false);
-        popups[page -= 2].SetActive(true);
+        loginFailPopUp.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            loginFail.SetActive(false);
+        });
     }
+
+    void CheckSignUpClose()
+    {
+        checkSignUpPopUp.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            checkSignUp.SetActive(false);
+            Click_Prev();
+        });
+    }
+
     //다음으로 이동하는 버튼
     public void Click_Next()
     {
-        if (page >= popups.Count - 1) return;
-        popups[page].SetActive(false);
-        popups[page += 1].SetActive(true);
+        if (page >= pages.Count - 1) return;
+        pages[page].SetActive(false);
+        pages[page += 1].SetActive(true);
     }
     //현재 로그인 포스트 통신 함수 
     public void LoginPost()
@@ -180,6 +203,10 @@ public class J_LoginUIManager : MonoBehaviour
                 }
                 KHHPhotonInit.instance.Init(prevSceneName, nextSceneName, HttpManager.instance.nickname);
             }
+        }, () =>
+        {
+            loginFail.SetActive(true);
+            loginFailPopUp.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
         });
         JObject jObject = new JObject();
         jObject["email"] = inputId.text;
@@ -207,6 +234,9 @@ public class J_LoginUIManager : MonoBehaviour
             JObject data = jObject["data"].ToObject<JObject>();
             HttpManager.instance.email = data["email"].ToObject<string>();
             HttpManager.instance.nickname = data["nickname"].ToObject<string>();
+
+            checkSignUp.SetActive(true);
+            checkSignUpPopUp.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
         });
         JObject jObject = new JObject();
         jObject["email"] = inputId2.text;
