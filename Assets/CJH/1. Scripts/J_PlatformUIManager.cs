@@ -11,6 +11,7 @@ using System.Security.Policy;
 using Unity.VisualScripting;
 using UnityEngine.Audio;
 using Photon.Pun;
+using DG.Tweening;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class J_PlatformUIManager : MonoBehaviour
     public Button videoBt; //영상보러가기 버튼
     public Button customizeBt; //아바타 커스터마이징 가기 버튼
     [Header("Setting")]
+    public CanvasGroup settingCG;
     public Button settingBt; //설정 버튼
     public GameObject settingTab; //설정창
     public Button closeBt; //닫기 버튼
@@ -101,6 +103,23 @@ public class J_PlatformUIManager : MonoBehaviour
     {
         EnterUI();
     }
+    //떠오르기 애니메이션 ui
+    void Init()
+    {
+        settingCG.gameObject.SetActive(true);
+        settingCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
+        settingCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => settingCG.blocksRaycasts = true);
+    }
+    //사라지기 애니메이션 ui
+    void Outit()
+    {
+        settingCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => settingCG.blocksRaycasts = true);
+        settingCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
+        settingCG.gameObject.SetActive(false);
+    }
+
+
+
     //퀴즈 통신
     public void GetQuiz()
     {
@@ -137,13 +156,13 @@ public class J_PlatformUIManager : MonoBehaviour
     //설정 탭 열기
     public void OpenTab()
     {
-        settingTab.SetActive(true);
+        Init();
     }
     //설정 탭 닫기
     public void CloseTab()
     {
         if (closeBt.onClick != null)
-            settingTab.SetActive(false);
+         Outit();
     }
     //플레이어가 전광판의 일정거리안에 들어가면 EnterUI가 생성된다.
     public void EnterUI()
