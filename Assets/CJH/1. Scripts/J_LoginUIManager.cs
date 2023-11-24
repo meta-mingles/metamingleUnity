@@ -61,12 +61,9 @@ public class J_LoginUIManager : MonoBehaviour
     void Start()
     {
         Init();
-        //IntroductionText();
         //이전
         if (prev_LoginBt != null) prev_LoginBt.onClick.AddListener(Click_Prev);
         if (prev_SignUp != null) prev_SignUp.onClick.AddListener(OnChange);
-        //if (close_Bt1 != null) close_Bt1.onClick.AddListener(Click_Prev);
-        //if (close_Bt2 != null) close_Bt2.onClick.AddListener(Click_Prev);
         if (close_Bt4 != null) close_Bt4.onClick.AddListener(OnChange);
 
         //다음
@@ -78,15 +75,12 @@ public class J_LoginUIManager : MonoBehaviour
             popups.Add(t.gameObject);
             t.gameObject.SetActive(false);
         }
-
         popups[page].SetActive(true);
         isReady = true;
         system = EventSystem.current;
-
         isRemember = PlayerPrefs.GetInt("IsRemember", 0) == 1;
         rememberMeToggle.isOn = isRemember;
         rememberMeToggle.onValueChanged.AddListener(OnToggleValueChanged);
-
         //ison일때 playerprefs의 데이터 값을 가져온다
         if (rememberMeToggle.isOn)
         {
@@ -112,7 +106,6 @@ public class J_LoginUIManager : MonoBehaviour
     {
         ChangeInput();
     }
-
     void Init()
     {
         titleCG.gameObject.SetActive(true);
@@ -121,24 +114,19 @@ public class J_LoginUIManager : MonoBehaviour
         titleLogo.DOScale(Vector3.one * 0.7f, 0.1f).SetDelay(0.4f).SetEase(Ease.Linear).OnComplete(() =>
         { titleLogo.DOScale(Vector3.one, 0.8f).SetEase(Ease.OutElastic); });
     }
-
     void Click_Start()
     {
         panel.SetActive(true);
         popupCG.transform.DOMoveY(0, 0.5f).SetEase(Ease.Linear);
         popupCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => popupCG.blocksRaycasts = true);
     }
-
     //이전으로 이동하는 버튼
     public void Click_Prev()
     {
-
         if (page <= 0 || !isReady) return;
-
         popups[page].SetActive(false);
         popups[page -= 1].SetActive(true);
     }
-
     //2칸 뒤로 이동
     public void OnChange()
     {
@@ -146,12 +134,6 @@ public class J_LoginUIManager : MonoBehaviour
         popups[page].SetActive(false);
         popups[page -= 2].SetActive(true);
     }
-    //자신 비활성화
-    public void OnClose()
-    {
-
-    }
-
     //다음으로 이동하는 버튼
     public void Click_Next()
     {
@@ -159,7 +141,6 @@ public class J_LoginUIManager : MonoBehaviour
         popups[page].SetActive(false);
         popups[page += 1].SetActive(true);
     }
-
     //현재 로그인 포스트 통신 함수 
     public void LoginPost()
     {
@@ -168,21 +149,17 @@ public class J_LoginUIManager : MonoBehaviour
         {
             PlayerPrefs.SetString("email", inputId.text);
             PlayerPrefs.SetString("pw", inputPW.text);
-
             //Post 데이터 전송했을 때 서버로부터 응답온다
-            Debug.Log("Login : " + downloadHandler.text);
             //Netownjson
             JObject jObject = JObject.Parse(downloadHandler.text);
             JObject data = jObject["data"].ToObject<JObject>();
             HttpManager.instance.token = data["token"].ToObject<string>();
             HttpManager.instance.nickname = data["nickname"].ToObject<string>();
-
             string prevSceneName, nextSceneName;
             if (SceneManager.GetActiveScene().name.Contains("Tool")) //tool
             {
                 prevSceneName = SceneManager.GetActiveScene().name;
                 nextSceneName = "ToolSelect";
-
                 //씬이동
                 GlobalValue.PrevSceneName = prevSceneName;
                 GlobalValue.CurSceneName = nextSceneName;
@@ -203,17 +180,11 @@ public class J_LoginUIManager : MonoBehaviour
                 }
                 KHHPhotonInit.instance.Init(prevSceneName, nextSceneName, HttpManager.instance.nickname);
             }
-
-            //여기서 씬이동
-            print("씬이동");
         });
-
         JObject jObject = new JObject();
         jObject["email"] = inputId.text;
         jObject["password"] = inputPW.text;
-
         info.body = jObject.ToString();
-
         HttpManager.instance.SendRequest(info);
     }
 
@@ -224,7 +195,6 @@ public class J_LoginUIManager : MonoBehaviour
         {
             loginBt.onClick.AddListener(LoginPost);
         }
-
     }
     //회원가입 포스트
     public void SignUpPost()
@@ -233,20 +203,15 @@ public class J_LoginUIManager : MonoBehaviour
         info.Set(RequestType.POST, "/member/signup", (DownloadHandler downloadHandler) =>
         {
             //Post 데이터 전송했을 때 서버로부터 응답온다
-            Debug.Log("Signup : " + downloadHandler.text);
-
-
             JObject jObject = JObject.Parse(downloadHandler.text);
             JObject data = jObject["data"].ToObject<JObject>();
             HttpManager.instance.email = data["email"].ToObject<string>();
             HttpManager.instance.nickname = data["nickname"].ToObject<string>();
         });
-
         JObject jObject = new JObject();
         jObject["email"] = inputId2.text;
         jObject["password"] = inputPW2.text;
         jObject["nickname"] = inputNickName.text;
-
         info.body = jObject.ToString();
         HttpManager.instance.SendRequest(info);
     }
@@ -258,22 +223,10 @@ public class J_LoginUIManager : MonoBehaviour
             signUpBt.onClick.AddListener(SignUpPost);
         }
     }
-
     public void SceneChange(string prevSceneName, string nextSceneName)
     {
+
     }
-
-    //#if UNITY_EDITOR
-    //    private void OnValidate()
-    //    {
-    //        if (loginBt.onClick.GetPersistentEventCount() == 0)
-    //            UnityEditor.Events.UnityEventTools.AddStringPersistentListener(loginBt.onClick, SceneChange, customizationSceneName);
-
-    //    }
-    //#endif
-
-
-
     //탭키로 인풋필드 이동 및 엔터버튼으로 로그인하기 
     public void ChangeInput()
     {
@@ -296,7 +249,6 @@ public class J_LoginUIManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Return))
         {
             loginBt.onClick.Invoke();
-            Debug.Log("Button pressed!");
         }
     }
 
@@ -306,7 +258,6 @@ public class J_LoginUIManager : MonoBehaviour
         if (value)
         {
             PlayerPrefs.SetInt("IsRemember", 1);
-            //설정
         }
         else
         {

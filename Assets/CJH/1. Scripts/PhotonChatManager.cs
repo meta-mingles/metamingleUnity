@@ -9,7 +9,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
-using UnityEngine.UIElements;
 
 public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
 {
@@ -18,29 +17,21 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     public RectTransform trContent;
     public RectTransform rtScrollView;
     float prevContentH;//채팅이 추가되기 전의 Content의 H 값을 가지고 있는 변수
-
-
     //photon Chat Setting
     ChatAppSettings chatAppSettings;
-
     //채팅 총괄하는 객체 
     ChatClient chatClient;
-
     //기본 채팅 채널 목록
     public List<string> channelNames = new List<string>();
-
     //현재 선택된 채널
     int currChannelIdx = 0;
-
     // Start is called before the first frame update
     void Start()
     {
         //텍스트를 작성하고 엔터를 쳤을 때 호출되는 함수 등록(onSubmit.AddListener)
         inputChat.onSubmit.AddListener(OnSubmit);
-
         //PhotonChat 초기설정
         PhotonChatSetting();
-
         //접속시도
         Connect();
     }
@@ -57,9 +48,6 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     {
         //새로운 채팅이 추가되기 전의 content의 H값을 저장
         prevContentH = trContent.sizeDelta.y;
-
-
-
         //귓속말인지 판단
         // /w 아이디 메시지 = > 메시지에 띄어쓰기를 기준으로 string 배열로 판단
         string[] s = text.Split(" ", 3);
@@ -77,15 +65,12 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
             //채팅을 보내자
             chatClient.PublishMessage(channelNames[currChannelIdx], text);
         }
-
         //inputChat 내용 초기화
         inputChat.text = "";
         //inputChat 강제로 선택되게 함
         inputChat.ActivateInputField();
-
         //Rpc함수로 모든사람한테 채팅 내용 전달
         photonView.RPC(nameof(AddChatRpc), RpcTarget.All, text);
-
         //자동스크롤
         StartCoroutine(AutoScrollBottom());
     }
@@ -107,11 +92,10 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
             {
                 //content의 y값 재설정
                 trContent.anchoredPosition = new Vector2(0, trContent.sizeDelta.y - rtScrollView.sizeDelta.y);
-
             }
         }
     }
-    //스타드 때 호출된 포톤챗 설정
+    //스타트 때 호출된 포톤챗 설정
     void PhotonChatSetting()
     {
         //포톤 설정을 가져와서 ChatAppSettings에 설정하자
@@ -128,7 +112,6 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
         chatAppSettings.Server = photonSettings.Server;
         chatAppSettings.Port = (ushort)photonSettings.Port;
         chatAppSettings.ProxyServer = photonSettings.ProxyServer;
-
     }
     //PhotonChat에 접속하는 함수
     void Connect()
@@ -136,7 +119,6 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
         chatClient = new ChatClient(this);
         //채팅할 때 NickName 설정
         chatClient.AuthValues = new Photon.Chat.AuthenticationValues(HttpManager.instance.nickname); //추후에 회원가입에서 닉네임을 서버에서 불러와야함 
-
         //초기설정을 이용해서 채팅서버에 연결 시도
         chatClient.ConnectUsingSettings(chatAppSettings);
     }
@@ -149,7 +131,7 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
         //생성된 게임오브젝트에서 ChatItem 컴포넌트 가져온다
         PhotonChatItem item = go.GetComponent<PhotonChatItem>();
         //가져온 컴포넌트에서 SetText 함수 실행
-        item.SetText(sender + " : " + message, color);
+        item.SetText(sender, message, color);
     }
 
     public void DebugReturn(DebugLevel level, string message)
@@ -197,7 +179,6 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
         for (int i = 0; i < channels.Length; i++)
         {
             Debug.Log("**** 채널 [" + channels[i] + "]추가 성공");
-
         }
 
     }

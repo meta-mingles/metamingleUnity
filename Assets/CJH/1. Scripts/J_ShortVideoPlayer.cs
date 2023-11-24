@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-
 public class J_ShortVideoPlayer : J_VideoPlayerBase
 {
     [Header("ShortVideo info")]

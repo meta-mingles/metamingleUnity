@@ -7,8 +7,6 @@ using System.Text;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
-
-
 public enum RequestType
 {
     GET,
@@ -17,24 +15,18 @@ public enum RequestType
     DELETE,
     TEXTURE
 }
-
 public class HttpInfo
 {
     public RequestType requestType;
     public string url = "";
     public string testUrl = "";
-
     public string body = "{}";
-    
     public Action<DownloadHandler> onReceive;
     public Action<DownloadHandler, int> onReceiveImage;
-
     public string loginId;
     public string loginPW;
     public string token;
-
     public int imageId;
-
     public void Set(
         RequestType type,
         string u,
@@ -43,14 +35,12 @@ public class HttpInfo
     {
         requestType = type;
         if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
-        //if (useDefaultUrl) testUrl = "http://192.168.0.37:8080"; //기존 서버 url
+        //if (useDefaultUrl) testUrl = "http://192.168.0.25:8080"; //기존 서버 url
         url += u;
         //testUrl += u;
         onReceive = callback;
     }
 }
-
- 
 public class HttpManager : MonoBehaviour
 {
     public static HttpManager instance;
@@ -65,7 +55,6 @@ public class HttpManager : MonoBehaviour
     public string english = "";
     public string korean = "";
     public int shortFormNo;
-
     public string token = "";
     private void Awake()
     {
@@ -84,7 +73,6 @@ public class HttpManager : MonoBehaviour
         if(httpInfo.requestType == RequestType.POST)
         {
             StartCoroutine(Post(httpInfo));
-
         }
         else
         {
@@ -94,9 +82,7 @@ public class HttpManager : MonoBehaviour
 
     IEnumerator CoSendRequest(HttpInfo httpInfo)
     {
-
         UnityWebRequest req = null;
-
         //POST, GET, PUT, DELETE  б 
         switch (httpInfo.requestType)
         {
@@ -104,7 +90,6 @@ public class HttpManager : MonoBehaviour
                 //Debug.Log(httpInfo.url);
                 //req = UnityWebRequest.Get(httpInfo.testUrl);
                 req = UnityWebRequest.Get(httpInfo.url);
-
                 break;
            
             case RequestType.PUT:
@@ -117,14 +102,11 @@ public class HttpManager : MonoBehaviour
                 req = UnityWebRequestTexture.GetTexture(httpInfo.url);
                 break;
         }
-
         if(token.Length > 0)
         {
             req.SetRequestHeader("Authentication", token);
         }
-
         yield return req.SendWebRequest();
-
         SetResult(req, httpInfo);
     }
 
@@ -143,10 +125,7 @@ public class HttpManager : MonoBehaviour
             {
                 req.SetRequestHeader("Authentication", token);
             }
-
             yield return req.SendWebRequest();
-
-
             SetResult(req, httpInfo);
         }
     }

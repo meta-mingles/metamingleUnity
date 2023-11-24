@@ -21,9 +21,6 @@ public class J_PlatformUIManager : MonoBehaviour
     {
         return linear != 0 ? 20f * Mathf.Log10(linear) : -144.0f;
     }
-
-
-
     private void Awake()
     {
         Instance = this;
@@ -36,10 +33,12 @@ public class J_PlatformUIManager : MonoBehaviour
         {
             GlobalValue.myLanguage = SystemLanguage.English;
         }
+        //언어설정 초기값
+        koreanBt.GetComponent<Image>().sprite = languageBox;
+        englishBt.GetComponent<Image>().sprite = alpha;
         //사운드 키기
         SoundManager.instance.BGMVolume = LinearToDecibel(0.3f); // 30 %로 시작
         SoundManager.instance.PlayBGM("PlatformBGM");
-
         soundSlider.onValueChanged.AddListener(HandleVolumeChange);
         soundSlider.value = 0.5f; //기본값 설정
     }
@@ -47,16 +46,13 @@ public class J_PlatformUIManager : MonoBehaviour
     private void HandleVolumeChange(float volume)
     {
         SoundManager.instance.BGMVolume = LinearToDecibel(volume);
-
     }
-
     [Header("Quiz")]
     public TMP_Text questionKorean; //한국질문
     public TMP_Text questionEnglish;//영어질문
     [Header("Platform")]
     public Button videoBt; //영상보러가기 버튼
     public Button customizeBt; //아바타 커스터마이징 가기 버튼
-    public Button chatBt; //채팅 버튼
     [Header("Setting")]
     public Button settingBt; //설정 버튼
     public GameObject settingTab; //설정창
@@ -76,26 +72,35 @@ public class J_PlatformUIManager : MonoBehaviour
     public Button enterBt;//입장 버튼
     private float Distance; // 거리
     public float constDist = 3f; //일정거리
-
     private void Start()
     {
         //언어
-        koreanBt.onClick.AddListener(() => ChangeLanguage("Korean"));
-
+        koreanBt.onClick.AddListener(() => ChangeLanguage("Korean", "?language=kr"));
+        englishBt.onClick.AddListener(() => ChangeLanguage("English","?language=eng"));
         //퀴즈
         GetQuiz();
     }
-
-    private void ChangeLanguage(string v)
+    private void ChangeLanguage(string language, string subTitleVideoUrl)
     {
-
+        //한국어 버튼일때
+        if(language == "Korean")
+        {
+            GlobalValue.myLanguage = SystemLanguage.Korean; 
+            koreanBt.GetComponent<Image>().sprite = languageBox;
+            englishBt.GetComponent<Image>().sprite = alpha;
+        }
+        //영어 버튼일때
+        else if (language == "English")
+        {
+            GlobalValue.myLanguage = SystemLanguage.English;
+            koreanBt.GetComponent<Image>().sprite = alpha;
+            englishBt.GetComponent<Image>().sprite = languageBox;
+        }
     }
-
     private void Update()
     {
         EnterUI();
     }
-
     //퀴즈 통신
     public void GetQuiz()
     {
