@@ -172,6 +172,7 @@ public class KHHEditManager : MonoBehaviour
     {
         if (!screenEditor.Play()) return;
 
+        screen.color = Color.white;
         screen.texture = videoCapture.FrameRenderTexture;
         playButton.gameObject.SetActive(false);
         stopButton.gameObject.SetActive(true);
@@ -183,6 +184,7 @@ public class KHHEditManager : MonoBehaviour
         stopButton.gameObject.SetActive(false);
         screenEditor.Stop();
         screen.texture = null;
+        screen.color = new Color32(56, 60, 62, 255);
     }
 
     void ExportButtonEvent()

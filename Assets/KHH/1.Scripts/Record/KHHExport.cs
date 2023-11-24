@@ -82,6 +82,7 @@ public class KHHExport : MonoBehaviour
 
     IEnumerator CoGenerateVideo()
     {
+        screen.color = Color.white;
         screen.texture = videoCapture.FrameRenderTexture;
         VideoCaptureCtrl.instance.StartCapture();
         yield return null;
@@ -108,6 +109,7 @@ public class KHHExport : MonoBehaviour
         while (VideoCaptureCtrl.instance.status != VideoCaptureCtrl.StatusType.FINISH)
             yield return null;
 
+        screen.color = new Color32(56, 60, 62, 255);
         screen.texture = null;
         //captureCamera.targetTexture = captureRenderTexture;
         exportState = ExportState.None;

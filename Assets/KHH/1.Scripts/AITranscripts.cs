@@ -59,13 +59,17 @@ public class AITranscripts : MonoBehaviour
         public string uuid;
     }
 
-    private string apiUrl_chat = "http://metaverse.ohgiraffers.com:8080/scenario/streaming";
-    private string apiUrl_image = "http://metaverse.ohgiraffers.com:8080/creative/image";
-    private string apiUrl_sound = "http://metaverse.ohgiraffers.com:8080/creative/sound";
-    private string apiUrl_quiz = "http://localhost:8080/scenario/quiz";
+    //private string apiUrl_chat = "http://metaverse.ohgiraffers.com:8080/scenario/streaming";
+    //private string apiUrl_image = "http://metaverse.ohgiraffers.com:8080/creative/image";
+    //private string apiUrl_sound = "http://metaverse.ohgiraffers.com:8080/creative/sound";
+    //private string apiUrl_quiz = "http://metaverse.ohgiraffers.com:8080/scenario/quiz";
+    private string apiUrl_chat = "http://192.168.0.5:8080/scenario/streaming";
+    private string apiUrl_image = "http://192.168.0.5:8080/creative/image";
+    private string apiUrl_sound = "http://192.168.0.5:8080/creative/sound";
+    private string apiUrl_quiz = "http://192.168.0.5:8080/scenario/quiz";
 
     public Button aiTranscriptsButton;
-    public TextMeshProUGUI aiTranscriptsButtonText;
+    public GameObject[] aiTranscriptsButtonTImages;
     public TMP_InputField chatInputField;
     public TMP_InputField transcriptsInputField;
 
@@ -95,7 +99,8 @@ public class AITranscripts : MonoBehaviour
         string inputText = chatInputField.text;
         string json = "{\"text\":\"" + inputText + "\"}";
 
-        aiTranscriptsButtonText.text = "작성중";
+        aiTranscriptsButtonTImages[0].SetActive(false);
+        aiTranscriptsButtonTImages[1].SetActive(true);
         aiTranscriptsButton.interactable = false;
 
         //isGeneratingBG = true;
@@ -391,7 +396,8 @@ public class AITranscripts : MonoBehaviour
 
     void HandleServerResponse()
     {
-        aiTranscriptsButtonText.text = "작성";
+        aiTranscriptsButtonTImages[0].SetActive(true);
+        aiTranscriptsButtonTImages[1].SetActive(false);
         aiTranscriptsButton.interactable = true;
     }
 }
