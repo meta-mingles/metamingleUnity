@@ -18,7 +18,7 @@ public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
 
     [Header("Male")]
     //몸 구조
-    public GameObject[] m_BasicBody;
+    public SkinnedMeshRenderer[] m_BasicBodys;
     //머리카락의 부모
     public Transform m_TrBaseHead;
     //머리
@@ -38,7 +38,7 @@ public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
 
     [Header("Female")]
     //몸 구조
-    public GameObject[] f_BasicBody;
+    public SkinnedMeshRenderer[] f_BasicBodys;
     //머리카락의 부모
     public Transform f_TrBaseHead;
     //머리
@@ -87,6 +87,7 @@ public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
             else if (categoryData.category.Equals("head"))
             {
                 SkinnedMeshRenderer head = isMale ? m_Head : f_Head;
+                SkinnedMeshRenderer[] bodys = isMale ? m_BasicBodys : f_BasicBodys;
                 //head.material = matHeads[categoryData.itemIndex - 1];
                 int catNum = 0;
                 for (int j = 0; j < head.materials.Length; j++)
@@ -95,6 +96,11 @@ public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
                     if (head.materials[j].name.Contains(categoryData.materialDatas[catNum].name))
                     {
                         SetColor(head.materials[j], categoryData.materialDatas[catNum]);
+                        if (categoryData.materialDatas[catNum].name.Contains("body"))
+                            for (int k = 0; k < bodys.Length; k++)
+                                if (bodys[k] != null)
+                                    SetColor(bodys[k].materials[j], categoryData.materialDatas[catNum]);
+
                         catNum++;
                         if (catNum == categoryData.materialDatas.Count) break;
                     }
@@ -234,9 +240,9 @@ public class J_CustomCharacter : MonoBehaviourPun, IPunObservable
                 bodyIdx -= 22;
 
             if (isMale)
-                m_BasicBody[bodyIdx].SetActive(false);
+                m_BasicBodys[bodyIdx].gameObject.SetActive(false);
             else
-                f_BasicBody[bodyIdx].SetActive(false);
+                f_BasicBodys[bodyIdx].gameObject.SetActive(false);
         }
 
     }
