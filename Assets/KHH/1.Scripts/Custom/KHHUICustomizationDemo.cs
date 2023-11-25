@@ -75,7 +75,12 @@ public class KHHUICustomizationDemo : MonoBehaviour
             item.Title = categories[i];
 
             string aux = categories[i];
-            item.OnClick = () => OnClickCategory?.Invoke(aux);
+            item.OnClick = () =>
+            {
+                foreach (var categoryItem in m_CategoryItems)
+                    categoryItem.SetOff();
+                OnClickCategory?.Invoke(aux);
+            };
         }
 
         for (int i = categories.Length; i < m_CategoryItems.Count; i++)

@@ -21,14 +21,15 @@ public class KHHExport : MonoBehaviour
     public Button uploadButton;
 
     [Header("Interactive")]
+    public Button shortformButton;
+    public GameObject shortformOff;
+    public GameObject shortformOn;
     public Button interactiveButton;
     public GameObject interactiveOff;
     public GameObject interactiveOn;
     public GameObject interactive;
     public KHHInteractiveButton interactiveButtonLeft;
     public KHHInteractiveButton interactiveButtonRight;
-
-    Outline interacitveOutline;
 
     public KHHScreenEditor screenEditor;
     public RawImage screen;
@@ -50,9 +51,8 @@ public class KHHExport : MonoBehaviour
     {
         if (backButton != null) backButton.onClick.AddListener(() => { gameObject.SetActive(false); });  //에디터로 돌아가기
         if (uploadButton != null) uploadButton.onClick.AddListener(UploadButtonEvent);
+        if (shortformButton != null) shortformButton.onClick.AddListener(ShortformButtonEvent);
         if (interactiveButton != null) interactiveButton.onClick.AddListener(InteractiveButtonEvent);
-
-        interacitveOutline = interactiveButton.GetComponent<Outline>();
     }
 
     //private void Update()
@@ -131,14 +131,24 @@ public class KHHExport : MonoBehaviour
         upload.Open(isInterActive ? UploadInteractiveVideo : UploadShortformVideo);
     }
 
+    void ShortformButtonEvent()
+    {
+        isInterActive = false;
+        shortformOff.SetActive(false);
+        shortformOn.SetActive(true);
+        interactiveOff.SetActive(true);
+        interactiveOn.SetActive(false);
+        interactive.SetActive(false);
+    }
+
     void InteractiveButtonEvent()
     {
-        isInterActive = !isInterActive;
-        interactiveOff.SetActive(!isInterActive);
-        interactiveOn.SetActive(isInterActive);
-        interactive.SetActive(isInterActive);
-        interacitveOutline.enabled = isInterActive;
-        //interactiveButton.image.color = isInterActive ? new Color32(200, 200, 200, 255) : new Color32(255, 255, 255, 255);
+        isInterActive = true;
+        shortformOff.SetActive(true);
+        shortformOn.SetActive(false);
+        interactiveOff.SetActive(false);
+        interactiveOn.SetActive(true);
+        interactive.SetActive(true);
     }
 
 
