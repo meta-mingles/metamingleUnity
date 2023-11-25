@@ -100,7 +100,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         {
             yield return StartCoroutine(ChangeColor(likeBtImage,color, colorChangeDuration));
         }
-        //최종 색깔 검정색으로 바뀐다./
+        //최종 색깔 검정색으로 바뀐다.
         yield return like_Button.GetComponent<Image>().color = Color.black;
     }
     //색상변경
