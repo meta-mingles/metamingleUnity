@@ -64,6 +64,8 @@ public class J_LoginUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DOTween.SetTweensCapacity(1250, 50);
+
         Init();
         //이전
         if (prev_LoginBt != null) prev_LoginBt.onClick.AddListener(Click_Prev);

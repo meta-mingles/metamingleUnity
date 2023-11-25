@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Security.Policy;
+using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
@@ -13,15 +15,40 @@ public class J_VideoReceiver : MonoBehaviour
     public GameObject videoFactory;
     public GameObject interactiveVideoFactory;
     public Transform trCtOFVideoSV; //비디오 스크롤뷰 생성장소
-    public GameObject videoInfo; //비디오 정보
+    private string thumbnailUrl;
     //public GameObject errorVideoFactory; //조회실패 팝업창
     private void Awake()
     {
         instance = this;
-        SceneLoad();
+        // thumbnailUrl 초기화
+        if (GlobalValue.myLanguage == SystemLanguage.Korean)
+        {
+            thumbnailUrl = "?language=kr";
+        }
+        else if (GlobalValue.myLanguage == SystemLanguage.English)
+        {
+            thumbnailUrl = "?language=eng";
+        }
+        if (GlobalValue.directVideoNo != 0)
+        {
+            VideoLoad();
+        }
+        else
+        {
+            ListLoad();
+        }
     }
-    ////씬이 넘어올 때 
-    private void SceneLoad()
+    //바로 숏폼 조회가 되는 씬
+    private void VideoLoad()
+    {
+        //서버한테 영상 정보 요청
+        HttpInfo httpInfo = new HttpInfo();
+        string url = "/short-form";
+        httpInfo.Set(RequestType.GET, url + "/"+ GlobalValue.directVideoNo + thumbnailUrl, OnCompleteSearchVideo);
+        HttpManager.instance.SendRequest(httpInfo);
+    }
+    //리스트가 열리는 씬
+    private void ListLoad()
     {
         // 서버한테 영상 정보 요청
         HttpInfo httpInfo = new HttpInfo();
@@ -38,6 +65,7 @@ public class J_VideoReceiver : MonoBehaviour
         httpInfo.Set(RequestType.GET, url+ thumbnailUrl, OnCompleteSearchVideo);
         HttpManager.instance.SendRequest(httpInfo);
     }
+
     //숏폼 다운
     void OnCompleteSearchVideo(DownloadHandler downloadHandler)
     {
