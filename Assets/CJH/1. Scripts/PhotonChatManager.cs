@@ -71,13 +71,13 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
         inputChat.ActivateInputField();
         //Rpc함수로 모든사람한테 채팅 내용 전달
         photonView.RPC(nameof(AddChatRpc), RpcTarget.All, text);
-        //자동스크롤
-        StartCoroutine(AutoScrollBottom());
+
     }
     [PunRPC]
     void AddChatRpc(string chat)
     {
-       //채팅 내용 추가
+        //채팅 내용 추가
+
     }
 
     //자동 스크롤 다운
@@ -132,6 +132,8 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
         PhotonChatItem item = go.GetComponent<PhotonChatItem>();
         //가져온 컴포넌트에서 SetText 함수 실행
         item.SetText(sender, message, color);
+        //자동스크롤
+        StartCoroutine(AutoScrollBottom());
     }
 
     public void DebugReturn(DebugLevel level, string message)

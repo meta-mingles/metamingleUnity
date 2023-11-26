@@ -2,12 +2,14 @@
 using System;
 using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class J_VideoPlayerBase : MonoBehaviour
 {
+    public string videoUrl;
     public VideoPlayer videoPlayer;
     public ShortVideoInfo videoInfo;
     public Action onClickEvent;
@@ -18,8 +20,6 @@ public class J_VideoPlayerBase : MonoBehaviour
     public Slider soundSlider; //사운드 볼륨 조절 
     public TMP_Text currentTimeText;
     public TMP_Text totalTimeText;
-    //영상 관련
-    private bool isDirect;
 
     private void Awake()
     {
@@ -46,11 +46,6 @@ public class J_VideoPlayerBase : MonoBehaviour
     }
     public virtual void SetItem(ShortVideoInfo Info)
     {
-        if (isDirect)
-        {
-
-        }
-
         RenderTexture rt = new RenderTexture(1920, 1080, 24);
         videoPlayer.targetTexture = rt;
         videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
@@ -69,7 +64,17 @@ public class J_VideoPlayerBase : MonoBehaviour
             subTitleurl = "?language=eng";
         }
 
-        httpInfo.Set(RequestType.GET, videoInfo.url + subTitleurl, (downloadHandler) =>
+        if (GlobalValue.directVideoNo != 0)
+        {
+            videoUrl = videoInfo.url + GlobalValue.directVideoNo + subTitleurl;
+            GlobalValue.directVideoNo = 0;
+        }
+        else
+        {
+            videoUrl = videoInfo.url + subTitleurl;
+        }
+
+        httpInfo.Set(RequestType.GET, videoUrl, (downloadHandler) =>
         {
             byte[] videoBytes = downloadHandler.data;
             videoPlayer.url = videoInfo.url;

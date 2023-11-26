@@ -11,6 +11,7 @@ using System.Security.Policy;
 using Unity.VisualScripting;
 using UnityEngine.Audio;
 using Photon.Pun;
+using DG.Tweening;
 
 public class J_PlatformUIManager : MonoBehaviour
 {
@@ -50,10 +51,13 @@ public class J_PlatformUIManager : MonoBehaviour
     [Header("Quiz")]
     public TMP_Text questionKorean; //한국질문
     public TMP_Text questionEnglish;//영어질문
+    private bool isDirect;
+    public int videoNo;
     [Header("Platform")]
     public Button videoBt; //영상보러가기 버튼
     public Button customizeBt; //아바타 커스터마이징 가기 버튼
     [Header("Setting")]
+    public CanvasGroup settingCG;
     public Button settingBt; //설정 버튼
     public GameObject settingTab; //설정창
     public Button closeBt; //닫기 버튼
@@ -97,17 +101,30 @@ public class J_PlatformUIManager : MonoBehaviour
             englishBt.GetComponent<Image>().sprite = languageBox;
         }
     }
-    private void Update()
+    //떠오르기 애니메이션 ui
+    void Init()
     {
-        EnterUI();
+        settingCG.gameObject.SetActive(true);
+        settingCG.transform.DOLocalMoveY(0, 0.5f).SetEase(Ease.Linear);
+        settingCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => settingCG.blocksRaycasts = true);
+    }
+    //사라지기 애니메이션 ui
+    void Outit()
+    {
+        settingCG.transform.DOLocalMoveY(-270f, 0.5f).SetEase(Ease.Linear);
+        settingCG.DOFade(0, 0.5f).SetEase(Ease.Linear).OnComplete(() => 
+        {
+            settingCG.gameObject.SetActive(false);
+            settingCG.blocksRaycasts = true;
+        });
     }
     //퀴즈 통신
     public void GetQuiz()
     {
         //퀴즈 겟
         HttpInfo info = new HttpInfo();
-        string url = "/quiz-rank";
-        info.Set(RequestType.GET, url, (DownloadHandler downloadHandler) =>
+        string quizUrl = "/quiz-rank";
+        info.Set(RequestType.GET, quizUrl, (DownloadHandler downloadHandler) =>
         {
             //Get 데이터 전송했을 때 서버로부터 응답온다
             JObject jObject = JObject.Parse(downloadHandler.text);
@@ -115,16 +132,16 @@ public class J_PlatformUIManager : MonoBehaviour
 
             foreach (var item in dataArray)
             {
+                int shortFormNo = item["shortFormNo"].ToObject<int>();
                 string english = item["english"].ToString();
                 string korean = item["korean"].ToString();
-
                 questionEnglish.text = english;
                 questionKorean.text = korean;
+                videoNo = shortFormNo;
             }
         });
         HttpManager.instance.SendRequest(info);
     }
-
     //씬이동 -- 비디오씬, 커스텀씬
     public void SceneChange(string sceneName)
     {
@@ -137,38 +154,14 @@ public class J_PlatformUIManager : MonoBehaviour
     //설정 탭 열기
     public void OpenTab()
     {
-        settingTab.SetActive(true);
+        Init();
     }
     //설정 탭 닫기
     public void CloseTab()
     {
         if (closeBt.onClick != null)
-            settingTab.SetActive(false);
+         Outit();
     }
-    //플레이어가 전광판의 일정거리안에 들어가면 EnterUI가 생성된다.
-    public void EnterUI()
-    {
-        //플레이어와 전광판간의 거리를 잰다
-        Distance = Vector3.Distance(billboard.transform.position, KHHPhotonManager.Instance.player.transform.position);
-
-        //일정거리 안에 들어가면
-        if (Distance < constDist)
-        {
-            enterTab.SetActive(true);
-        }
-        else
-        {
-            enterTab.SetActive(false);
-        }
-        if (enterBt != null && Input.GetKeyDown(KeyCode.F))
-        {
-            GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
-            GlobalValue.CurSceneName = "VideoScene";
-            PhotonNetwork.LeaveRoom();
-            SceneManager.LoadScene("VideoScene");
-        }
-    }
-
 #if UNITY_EDITOR
     private void OnValidate()
     {
