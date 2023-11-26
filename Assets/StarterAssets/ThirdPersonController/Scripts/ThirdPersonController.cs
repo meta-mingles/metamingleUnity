@@ -1,5 +1,6 @@
 ﻿ using UnityEngine;
-#if ENABLE_INPUT_SYSTEM 
+using UnityEngine.EventSystems;
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
 
@@ -154,6 +155,11 @@ namespace StarterAssets
 
         private void Update()
         {
+            // UI 요소와 상호작용 중인지 확인
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return; // UI 요소와 상호작용 중이면 아래의 움직임 관련 코드를 실행하지 않음
+            }
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
@@ -163,6 +169,11 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            // UI 요소와 상호작용 중인지 확인
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return; // UI 요소와 상호작용 중이면 아래의 움직임 관련 코드를 실행하지 않음
+            }
             CameraRotation();
         }
 

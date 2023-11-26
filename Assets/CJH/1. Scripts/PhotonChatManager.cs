@@ -9,6 +9,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
+using UnityEngine.UIElements;
 
 public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
 {
@@ -16,6 +17,8 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     public GameObject chatItemFactory;
     public RectTransform trContent;
     public RectTransform rtScrollView;
+    public ScrollRect scrollRect;
+        
     float prevContentH;//채팅이 추가되기 전의 Content의 H 값을 가지고 있는 변수
     //photon Chat Setting
     ChatAppSettings chatAppSettings;
@@ -83,17 +86,20 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     //자동 스크롤 다운
     IEnumerator AutoScrollBottom()
     {
-        yield return 0;
-        //스크롤뷰의 H보다 content의 H값이 크다면
-        if(rtScrollView.sizeDelta.y < trContent.sizeDelta.y)
-        {
-            //이전에 바닥에 닿아있었다면
-            if(prevContentH - rtScrollView.sizeDelta.y <= trContent.anchoredPosition.y)
-            {
-                //content의 y값 재설정
-                trContent.anchoredPosition = new Vector2(0, trContent.sizeDelta.y - rtScrollView.sizeDelta.y);
-            }
-        }
+        yield return null;
+
+        scrollRect.normalizedPosition = new Vector2(0, 0);
+
+        ////스크롤뷰의 H보다 content의 H값이 크다면
+        //if (rtScrollView.sizeDelta.y < trContent.sizeDelta.y)
+        //{
+        //    //이전에 바닥에 닿아있었다면
+        //    if(prevContentH - rtScrollView.sizeDelta.y <= trContent.anchoredPosition.y)
+        //    {
+        //        //content의 y값 재설정
+        //        trContent.anchoredPosition = new Vector2(0, trContent.sizeDelta.y - rtScrollView.sizeDelta.y);
+        //    }
+        //}
     }
     //스타트 때 호출된 포톤챗 설정
     void PhotonChatSetting()
