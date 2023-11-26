@@ -44,6 +44,16 @@ public class KHHVideoCapture : MonoBehaviour
 
     public void OnCaptureComplete()
     {
+        int count = 0;
+        string newFilePath = RockVR.Video.PathConfig.SaveFolder + KHHEditData.VideoTitle + "_" + count.ToString() + ".mp4";
+        while (System.IO.File.Exists(newFilePath))
+        {
+            count++;
+            newFilePath = RockVR.Video.PathConfig.SaveFolder + KHHEditData.VideoTitle + "_" + count.ToString() + ".mp4";
+        }
+        System.IO.File.Copy(filePath, newFilePath);
+        System.IO.File.Delete(filePath);
+        filePath = newFilePath;
         Debug.Log("Capture Finish");
         //완료창 띄우기
     }
@@ -70,7 +80,7 @@ public class KHHVideoCapture : MonoBehaviour
 
     IEnumerator CoUploadShortformVideo(byte[] videoBytes, string title, string description)
     {
-        string uuid = null;  // 없을 시 null 반환
+        string uuid = string.Empty;  // 없을 시 null 반환
         if (PlayerPrefs.HasKey($"{KHHEditData.VideoTitle}uuid"))
             uuid = PlayerPrefs.GetString($"{KHHEditData.VideoTitle}uuid");  // 시나리오 작성 시 저장된 키 값 꺼냄
 
@@ -133,7 +143,7 @@ public class KHHVideoCapture : MonoBehaviour
 
     IEnumerator CoUploadInteractiveVideo(List<byte[]> videoBytesList, string title, string description, string c1, string c2)
     {
-        string uuid = null;  // 없을 시 null 반환
+        string uuid = string.Empty;  // 없을 시 null 반환
         if (PlayerPrefs.HasKey($"{KHHEditData.VideoTitle}uuid"))
             uuid = PlayerPrefs.GetString($"{KHHEditData.VideoTitle}uuid");  // 시나리오 작성 시 저장된 키 값 꺼냄
 

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class KHHExportUpload : MonoBehaviour
 {
-    [SerializeField]CanvasGroup canvasGroup;
+    [SerializeField] CanvasGroup canvasGroup;
 
     [Header("Check")]
     [SerializeField] CanvasGroup check;
@@ -35,7 +35,7 @@ public class KHHExportUpload : MonoBehaviour
 
     void Init()
     {
-        transform.localPosition = new Vector3(0, -100, 0);
+        canvasGroup.transform.localPosition = new Vector3(0, -100, 0);
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
 
