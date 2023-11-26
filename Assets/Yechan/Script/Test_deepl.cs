@@ -11,8 +11,6 @@ public class Test_deepl : MonoBehaviour
     public static Test_deepl Instance { get; private set; }
     public Change_language get_language;
     private Translator translator;
-    public Button KEButton;
-    public Button EKButton;
     public TMP_InputField inputText;
     public TMP_InputField outputText;
     string input_language;
@@ -61,29 +59,12 @@ public class Test_deepl : MonoBehaviour
         }
     }
     string selected_language;
-    void KEOnButtonClicked()
-    {
-        if (get_language.iskorea)
-        {
-            selected_language = "ko";
-        }
-        else
-        {
-            selected_language = "EN-GB";
-        }
-        Debug.Log("버튼출력");
-        Debug.Log(get_language.iskorea);
-
-        string textValue = inputText.text;
-
-        Debug.Log("Button Clicked! Text is: " + textValue);
-        StartTranslation(textValue,selected_language);
-    }
+    
     void Start()
     {
         var authKey = "39774928-946a-9d79-a580-148a5a61b7b5:fx"; // Replace with your key
         translator = new Translator(authKey);
-        KEButton.onClick.AddListener(KEOnButtonClicked);
+        //KEButton.onClick.AddListener(KEOnButtonClicked);
         Debug.Log("테스트 시작");
     }
 }
