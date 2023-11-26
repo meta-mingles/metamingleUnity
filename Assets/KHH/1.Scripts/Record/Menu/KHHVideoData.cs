@@ -24,7 +24,7 @@ public class KHHVideoData : KHHData
             if (Input.GetKeyDown(KeyCode.Delete))
             {
                 //파일 삭제
-                File.Delete(KHHEditData.FileSoundPath + "/" + fileName + ".wav");
+                File.Delete(KHHEditData.FileVideoPath + fileName + FileExtension);
                 khhDataManager.Refresh();
             }
         }
@@ -45,7 +45,8 @@ public class KHHVideoData : KHHData
         videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
         videoPlayer.url = filePath;
         videoPlayer.SetDirectAudioVolume(0, 0);
-        videoPlayer.Stop();
+        videoPlayer.Play();
+        videoPlayer.Pause();
     }
 
     public override void OnSelect(BaseEventData eventData)

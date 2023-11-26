@@ -1,8 +1,9 @@
-﻿using Rukha93.ModularAnimeCharacter.Customization;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
@@ -50,7 +51,10 @@ public static class KHHUserCustom
     static KHHUserCustomData customData;
     static KHHCategoryData curCatData;
 
-    public static void Init()
+    static bool isLoaded = false;
+    public static bool HasData { get; set; } 
+
+    static void Init()
     {
         customData = new KHHUserCustomData();
         customData.datas = new List<KHHCategoryData>();
@@ -63,6 +67,12 @@ public static class KHHUserCustom
             data.materialDatas = new List<KHHMaterialData>();
             customData.datas.Add(data);
         }
+    }
+
+    public static void Clear()
+    {
+        foreach (var data in customData.datas)
+            data.Reset();
     }
 
     public static void SetCategory(string category)
@@ -124,6 +134,7 @@ public static class KHHUserCustom
         {
             fileStream = new FileStream(Application.persistentDataPath + "/customData.json", FileMode.Create);
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
+            await PostJson(bytes);
             await fileStream.WriteAsync(bytes, 0, bytes.Length);
         }
         catch (Exception e)
@@ -132,21 +143,106 @@ public static class KHHUserCustom
         }
         finally
         {
+            HasData = true;
             if (fileStream != null)
                 fileStream.Close();
             action?.Invoke();
         }
     }
 
-    public static KHHUserCustomData LoadData()
+    static async Task PostJson(byte[] jsonData)
     {
-        if (!System.IO.File.Exists(Application.persistentDataPath + "/customData.json"))
-            return null;
+        // HttpClient 객체 생성
+        using (HttpClient client = new HttpClient())
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "http://metaverse.ohgiraffers.com:8080/avatar");
 
-        byte[] bytes = System.IO.File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
+            //request.Headers.Add("Authorization", HttpManager.instance.token);
+            request.Content = new ByteArrayContent(jsonData);
+            request.Content.Headers.Add("Content-Type", "application/json");
 
-        var json = System.Text.Encoding.UTF8.GetString(bytes);
+            // POST 요청 전송
+            using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+            // 응답 처리
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseContent);
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode}");
+            }
+        }
+    }
+
+    public static async Task<KHHUserCustomData> LoadData()
+    {
+        if (isLoaded) return customData;
+
+        Init();
+        string json = await GetJson();
+
+        if (string.IsNullOrEmpty(json))
+        {
+            HasData = false;
+            return customData;
+        }
+
         JsonUtility.FromJsonOverwrite(json, customData);
+        isLoaded = true;
+        HasData = true;
+
         return customData;
+    }
+
+    static async Task<string> GetJson()
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            try
+            {
+                using var response = await client.GetAsync("http://metaverse.ohgiraffers.com:8080/avatar");
+                //await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+                // 응답 처리
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = await response.Content.ReadAsStringAsync();
+                    return data;
+                }
+                else
+                {
+                    Debug.Log($"Error: {response.StatusCode}");
+                    if (!File.Exists(Application.persistentDataPath + "/customData.json"))
+                        return string.Empty;
+
+                    byte[] bytes = File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
+                    var json = System.Text.Encoding.UTF8.GetString(bytes);
+                    return json;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Error: {e}");
+                if (!File.Exists(Application.persistentDataPath + "/customData.json"))
+                    return string.Empty;
+
+                byte[] bytes = File.ReadAllBytes(Application.persistentDataPath + "/customData.json");
+                var json = System.Text.Encoding.UTF8.GetString(bytes);
+                return json;
+            }
+        }
+    }
+
+    public static byte[] string_to_hex_array(string charstr)
+    {
+        string[] split = charstr.Split(new char[] { ' ' });
+        List<byte> bList = new List<byte>();
+
+        foreach (string str in split) bList.Add(byte.Parse(str, NumberStyles.HexNumber));
+
+        return bList.ToArray();
     }
 }

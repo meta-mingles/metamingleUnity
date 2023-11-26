@@ -5,30 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[System.Serializable]
-public class SignUpInfo //로그인 정보
-{
-    public string email; //아이디
-    public string password; //패스워드
-}
-
-[Serializable]
-public class SignInInfo
-{
-    public string apiStatus;
-    public string message;
-    public TokenInfo data;
-}
-
-[Serializable]
-public class TokenInfo
-{
-    public string token;
-}
-
-
-
-
 [System.Serializable] 
 public class ShortVideoInfo //비디오 정보
 {

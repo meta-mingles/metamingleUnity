@@ -2,40 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 /// <summary>
 /// Position index of joint points
 /// </summary>
 public enum PositionIndex : int
 {
-    rShldrBend = 0,
-    rForearmBend,
-    rHand,
-    rThumb2,
-    rMid1,
+    rShldrBend = 0,                           // 0
+    rForearmBend,                             // 1
+    rHand,                                    // 2
+    rThumb2,                                  // 3
+    rMid1,                                    // 4
 
-    lShldrBend,
-    lForearmBend,
-    lHand,
-    lThumb2,
-    lMid1,
+    lShldrBend,                               // 5
+    lForearmBend,                             // 6
+    lHand,                                    // 7
+    lThumb2,                                  // 8
+    lMid1,                                    // 9
 
-    lEar,
-    lEye,
-    rEar,
-    rEye,
-    Nose,
+    lEar,                                     // 10
+    lEye,                                     // 11
+    rEar,                                     // 12
+    rEye,                                     // 13
+    Nose,                                     // 14
 
-    rThighBend,
-    rShin,
-    rFoot,
-    rToe,
+    rThighBend,                               // 15
+    rShin,                                    // 16
+    rFoot,                                    // 17
+    rToe,                                     // 18
 
-    lThighBend,
-    lShin,
-    lFoot,
-    lToe,
+    lThighBend,                               // 19
+    lShin,                                    // 20
+    lFoot,                                    // 21
+    lToe,                                     // 22
 
-    abdomenUpper,
+    abdomenUpper,                             // 23
 
     //Calculated coordinates
     hip,
@@ -60,64 +61,65 @@ public class VNectModel : MonoBehaviour
 
     public class JointPoint
     {
-        public Vector2 Pos2D = new Vector2();
-        public float score2D;
+        // public Vector2 Pos2D = new Vector2();                          // 사용 안함
+        // public float score2D;                                          // 사용 안함
 
-        public Vector3 Pos3D = new Vector3();
-        public Vector3 Now3D = new Vector3();
-        public Vector3[] PrevPos3D = new Vector3[6];
-        public float score3D;
+        public Vector3 Pos3D = new Vector3();                             // 관절 좌표
+        public Vector3 Now3D = new Vector3();                             // 현재 관절 좌표
+        public Vector3 Save3D = new Vector3();                            // 구겨지지 않게 하기 위한 이전 값 저장 장
+        public Vector3[] PrevPos3D = new Vector3[6];                      // 이전 6개 좌표(Smoothing 계산시 필요)
+        public float score3D;                                             // 값 1로 고정
 
         // Bones
-        public Transform Transform = null;
-        public Quaternion InitRotation;
-        public Quaternion Inverse;
-        public Quaternion InverseRotation;
+        public Transform Transform = null;                                // Transform 정보 비움
+        public Quaternion InitRotation;                                   // 초기 Rotation 값
+        public Quaternion Inverse;                                        // Quaternion의 회전 값의 Inverse
+        public Quaternion InverseRotation;                                // InitRotation * Inverse
 
-        public JointPoint Child = null;
-        public JointPoint Parent = null;
+        public JointPoint Child = null;                                   // 관절에 대한 자식 정보
+        public JointPoint Parent = null;                                  // 관절에 대한 부모 정보
 
         // For Kalman filter
-        public Vector3 P = new Vector3();
-        public Vector3 X = new Vector3();
-        public Vector3 K = new Vector3();
+        public Vector3 P = new Vector3();                                 // 오차 공분산 행렬(Error Covariance Matrix)
+        public Vector3 X = new Vector3();                                 // 상태 추정 벡터(State Estimate Vector)
+        public Vector3 K = new Vector3();                                 // 칼만 이득 행렬(Kalman Gain Matrix)
     }
 
     public class Skeleton
     {
-        public GameObject LineObject;
+        public GameObject LineObject;                                     // Line object
         public LineRenderer Line;
 
-        public JointPoint start = null;
-        public JointPoint end = null;
+        public JointPoint start = null;                                   // Line의 Start 지점
+        public JointPoint end = null;                                     // Line의 End 지점
     }
 
-    private List<Skeleton> Skeletons = new List<Skeleton>();
-    public Material SkeletonMaterial;
+    private List<Skeleton> Skeletons = new List<Skeleton>();              // Skeleton에 대한 Line List
+    public Material SkeletonMaterial;                                     // Skeleton의 Material
 
-    public bool ShowSkeleton;
-    private bool useSkeleton;
-    public float SkeletonX;
-    public float SkeletonY;
-    public float SkeletonZ;
-    public float SkeletonScale;
+    public bool ShowSkeleton;                                             // Skeleton 나타낼 지 여부
+    private bool useSkeleton;                                             // ShowSkeleton
+    public float SkeletonX;                                               // Skeleton의 위치 X 
+    public float SkeletonY;                                               // Skeleton의 위치 Y
+    public float SkeletonZ;                                               // Skeleton의 위치 Z
+    public float SkeletonScale;                                           // Skeleton의 크기
 
     // Joint position and bone
-    private JointPoint[] jointPoints;
+    private JointPoint[] jointPoints;                                     // JointPoint 배열
     public JointPoint[] JointPoints { get { return jointPoints; } }
 
-    private Vector3 initPosition; // Initial center position
+    private Vector3 initPosition;                                         // Center Position
 
-    private Quaternion InitGazeRotation;
-    private Quaternion gazeInverse;
+    // private Quaternion InitGazeRotation;                               // 시선에 대한 Rotation 값
+    // private Quaternion gazeInverse;                                    // 시선에 대한 Inverse 값
 
     // UnityChan
-    public GameObject ModelObject;
-    public GameObject Nose;
-    private Animator anim;
+    public GameObject ModelObject;                                        // Avatar
+    public GameObject Nose;                                               // Avatar의 코 위치의 GameObject
+    private Animator anim;                                                // Avatar의 Animator
 
     // Move in z direction
-    private float centerTall = 224 * 0.75f;
+    private float centerTall = 224 * 0.75f;                               // Tall 고정
     private float tall = 224 * 0.75f;
     private float prevTall = 224 * 0.75f;
     public float ZScale = 0.8f;
@@ -133,6 +135,7 @@ public class VNectModel : MonoBehaviour
     /// Initialize joint points
     /// </summary>
     /// <returns></returns>
+
     public JointPoint[] Init()
     {
         jointPoints = new JointPoint[PositionIndex.Count.Int()];
@@ -162,15 +165,15 @@ public class VNectModel : MonoBehaviour
 
         // Right Leg
         jointPoints[PositionIndex.rThighBend.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.RightUpperLeg);
-        jointPoints[PositionIndex.rShin.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.RightLowerLeg);
-        jointPoints[PositionIndex.rFoot.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.RightFoot);
-        jointPoints[PositionIndex.rToe.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.RightToes);
+        //jointPoints[PositionIndex.rShin.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.RightLowerLeg);
+        //jointPoints[PositionIndex.rFoot.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.RightFoot);
+        //jointPoints[PositionIndex.rToe.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.RightToes);
 
         // Left Leg
         jointPoints[PositionIndex.lThighBend.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.LeftUpperLeg);
-        jointPoints[PositionIndex.lShin.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
-        jointPoints[PositionIndex.lFoot.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.LeftFoot);
-        jointPoints[PositionIndex.lToe.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.LeftToes);
+        //jointPoints[PositionIndex.lShin.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
+        //jointPoints[PositionIndex.lFoot.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.LeftFoot);
+        //jointPoints[PositionIndex.lToe.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.LeftToes);
 
         // etc
         jointPoints[PositionIndex.abdomenUpper.Int()].Transform = anim.GetBoneTransform(HumanBodyBones.Spine);
@@ -190,19 +193,29 @@ public class VNectModel : MonoBehaviour
         jointPoints[PositionIndex.lForearmBend.Int()].Child = jointPoints[PositionIndex.lHand.Int()];
         jointPoints[PositionIndex.lForearmBend.Int()].Parent = jointPoints[PositionIndex.lShldrBend.Int()];
 
+        // Right Hands
+        //jointPoints[PositionIndex.rHand.Int()].Child = jointPoints[PositionIndex.rMid1.Int()];
+        //jointPoints[PositionIndex.rHand.Int()].Child = jointPoints[PositionIndex.rThumb2.Int()];
+        //jointPoints[PositionIndex.rMid1.Int()].Parent = jointPoints[PositionIndex.rHand.Int()];
+
+        //// Left Hands
+        //jointPoints[PositionIndex.lHand.Int()].Child = jointPoints[PositionIndex.lMid1.Int()];
+        //jointPoints[PositionIndex.lHand.Int()].Child = jointPoints[PositionIndex.lThumb2.Int()];
+        //jointPoints[PositionIndex.lMid1.Int()].Parent = jointPoints[PositionIndex.lHand.Int()];
+
         // Fase
 
         // Right Leg
-        jointPoints[PositionIndex.rThighBend.Int()].Child = jointPoints[PositionIndex.rShin.Int()];
-        jointPoints[PositionIndex.rShin.Int()].Child = jointPoints[PositionIndex.rFoot.Int()];
-        jointPoints[PositionIndex.rFoot.Int()].Child = jointPoints[PositionIndex.rToe.Int()];
-        jointPoints[PositionIndex.rFoot.Int()].Parent = jointPoints[PositionIndex.rShin.Int()];
+        //jointPoints[PositionIndex.rThighBend.Int()].Child = jointPoints[PositionIndex.rShin.Int()];
+        //jointPoints[PositionIndex.rShin.Int()].Child = jointPoints[PositionIndex.rFoot.Int()];
+        //jointPoints[PositionIndex.rFoot.Int()].Child = jointPoints[PositionIndex.rToe.Int()];
+        //jointPoints[PositionIndex.rFoot.Int()].Parent = jointPoints[PositionIndex.rShin.Int()];
 
         // Left Leg
-        jointPoints[PositionIndex.lThighBend.Int()].Child = jointPoints[PositionIndex.lShin.Int()];
-        jointPoints[PositionIndex.lShin.Int()].Child = jointPoints[PositionIndex.lFoot.Int()];
-        jointPoints[PositionIndex.lFoot.Int()].Child = jointPoints[PositionIndex.lToe.Int()];
-        jointPoints[PositionIndex.lFoot.Int()].Parent = jointPoints[PositionIndex.lShin.Int()];
+        //jointPoints[PositionIndex.lThighBend.Int()].Child = jointPoints[PositionIndex.lShin.Int()];
+        //jointPoints[PositionIndex.lShin.Int()].Child = jointPoints[PositionIndex.lFoot.Int()];
+        //jointPoints[PositionIndex.lFoot.Int()].Child = jointPoints[PositionIndex.lToe.Int()];
+        //jointPoints[PositionIndex.lFoot.Int()].Parent = jointPoints[PositionIndex.lShin.Int()];
 
         // etc
         jointPoints[PositionIndex.spine.Int()].Child = jointPoints[PositionIndex.neck.Int()];
@@ -230,14 +243,14 @@ public class VNectModel : MonoBehaviour
             AddSkeleton(PositionIndex.rEar, PositionIndex.Nose);
 
             // Right Leg
-            AddSkeleton(PositionIndex.rThighBend, PositionIndex.rShin);
-            AddSkeleton(PositionIndex.rShin, PositionIndex.rFoot);
-            AddSkeleton(PositionIndex.rFoot, PositionIndex.rToe);
+            //AddSkeleton(PositionIndex.rThighBend, PositionIndex.rShin);
+            //AddSkeleton(PositionIndex.rShin, PositionIndex.rFoot);
+            //AddSkeleton(PositionIndex.rFoot, PositionIndex.rToe);
 
             // Left Leg
-            AddSkeleton(PositionIndex.lThighBend, PositionIndex.lShin);
-            AddSkeleton(PositionIndex.lShin, PositionIndex.lFoot);
-            AddSkeleton(PositionIndex.lFoot, PositionIndex.lToe);
+            //AddSkeleton(PositionIndex.lThighBend, PositionIndex.lShin);
+            //AddSkeleton(PositionIndex.lShin, PositionIndex.lFoot);
+            //AddSkeleton(PositionIndex.lFoot, PositionIndex.lToe);
 
             // etc
             AddSkeleton(PositionIndex.spine, PositionIndex.neck);
@@ -255,44 +268,50 @@ public class VNectModel : MonoBehaviour
         }
 
         // Set Inverse
+        // hip(center)과 양쪽 골반의 삼각형에서의 법선 벡터 - 인체 방향을 뜻한다.
         var forward = TriangleNormal(jointPoints[PositionIndex.hip.Int()].Transform.position, jointPoints[PositionIndex.lThighBend.Int()].Transform.position, jointPoints[PositionIndex.rThighBend.Int()].Transform.position);
         foreach (var jointPoint in jointPoints)
         {
-            if (jointPoint.Transform != null)
+            if (jointPoint.Transform != null)                                                 // Transform 정보가 없는 경우, 초기 Rotation 값을 각 관절의 Rotation 값으로 정한다.       
             {
                 jointPoint.InitRotation = jointPoint.Transform.rotation;
             }
 
-            if (jointPoint.Child != null)
+            if (jointPoint.Child != null)                                                     // 해당 관절의 Child가 있는 경우 다음과 같이 계산한다.
             {
-                jointPoint.Inverse = GetInverse(jointPoint, jointPoint.Child, forward);
-                jointPoint.InverseRotation = jointPoint.Inverse * jointPoint.InitRotation;
+                jointPoint.Inverse = GetInverse(jointPoint, jointPoint.Child, forward);       // Inverse = 해당 관절과, Child 관절, 인체의 방향(forward)의 Quaternion Rotation 값의 Inverse
+                jointPoint.InverseRotation = jointPoint.Inverse * jointPoint.InitRotation;    // InverseRotation = 초기 Rotation * Inverse
             }
         }
+
+        // Center Position hip 정의(forward에 대한 Quaternion 회전값의 Inverse 이용)
         var hip = jointPoints[PositionIndex.hip.Int()];
         initPosition = jointPoints[PositionIndex.hip.Int()].Transform.position;
         hip.Inverse = Quaternion.Inverse(Quaternion.LookRotation(forward));
         hip.InverseRotation = hip.Inverse * hip.InitRotation;
 
-        // For Head Rotation
+        // head 정의(→ 시선에 대한 Quaternion 회전값의 Inverse 이동)
         var head = jointPoints[PositionIndex.head.Int()];
         head.InitRotation = jointPoints[PositionIndex.head.Int()].Transform.rotation;
         var gaze = jointPoints[PositionIndex.Nose.Int()].Transform.position - jointPoints[PositionIndex.head.Int()].Transform.position;
         head.Inverse = Quaternion.Inverse(Quaternion.LookRotation(gaze));
         head.InverseRotation = head.Inverse * head.InitRotation;
 
-        var lHand = jointPoints[PositionIndex.lHand.Int()];
-        var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
-        lHand.InitRotation = lHand.Transform.rotation;
-        lHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Transform.position - jointPoints[PositionIndex.lMid1.Int()].Transform.position, lf));
-        lHand.InverseRotation = lHand.Inverse * lHand.InitRotation;
+        //// hand 정의(forward 자리에 손바닥 향하는 위치인 lf 대체)
+        //var lHand = jointPoints[PositionIndex.lHand.Int()];
+        //var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
+        //lHand.InitRotation = lHand.Transform.rotation;
+        //lHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Transform.position - jointPoints[PositionIndex.lMid1.Int()].Transform.position, lf));
+        //lHand.InverseRotation = lHand.Inverse * lHand.InitRotation;
 
-        var rHand = jointPoints[PositionIndex.rHand.Int()];
-        var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
-        rHand.InitRotation = jointPoints[PositionIndex.rHand.Int()].Transform.rotation;
-        rHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Transform.position - jointPoints[PositionIndex.rMid1.Int()].Transform.position, rf));
-        rHand.InverseRotation = rHand.Inverse * rHand.InitRotation;
+        //// hand 정의(forward 자리에 손바닥 향하는 위치인 rf 대체)
+        //var rHand = jointPoints[PositionIndex.rHand.Int()];
+        //var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
+        //rHand.InitRotation = jointPoints[PositionIndex.rHand.Int()].Transform.rotation;
+        //rHand.Inverse = Quaternion.Inverse(Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Transform.position - jointPoints[PositionIndex.rMid1.Int()].Transform.position, rf));
+        //rHand.InverseRotation = rHand.Inverse * rHand.InitRotation;
 
+        // 3DScore는 모두 1로 통일
         jointPoints[PositionIndex.hip.Int()].score3D = 1f;
         jointPoints[PositionIndex.neck.Int()].score3D = 1f;
         jointPoints[PositionIndex.Nose.Int()].score3D = 1f;
@@ -305,22 +324,23 @@ public class VNectModel : MonoBehaviour
 
     public void PoseUpdate()
     {
-        // caliculate movement range of z-coordinate from height
+        // 사용자의 키(tall) 계산
         var t1 = Vector3.Distance(jointPoints[PositionIndex.head.Int()].Pos3D, jointPoints[PositionIndex.neck.Int()].Pos3D);
         var t2 = Vector3.Distance(jointPoints[PositionIndex.neck.Int()].Pos3D, jointPoints[PositionIndex.spine.Int()].Pos3D);
         var pm = (jointPoints[PositionIndex.rThighBend.Int()].Pos3D + jointPoints[PositionIndex.lThighBend.Int()].Pos3D) / 2f;
         var t3 = Vector3.Distance(jointPoints[PositionIndex.spine.Int()].Pos3D, pm);
-        var t4r = Vector3.Distance(jointPoints[PositionIndex.rThighBend.Int()].Pos3D, jointPoints[PositionIndex.rShin.Int()].Pos3D);
-        var t4l = Vector3.Distance(jointPoints[PositionIndex.lThighBend.Int()].Pos3D, jointPoints[PositionIndex.lShin.Int()].Pos3D);
-        var t4 = (t4r + t4l) / 2f;
-        var t5r = Vector3.Distance(jointPoints[PositionIndex.rShin.Int()].Pos3D, jointPoints[PositionIndex.rFoot.Int()].Pos3D);
-        var t5l = Vector3.Distance(jointPoints[PositionIndex.lShin.Int()].Pos3D, jointPoints[PositionIndex.lFoot.Int()].Pos3D);
-        var t5 = (t5r + t5l) / 2f;
-        var t = t1 + t2 + t3 + t4 + t5;
+        //var t4r = Vector3.Distance(jointPoints[PositionIndex.rThighBend.Int()].Pos3D, jointPoints[PositionIndex.rShin.Int()].Pos3D);
+        //var t4l = Vector3.Distance(jointPoints[PositionIndex.lThighBend.Int()].Pos3D, jointPoints[PositionIndex.lShin.Int()].Pos3D);
+        //var t4 = (t4r + t4l) / 2f;
+        //var t5r = Vector3.Distance(jointPoints[PositionIndex.rShin.Int()].Pos3D, jointPoints[PositionIndex.rFoot.Int()].Pos3D);
+        //var t5l = Vector3.Distance(jointPoints[PositionIndex.lShin.Int()].Pos3D, jointPoints[PositionIndex.lFoot.Int()].Pos3D);
+        //var t5 = (t5r + t5l) / 2f;
+        //var t = t1 + t2 + t3 + t4 + t5;
+        var t = t1 + t2 + t3;
 
-
-        // Low pass filter in z direction
+        // 얼마나 이동했는지에 대한 척도
         tall = t * 0.7f + prevTall * 0.3f;
+        //tall = 224;
         prevTall = tall;
 
         if (tall == 0)
@@ -329,12 +349,12 @@ public class VNectModel : MonoBehaviour
         }
         var dz = (centerTall - tall) / centerTall * ZScale;
 
-        // movement and rotatation of center
+        // center 관절(hip)의 transform과 rotation 설정
         var forward = TriangleNormal(jointPoints[PositionIndex.hip.Int()].Pos3D, jointPoints[PositionIndex.lThighBend.Int()].Pos3D, jointPoints[PositionIndex.rThighBend.Int()].Pos3D);
         jointPoints[PositionIndex.hip.Int()].Transform.position = jointPoints[PositionIndex.hip.Int()].Pos3D * 0.005f + new Vector3(initPosition.x, initPosition.y, initPosition.z + dz);
         jointPoints[PositionIndex.hip.Int()].Transform.rotation = Quaternion.LookRotation(forward) * jointPoints[PositionIndex.hip.Int()].InverseRotation;
 
-        // rotate each of bones
+        // 각 관절의 rotation 계산
         foreach (var jointPoint in jointPoints)
         {
             if (jointPoint.Parent != null)
@@ -354,15 +374,15 @@ public class VNectModel : MonoBehaviour
         var head = jointPoints[PositionIndex.head.Int()];
         head.Transform.rotation = Quaternion.LookRotation(gaze, f) * head.InverseRotation;
 
-        // Wrist rotation (Test code)
-        var lHand = jointPoints[PositionIndex.lHand.Int()];
-        var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
-        lHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Pos3D - jointPoints[PositionIndex.lMid1.Int()].Pos3D, lf) * lHand.InverseRotation;
+        //// Wrist rotation (Test code)
+        //var lHand = jointPoints[PositionIndex.lHand.Int()];
+        //var lf = TriangleNormal(lHand.Pos3D, jointPoints[PositionIndex.lMid1.Int()].Pos3D, jointPoints[PositionIndex.lThumb2.Int()].Pos3D);
+        //lHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.lThumb2.Int()].Pos3D - jointPoints[PositionIndex.lMid1.Int()].Pos3D, lf) * lHand.InverseRotation;
 
-        var rHand = jointPoints[PositionIndex.rHand.Int()];
-        var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
+        //var rHand = jointPoints[PositionIndex.rHand.Int()];
+        //var rf = TriangleNormal(rHand.Pos3D, jointPoints[PositionIndex.rThumb2.Int()].Pos3D, jointPoints[PositionIndex.rMid1.Int()].Pos3D);
+        ////rHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Pos3D - jointPoints[PositionIndex.rMid1.Int()].Pos3D, rf) * rHand.InverseRotation;
         //rHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Pos3D - jointPoints[PositionIndex.rMid1.Int()].Pos3D, rf) * rHand.InverseRotation;
-        rHand.Transform.rotation = Quaternion.LookRotation(jointPoints[PositionIndex.rThumb2.Int()].Pos3D - jointPoints[PositionIndex.rMid1.Int()].Pos3D, rf) * rHand.InverseRotation;
 
         foreach (var sk in Skeletons)
         {

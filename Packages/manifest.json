@@ -1,4 +1,21 @@
-{
+﻿{
+  "scopedRegistries": [
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [ "jp.keijiro" ]
+    },
+    {
+      "name": "creativeikep",
+      "url": "https://registry.npmjs.com",
+      "scopes": [ "jp.ikep" ]
+    },
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [ "com.unity.uiextensions" ]
+    }
+  ],
   "dependencies": {
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.barracuda": "2.0.0",
@@ -8,6 +25,7 @@
     "com.unity.ide.visualstudio": "2.0.18",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.inputsystem": "1.6.1",
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.render-pipelines.universal": "12.1.11",
     "com.unity.shadergraph": "12.1.11",
     "com.unity.test-framework": "1.1.33",
@@ -45,15 +63,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
-  },
-  "scopedRegistries": [
-    {
-      "name": "package.openupm.com",
-      "url": "https://package.openupm.com",
-      "scopes": [
-        "com.unity.uiextensions"
-      ]
-    }
-  ]
+    "com.unity.modules.xr": "1.0.0",
+    "jp.ikep.mediapipe.holistic": "1.1.0"
+  }
 }

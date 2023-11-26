@@ -7,7 +7,6 @@ public class KHHUIColorItem : MonoBehaviour
 {
     [SerializeField] private Image m_RightImage;
     [SerializeField] private Button m_RightButton;
-    [SerializeField] private Text m_RightText;
 
     public System.Action OnClickLight;
 

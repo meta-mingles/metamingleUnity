@@ -13,10 +13,12 @@ public class KHHMotionData : KHHData
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 //파일 삭제
                 File.Delete(KHHEditData.FileMotionPath + "/" + fileName + ".csv");
                 File.Delete(KHHEditData.FileMotionPath + "/" + fileName + ".wav");
                 khhDataManager.Refresh();
+                KHHEditManager.Instance.screenEditor.Refresh();
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -74,7 +75,12 @@ public class KHHUICustomizationDemo : MonoBehaviour
             item.Title = categories[i];
 
             string aux = categories[i];
-            item.OnClick = () => OnClickCategory?.Invoke(aux);
+            item.OnClick = () =>
+            {
+                foreach (var categoryItem in m_CategoryItems)
+                    categoryItem.SetOff();
+                OnClickCategory?.Invoke(aux);
+            };
         }
 
         for (int i = categories.Length; i < m_CategoryItems.Count; i++)
@@ -153,6 +159,8 @@ public class KHHUICustomizationDemo : MonoBehaviour
             {
                 if (sharedMaterials[j].name.Contains("mouth"))
                     continue;
+                if (sharedMaterials[j].name.Contains("face"))
+                    continue;
                 if (materials.Contains(sharedMaterials[j]))
                     continue;
                 materials.Add(sharedMaterials[j]);
@@ -194,31 +202,32 @@ public class KHHUICustomizationDemo : MonoBehaviour
             {
                 item.ResetColors();
 
-                Color colorA = materials[i].GetColor("_Color_A_2");
-                Color colorB = materials[i].GetColor("_Color_B_2");
-                Color colorC = materials[i].GetColor("_Color_C_2");
+                Color colorA, colorB, colorC, newColorA, newColorB, newColorC;
+                colorA = newColorA = materials[i].GetColor("_Color_A_2");
+                colorB = newColorB = materials[i].GetColor("_Color_B_2");
+                colorC = newColorC = materials[i].GetColor("_Color_C_2");
                 if (materialData != null)
                 {
-                    if (materialData.ColorA != Color.black)
-                        colorA = materialData.ColorA;
-                    if (materialData.ColorB != Color.black)
-                        colorB = materialData.ColorB;
-                    if (materialData.ColorC != Color.black)
-                        colorC = materialData.ColorC;
-                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", colorA);
-                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", colorB);
-                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", colorC);
+                    newColorA = materialData.ColorA;
+                    newColorB = materialData.ColorB;
+                    newColorC = materialData.ColorC;
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", newColorA);
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", newColorB);
+                    OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", newColorC);
                 }
 
                 //customization channel 1
-                item.SetColor(auxPropertyBlock.HasColor("_Color_A_2") ? auxPropertyBlock.GetColor("_Color_A_2") : colorA, 0,
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", c));
+                if (colorA.r != 0 || colorA.g != 0 || colorA.b != 0)
+                    item.SetColor(auxPropertyBlock.HasColor("_Color_A_2") ? auxPropertyBlock.GetColor("_Color_A_2") : newColorA, 0,
+                        (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_A_2", c));
                 //customization channel 2
-                item.SetColor(auxPropertyBlock.HasColor("_Color_B_2") ? auxPropertyBlock.GetColor("_Color_B_2") : colorB, 1,
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", c));
+                if (colorB.r != 0 || colorB.g != 0 || colorB.b != 0)
+                    item.SetColor(auxPropertyBlock.HasColor("_Color_B_2") ? auxPropertyBlock.GetColor("_Color_B_2") : newColorB, 1,
+                        (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_B_2", c));
                 //customization channel 3
-                item.SetColor(auxPropertyBlock.HasColor("_Color_C_2") ? auxPropertyBlock.GetColor("_Color_C_2") : colorC, 2,
-                    (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", c));
+                if (colorC.r != 0 || colorC.g != 0 || colorC.b != 0)
+                    item.SetColor(auxPropertyBlock.HasColor("_Color_C_2") ? auxPropertyBlock.GetColor("_Color_C_2") : newColorC, 2,
+                        (c) => OnChangeColor?.Invoke(auxRenderer, auxMatIndex, "_Color_C_2", c));
             }
             else if (materials[i].HasProperty("_BaseColor"))
             {
@@ -266,9 +275,19 @@ public class KHHUICustomizationDemo : MonoBehaviour
         KHHUserCustom.SaveData(() =>
         {
             string newSceneName = GlobalValue.PrevSceneName;
-            GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
-            GlobalValue.CurSceneName = newSceneName;
-            SceneManager.LoadScene(newSceneName);
+            if (newSceneName.Contains("Tool"))
+            {
+                GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+                GlobalValue.CurSceneName = newSceneName;
+                SceneManager.LoadScene(newSceneName);
+            }
+            else
+            {
+                GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+                GlobalValue.CurSceneName = newSceneName;
+                KHHPhotonInit.instance.ReJoinRoom(SceneManager.GetActiveScene().name, newSceneName);
+                //PhotonNetwork.LoadLevel(newSceneName);
+            }
         });
     }
 }

@@ -12,34 +12,77 @@ using UnityEngine.UI;
 
 public class AITranscripts : MonoBehaviour
 {
-    private string apiUrl_chat = "http://metaverse.ohgiraffers.com:8080/scenario/streaming";
-    //private string apiUrl_chat = "https://7091-221-163-19-218.ngrok.io/chatbot/test_text";
-    private string apiUrl = "https://metaverse.ohgiraffers.com:8080/chatbot/test_image";
-    //private string apiUrl_chat = "https://bec3-221-163-19-218.ngrok-free.app/chatbot/test_text";
-    //private string apiUrl = "https://bec3-221-163-19-218.ngrok-free.app/chatbot/test_image"; // FastAPI 서버의 엔드포인트 URL을 입력하세요.
-    // private string apiUrl_chat = "http://192.168.0.77:8001/chatbot/test_text";
-    // private string apiUrl = "http://192.168.0.77:8001/chatbot/test_image"; // FastAPI 서버의 엔드포인트 URL을 입력하세요.
-    /*    private string apiUrl_chat = "http://127.0.0.1:8000/chatbot/test_text";
-        private string apiUrl = "http://127.0.0.1:8000/chatbot/test_image"; // FastAPI 서버의 엔드포인트 URL을 입력하세요.*/
+    [System.Serializable]
+    public class ApiResponse
+    {
+        public string apiStatus;
+        public string message;
+        public ImageData[] data;
+    }
+
+    [System.Serializable]
+
+    public class ApiResponseSound
+    {
+        public string apiStatus;
+        public string message;
+        public SoundData[] data;
+    }
+
+    [System.Serializable]
+    public class ImageData
+    {
+        public string title;
+        public string imageUrl;
+    }
+
+    [System.Serializable]
+
+
+    public class SoundData
+    {
+        public string title;
+        public string soundUrl;
+    }
+
+    [System.Serializable]
+    public class ApiResponseQuiz
+    {
+        public string apiStatus;
+        public string message;
+        public QuizData data;
+    }
+
+    [System.Serializable]
+    public class QuizData
+    {
+        public string uuid;
+    }
+
+    //private string apiUrl_chat = "http://metaverse.ohgiraffers.com:8080/scenario/streaming";
+    //private string apiUrl_image = "http://metaverse.ohgiraffers.com:8080/creative/image";
+    //private string apiUrl_sound = "http://metaverse.ohgiraffers.com:8080/creative/sound";
+    //private string apiUrl_quiz = "http://metaverse.ohgiraffers.com:8080/scenario/quiz";
+    private string apiUrl_chat = "http://192.168.0.5:8080/scenario/streaming";
+    private string apiUrl_image = "http://192.168.0.5:8080/creative/image";
+    private string apiUrl_sound = "http://192.168.0.5:8080/creative/sound";
+    private string apiUrl_quiz = "http://192.168.0.5:8080/scenario/quiz";
 
     public Button aiTranscriptsButton;
-    public TextMeshProUGUI aiTranscriptsButtonText;
+    public GameObject[] aiTranscriptsButtonTImages;
     public TMP_InputField chatInputField;
     public TMP_InputField transcriptsInputField;
 
     //public Button yourButton2;
     //public RawImage yourRawImage;
 
-    bool isGeneratingBG = false;
-    bool isGeneratingTS = false;
+    //bool isGeneratingBG = false;
+    //bool isGeneratingTS = false;
 
     // btn, btn2 에 클릭 이벤트가 발생하면 TaskOnClick, TaskOnClick2를 각각 실행하라.
     void Start()
     {
         aiTranscriptsButton.onClick.AddListener(AITranscriptsButtonEvent);
-
-        //Button btn2 = yourButton2.GetComponent<Button>();
-        //btn2.onClick.AddListener(TaskOnClick2);
     }
 
     void Update()
@@ -56,11 +99,12 @@ public class AITranscripts : MonoBehaviour
         string inputText = chatInputField.text;
         string json = "{\"text\":\"" + inputText + "\"}";
 
-        aiTranscriptsButtonText.text = "작성중";
+        aiTranscriptsButtonTImages[0].SetActive(false);
+        aiTranscriptsButtonTImages[1].SetActive(true);
         aiTranscriptsButton.interactable = false;
 
-        isGeneratingBG = true;
-        isGeneratingTS = true;
+        //isGeneratingBG = true;
+        //isGeneratingTS = true;
 
         // JSON 데이터를 바이트 배열로 변환
         byte[] jsonData = Encoding.UTF8.GetBytes(json);
@@ -73,6 +117,9 @@ public class AITranscripts : MonoBehaviour
 
         try
         {
+            StartCoroutine(PostImage(jsonData));
+            StartCoroutine(PostSound(jsonData));
+            StartCoroutine(PostQuiz(jsonData));   //퀴즈 생성 요청 추가
             await PostJson(jsonData);
         }
         catch (Exception ex)
@@ -81,48 +128,48 @@ public class AITranscripts : MonoBehaviour
         }
     }
 
-    IEnumerator PostImageFile(byte[] jsonData)
-    {
-        using (UnityWebRequest www = new UnityWebRequest(apiUrl, "POST"))
-        {
-            www.uploadHandler = new UploadHandlerRaw(jsonData);
-            www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
+    //IEnumerator PostImageFile(byte[] jsonData)
+    //{
+    //    using (UnityWebRequest www = new UnityWebRequest(apiUrl, "POST"))
+    //    {
+    //        www.uploadHandler = new UploadHandlerRaw(jsonData);
+    //        www.downloadHandler = new DownloadHandlerBuffer();
+    //        www.SetRequestHeader("Content-Type", "application/json");
 
-            yield return www.SendWebRequest();
+    //        yield return www.SendWebRequest();
 
-            void SaveImage(byte[] imageBytes, string fileName)
-            {
-                if (Directory.Exists(Path.GetDirectoryName(fileName)) == false)
-                    Directory.CreateDirectory(Path.GetDirectoryName(fileName));
-                File.WriteAllBytes(fileName, imageBytes);
-                Debug.Log("Image saved");
-            }
+    //        void SaveImage(byte[] imageBytes, string fileName)
+    //        {
+    //            if (Directory.Exists(Path.GetDirectoryName(fileName)) == false)
+    //                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+    //            File.WriteAllBytes(fileName, imageBytes);
+    //            Debug.Log("Image saved");
+    //        }
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError(www.error);
-            }
-            else
-            {
+    //        if (www.result != UnityWebRequest.Result.Success)
+    //        {
+    //            Debug.LogError(www.error);
+    //        }
+    //        else
+    //        {
 
-                SaveImage(www.downloadHandler.data, Application.persistentDataPath + "/Images/test.jpg");
-                //SaveImage(www.downloadHandler.data, "./Assets/Resources/Images/test.jpg");
-                //Debug.Log("Success!!!!!");
+    //            SaveImage(www.downloadHandler.data, Application.persistentDataPath + "/Images/test.jpg");
+    //            //SaveImage(www.downloadHandler.data, "./Assets/Resources/Images/test.jpg");
+    //            //Debug.Log("Success!!!!!");
 
-                // 여기에서 responseText를 파싱하여 결과값을 추출
-            }
+    //            // 여기에서 responseText를 파싱하여 결과값을 추출
+    //        }
 
-            isGeneratingBG = false;
-            if (isGeneratingBG == false && isGeneratingTS == false)
-            {
-                aiTranscriptsButtonText.text = "작성";
-                aiTranscriptsButton.interactable = true;
-            }
+    //        isGeneratingBG = false;
+    //        if (isGeneratingBG == false && isGeneratingTS == false)
+    //        {
+    //            aiTranscriptsButtonText.text = "작성";
+    //            aiTranscriptsButton.interactable = true;
+    //        }
 
-            KHHEditManager.Instance.BackgroundButtonEvent();
-        }
-    }
+    //        KHHEditManager.Instance.BackgroundButtonEvent();
+    //    }
+    //}
 
     async Task PostJson(byte[] jsonData)
     {
@@ -134,7 +181,7 @@ public class AITranscripts : MonoBehaviour
         request.Headers.Add("Accept", "text/event-stream");
 
         ////헤더에 토큰 추가 (현재 생략 가능)
-        //request.Headers.Add("Authorization", 토큰);
+        request.Headers.Add("Authorization", HttpManager.instance.token);
 
         request.Content = new ByteArrayContent(jsonData);
         request.Content.Headers.Add("Content-Type", "application/json");
@@ -161,7 +208,18 @@ public class AITranscripts : MonoBehaviour
                         line = line.Substring(prefix.Length);
                     }
 
+                    // Check if the line contains " |" and replace it with a newline
+                    if (line.Contains("|"))
+                    {
+                        /*line = line.Replace("|", "\n\n");*/
+                        transcriptsInputField.text += "\n\n";
+                        Debug.Log("good");
+                        continue;
+                    }
+
                     transcriptsInputField.text += line;
+
+                    await Task.Delay(30);
 
                     if (string.IsNullOrEmpty(line)) continue;
                 }
@@ -182,41 +240,164 @@ public class AITranscripts : MonoBehaviour
         }
     }
 
-    void HandleServerResponse()
+    IEnumerator PostImage(byte[] jsonData)
     {
-        aiTranscriptsButtonText.text = "작성";
-        aiTranscriptsButton.interactable = true;
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl_image, "GET"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(jsonData);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Authorization", HttpManager.instance.token);
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                string jsonString = www.downloadHandler.text;
+                ApiResponse apiResponse = JsonUtility.FromJson<ApiResponse>(jsonString);
+
+                if (apiResponse != null && apiResponse.apiStatus == "SUCCESS")
+                {
+                    foreach (ImageData imageData in apiResponse.data)
+                    {
+                        yield return StartCoroutine(DownloadImage(imageData.imageUrl, imageData.title));
+                    }
+                }
+                else
+                {
+                    Debug.LogError("이미지 저장 실패");
+                }
+
+                KHHEditManager.Instance.BackgroundButtonEvent();
+            }
+        }
     }
 
-    //IEnumerator PostJson(byte[] jsonData)
-    //{
-    //    using (UnityWebRequest www = new UnityWebRequest(apiUrl_chat, "POST"))
-    //    {
-    //        www.uploadHandler = new UploadHandlerRaw(jsonData);
-    //        www.downloadHandler = new DownloadHandlerBuffer();
-    //        www.SetRequestHeader("Content-Type", "application/json");
+    IEnumerator DownloadImage(string imageUrl, string title)
+    {
+        using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(imageUrl))
+        {
+            yield return www.SendWebRequest();
 
-    //        yield return www.SendWebRequest();
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                // Get the downloaded texture
+                Texture2D texture = DownloadHandlerTexture.GetContent(www);
 
-    //        if (www.result != UnityWebRequest.Result.Success)
-    //        {
-    //            Debug.LogError(www.error);
-    //        }
-    //        else
-    //        {
-    //            string responseText = www.downloadHandler.text;
-    //            //Debug.Log("Response from server: " + responseText);
-    //            responseText = responseText.Replace("\\n", "\n").Replace("\\\"", "\"");
-    //            transcriptsInputField.text = responseText;
-    //            // 여기에서 responseText를 파싱하여 결과값을 추출
-    //        }
+                // Save the image with a unique filename
+                string fileName = KHHEditData.FileImagePath + "/" + title + ".jpg";
+                SaveData(texture.EncodeToJPG(), fileName);
+            }
+        }
+    }
 
-    //        isGeneratingTS = false;
-    //        if(isGeneratingBG == false && isGeneratingTS == false)
-    //        {
-    //            aiTranscriptsButtonText.text = "작성";
-    //            aiTranscriptsButton.interactable = true;
-    //        }
-    //    }
-    //}
+    IEnumerator PostSound(byte[] jsonData)
+    {
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl_sound, "GET"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(jsonData);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Authorization", HttpManager.instance.token);
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                string jsonString = www.downloadHandler.text;
+                ApiResponseSound apiResponse = JsonUtility.FromJson<ApiResponseSound>(jsonString);
+
+                if (apiResponse != null && apiResponse.apiStatus == "SUCCESS")
+                {
+                    foreach (SoundData soundData in apiResponse.data)
+                    {
+                        yield return StartCoroutine(DownloadSound(soundData.soundUrl, soundData.title));
+                    }
+                }
+                else
+                {
+                    Debug.LogError("BGM 저장 실패");
+                }
+
+                KHHEditManager.Instance.SoundButtonEvent();
+            }
+        }
+    }
+
+    IEnumerator PostQuiz(byte[] jsonData)
+    {
+        using (UnityWebRequest www = new UnityWebRequest(apiUrl_quiz, "POST"))
+        {
+            www.uploadHandler = new UploadHandlerRaw(jsonData);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                string jsonString = www.downloadHandler.text;
+                ApiResponseQuiz apiResponse = JsonUtility.FromJson<ApiResponseQuiz>(jsonString);
+
+                if (apiResponse != null && apiResponse.apiStatus == "SUCCESS")
+                {
+                    PlayerPrefs.SetString($"{KHHEditData.VideoTitle}uuid", apiResponse.data.uuid);  //반환된 UUID PlayerPrefs 저장
+                }
+                else
+                {
+                    Debug.LogError("QUIZ 저장 실패");
+                }
+
+            }
+        }
+    }
+
+    IEnumerator DownloadSound(string soundUrl, string title)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(soundUrl))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(www.error);
+            }
+            else
+            {
+                string fileName = KHHEditData.FileSoundPath + "/" + title + ".wav";
+                SaveData(www.downloadHandler.data, fileName);
+            }
+        }
+    }
+
+    void SaveData(byte[] dataBytes, string fileName)
+    {
+        if (Directory.Exists(Path.GetDirectoryName(fileName)) == false)
+            Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+        File.WriteAllBytes(fileName, dataBytes);
+        Debug.Log("Data saved: " + fileName);
+    }
+
+    void HandleServerResponse()
+    {
+        aiTranscriptsButtonTImages[0].SetActive(true);
+        aiTranscriptsButtonTImages[1].SetActive(false);
+        aiTranscriptsButton.interactable = true;
+    }
 }

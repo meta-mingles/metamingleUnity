@@ -14,7 +14,6 @@ public class KHHRecordManager : MonoBehaviour
 
     public Camera captureCamera;
     public GameObject captureScreen;
-    public RenderTexture captureRenderTexture;
 
     public Button recordExitButton;
     public Button recordStartButton;
@@ -32,6 +31,8 @@ public class KHHRecordManager : MonoBehaviour
     bool startRecord = false;
     public bool StartRecord { get { return startRecord; } set { startRecord = value; } }
 
+    RenderTexture captureRenderTexture;
+
     private void Awake()
     {
         Instance = this;
@@ -40,39 +41,11 @@ public class KHHRecordManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        recordExitButton.onClick.AddListener(() =>
-        {
-            isActive = false;
-            record.SetActive(false);
-            edit.SetActive(true);
-            captureScreen.gameObject.SetActive(false);
-            captureCamera.targetTexture = captureRenderTexture;
-            motionDataManager.Refresh();
-            videoCapture.CameraPlayStop();
-            barracudaRunner.gameObject.SetActive(false);
-            barracudaRunner.IsTracking = false;
-        });
+        if (recordExitButton != null) recordExitButton.onClick.AddListener(RecordExitButtonEvent);
+        if (recordStartButton != null) recordStartButton.onClick.AddListener(RecordStartButtonEvent);
+        if (recordStopButton != null) recordStopButton.onClick.AddListener(RecordStopButtonEvent);
 
-        recordStartButton.onClick.AddListener(() =>
-        {
-            isRecording = true;
-            KHHCanvasShield.Instance.Show();
-            modelRecorder.StartRecord();
-            MicrophoneRecorder.Instance.StartRecordMicrophone();
-            recordStartButton.gameObject.SetActive(false);
-            recordStopButton.gameObject.SetActive(true);
-        });
-
-        recordStopButton.onClick.AddListener(() =>
-        {
-            isRecording = false;
-            string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-            modelRecorder.StopRecord(KHHEditData.FileMotionPath + "/" + fileName + ".csv");
-            MicrophoneRecorder.Instance.StopRecordMicrophone(fileName);
-            recordStartButton.gameObject.SetActive(true);
-            recordStopButton.gameObject.SetActive(false);
-        });
-
+        captureRenderTexture = captureCamera.targetTexture;
         //movieSender.CameraPlayStart();
     }
 
@@ -106,5 +79,39 @@ public class KHHRecordManager : MonoBehaviour
             KHHCanvasShield.Instance.Show();
         else
             KHHCanvasShield.Instance.Close();
+    }
+
+    void RecordExitButtonEvent()
+    {
+        if (isRecording) RecordStopButtonEvent();
+        isActive = false;
+        record.SetActive(false);
+        edit.SetActive(true);
+        captureScreen.gameObject.SetActive(false);
+        captureCamera.targetTexture = captureRenderTexture;
+        motionDataManager.Refresh();
+        videoCapture.CameraPlayStop();
+        barracudaRunner.gameObject.SetActive(false);
+        barracudaRunner.IsTracking = false;
+    }
+
+    void RecordStartButtonEvent()
+    {
+        isRecording = true;
+        KHHCanvasShield.Instance.Show();
+        modelRecorder.StartRecord();
+        MicrophoneRecorder.Instance.StartRecordMicrophone();
+        recordStartButton.gameObject.SetActive(false);
+        recordStopButton.gameObject.SetActive(true);
+    }
+
+    void RecordStopButtonEvent()
+    {
+        isRecording = false;
+        string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+        modelRecorder.StopRecord(KHHEditData.FileMotionPath + "/" + fileName + ".csv");
+        MicrophoneRecorder.Instance.StopRecordMicrophone(fileName);
+        recordStartButton.gameObject.SetActive(true);
+        recordStopButton.gameObject.SetActive(false);
     }
 }

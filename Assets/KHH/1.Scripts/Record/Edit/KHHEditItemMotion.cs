@@ -68,6 +68,7 @@ public class KHHEditItemMotion : KHHEditItem
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 Remove();
             }
         }
@@ -110,24 +111,18 @@ public class KHHEditItemMotion : KHHEditItem
         //audioSource.Stop();
     }
 
-    public override void PlayEnd()
-    {
-        base.PlayEnd();
-        //audioSource.Stop();
-    }
-
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}M");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MCRX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVCRX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}MVV");
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == pairSound));
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}M");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}MVV");
+        screenEditor.RemoveItem(this);
+        screenEditor.RemoveItem(pairSound);
         Destroy(gameObject);
         Destroy(pairSound.gameObject);
     }
@@ -196,14 +191,16 @@ public class KHHEditItemMotion : KHHEditItem
     public override void OnSelect(BaseEventData eventData)
     {
         isSelected = true;
-        outline.enabled = true;
-        if(pairSound!=null) pairSound.IsSelected = true;
+        foreach (var outline in outlines)
+            outline.enabled = true;
+        if (pairSound != null) pairSound.IsSelected = true;
     }
 
     public override void OnDeselect(BaseEventData eventData)
     {
         isSelected = false;
-        outline.enabled = false;
+        foreach (var outline in outlines)
+            outline.enabled = false;
         if (pairSound != null) pairSound.IsSelected = false;
     }
 }

@@ -8,6 +8,7 @@ public class KHHEditItemBackground : KHHEditItem
 {
     Texture2D texture;
 
+    Coroutine coroutine;
     // Update is called once per frame
     protected override void Update()
     {
@@ -27,6 +28,7 @@ public class KHHEditItemBackground : KHHEditItem
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 Remove();
             }
         }
@@ -35,28 +37,30 @@ public class KHHEditItemBackground : KHHEditItem
     public override void PlayStart()
     {
         base.PlayStart();
+        if (coroutine != null) StopCoroutine(coroutine);
         screenEditor.backgroundImage.texture = texture;
     }
 
     public override void PlayStop()
     {
         base.PlayStop();
-        screenEditor.backgroundImage.texture = null;
+        coroutine = StartCoroutine(RemoveBackground());
     }
 
-    public override void PlayEnd()
+    IEnumerator RemoveBackground()
     {
-        base.PlayEnd();
+        yield return new WaitForSeconds(0.05f);
         screenEditor.backgroundImage.texture = null;
+        coroutine = null;
     }
 
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}I");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}ICRX");
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}I");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}ICRX");
+        screenEditor.RemoveItem(this);
         Destroy(gameObject);
     }
 

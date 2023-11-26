@@ -24,8 +24,8 @@ namespace Rukha93.ModularAnimeCharacter.Customization
         [SerializeField] private float m_FakeLoadTime = 1f;
 
         [Space]
-        [SerializeField] private ItemGroup m_MaleItems;
-        [SerializeField] private ItemGroup m_FemaleItems;
+        [SerializeField] public ItemGroup m_MaleItems;
+        [SerializeField] public ItemGroup m_FemaleItems;
 
         private Dictionary<string, object> m_AssetMap;
 

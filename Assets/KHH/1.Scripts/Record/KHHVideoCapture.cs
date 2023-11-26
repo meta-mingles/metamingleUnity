@@ -13,6 +13,7 @@ public class KHHVideoCapture : MonoBehaviour
     public Queue<string> actionQueue = new Queue<string>();
 
     private string filePath;
+    //public string FilePath { get { return filePath; } }
 
     //업로드중
     public bool IsUploading { get; set; } = false;
@@ -40,75 +41,6 @@ public class KHHVideoCapture : MonoBehaviour
             }
         }
     }
-
-    //    private void OnGUI()
-    //    {
-    //        if (VideoCaptureCtrl.instance.status == VideoCaptureCtrl.StatusType.NOT_START)
-    //        {
-    //            if (GUI.Button(new Rect(10, Screen.height - 60, 150, 50), "Start Capture"))
-    //            {
-    //                VideoCaptureCtrl.instance.StartCapture();
-    //            }
-    //        }
-    //        else if (VideoCaptureCtrl.instance.status == VideoCaptureCtrl.StatusType.STARTED)
-    //        {
-    //            if (GUI.Button(new Rect(10, Screen.height - 60, 150, 50), "Stop Capture"))
-    //            {
-    //                VideoCaptureCtrl.instance.StopCapture();
-    //            }
-    //            if (GUI.Button(new Rect(180, Screen.height - 60, 150, 50), "Pause Capture"))
-    //            {
-    //                VideoCaptureCtrl.instance.ToggleCapture();
-    //            }
-    //        }
-    //        else if (VideoCaptureCtrl.instance.status == VideoCaptureCtrl.StatusType.PAUSED)
-    //        {
-    //            if (GUI.Button(new Rect(10, Screen.height - 60, 150, 50), "Stop Capture"))
-    //            {
-    //                VideoCaptureCtrl.instance.StopCapture();
-    //            }
-    //            if (GUI.Button(new Rect(180, Screen.height - 60, 150, 50), "Continue Capture"))
-    //            {
-    //                VideoCaptureCtrl.instance.ToggleCapture();
-    //            }
-    //        }
-    //        else if (VideoCaptureCtrl.instance.status == VideoCaptureCtrl.StatusType.STOPPED)
-    //        {
-    //            if (GUI.Button(new Rect(10, Screen.height - 60, 150, 50), "Processing"))
-    //            {
-    //                // Waiting processing end.
-    //            }
-    //        }
-    //        else if (VideoCaptureCtrl.instance.status == VideoCaptureCtrl.StatusType.FINISH)
-    //        {
-    //            if (!isPlayVideo)
-    //            {
-    //                if (GUI.Button(new Rect(10, Screen.height - 60, 150, 50), "View Video"))
-    //                {
-    //#if UNITY_5_6_OR_NEWER
-    //                    // Set root folder.
-    //                    isPlayVideo = true;
-    //                    VideoPlayer.instance.SetRootFolder();
-    //                    // Play capture video.
-    //                    VideoPlayer.instance.PlayVideo();
-    //                }
-    //            }
-    //            else
-    //            {
-    //                if (GUI.Button(new Rect(10, Screen.height - 60, 150, 50), "Next Video"))
-    //                {
-    //                    // Turn to next video.
-    //                    VideoPlayer.instance.NextVideo();
-    //                    // Play capture video.
-    //                    VideoPlayer.instance.PlayVideo();
-    //#else
-    //                        // Open video save directory.
-    //                        Process.Start(PathConfig.saveFolder);
-    //#endif
-    //                }
-    //            }
-    //        }
-    //    }
 
     public void OnCaptureComplete()
     {
@@ -138,6 +70,10 @@ public class KHHVideoCapture : MonoBehaviour
 
     IEnumerator CoUploadShortformVideo(byte[] videoBytes, string title, string description)
     {
+        string uuid = null;  // 없을 시 null 반환
+        if (PlayerPrefs.HasKey($"{KHHEditData.VideoTitle}uuid"))
+            uuid = PlayerPrefs.GetString($"{KHHEditData.VideoTitle}uuid");  // 시나리오 작성 시 저장된 키 값 꺼냄
+
         using (UnityWebRequest www = new UnityWebRequest(uploadShortformURL, "POST"))
         {
             // Create a new WWWForm object to package your data.
@@ -149,12 +85,14 @@ public class KHHVideoCapture : MonoBehaviour
             // Add the title to the form data.
             form.AddField("title", title);
             form.AddField("description", description);
+            form.AddField("uuid", uuid);  // uuid 함께 전송
 
             // Set the form as the request's upload handler.
             www.uploadHandler = new UploadHandlerRaw(form.data);
             www.downloadHandler = new DownloadHandlerBuffer();
 
             // Set the correct headers for a multipart/form-data POST request.
+            www.SetRequestHeader("Authorization", HttpManager.instance.token);
             foreach (KeyValuePair<string, string> header in form.headers)
             {
                 www.SetRequestHeader(header.Key, header.Value);
@@ -190,11 +128,15 @@ public class KHHVideoCapture : MonoBehaviour
         for (int i = 0; i < paths.Count; i++)
             videoBytes.Add(ReadVideoAsBytes(paths[i]));
 
-        StartCoroutine(CoUploadInteractiveVideo(videoBytes, description, title, c1, c2));
+        StartCoroutine(CoUploadInteractiveVideo(videoBytes, title, description, c1, c2));
     }
 
     IEnumerator CoUploadInteractiveVideo(List<byte[]> videoBytesList, string title, string description, string c1, string c2)
     {
+        string uuid = null;  // 없을 시 null 반환
+        if (PlayerPrefs.HasKey($"{KHHEditData.VideoTitle}uuid"))
+            uuid = PlayerPrefs.GetString($"{KHHEditData.VideoTitle}uuid");  // 시나리오 작성 시 저장된 키 값 꺼냄
+
         using (UnityWebRequest www = new UnityWebRequest(uploadInteractiveURL, "POST"))
         {
             // Create a new WWWForm object to package your data.
@@ -215,12 +157,14 @@ public class KHHVideoCapture : MonoBehaviour
             form.AddField("description", description);
             form.AddField("choice1", c1);
             form.AddField("choice2", c2);
+            form.AddField("uuid", uuid);  // uuid 함께 전송
 
             // Set the form as the request's upload handler.
             www.uploadHandler = new UploadHandlerRaw(form.data);
             www.downloadHandler = new DownloadHandlerBuffer();
 
             // Set the correct headers for a multipart/form-data POST request.
+            www.SetRequestHeader("Authorization", HttpManager.instance.token);
             foreach (KeyValuePair<string, string> header in form.headers)
             {
                 www.SetRequestHeader(header.Key, header.Value);

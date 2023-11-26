@@ -22,9 +22,11 @@ public class KHHSoundData : KHHData
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 //파일 삭제
                 File.Delete(KHHEditData.FileSoundPath + "/" + fileName + ".wav");
                 khhDataManager.Refresh();
+                KHHEditManager.Instance.screenEditor.Refresh();
             }
         }
     }

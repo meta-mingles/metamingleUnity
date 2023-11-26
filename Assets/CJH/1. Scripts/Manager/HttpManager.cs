@@ -7,8 +7,6 @@ using System.Text;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
-
-
 public enum RequestType
 {
     GET,
@@ -17,69 +15,50 @@ public enum RequestType
     DELETE,
     TEXTURE
 }
-
 public class HttpInfo
 {
     public RequestType requestType;
     public string url = "";
     public string testUrl = "";
-
     public string body = "{}";
-    
     public Action<DownloadHandler> onReceive;
+    public Action onReceiveFail;
     public Action<DownloadHandler, int> onReceiveImage;
-
     public string loginId;
     public string loginPW;
     public string token;
-
     public int imageId;
-
     public void Set(
         RequestType type,
         string u,
         Action<DownloadHandler> callback,
+        Action callbackFail = null,
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) testUrl = "http://192.168.0.28:8080";  //로그인 임시 url
         if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
+        //if (useDefaultUrl) testUrl = "http://192.168.0.25:8080"; //기존 서버 url
         url += u;
-        testUrl += u;
+        //testUrl += u;
         onReceive = callback;
+        onReceiveFail = callbackFail;
     }
 }
-
-
 public class HttpManager : MonoBehaviour
 {
-    static HttpManager instance;
+    public static HttpManager instance;
 
+    //로그인,회원가입
+    public string email = "";
+    public string password = "";
+    public string nickname = "";
+
+    //퀴즈
+    public int rankNo;
+    public string english = "";
+    public string korean = "";
+    public int shortFormNo;
     public string token = "";
-
-    public static HttpManager Get()
-    {
-        if (instance == null)
-        {
-            GameObject go = new GameObject("HttpStudy");
-            go.AddComponent<HttpManager>();
-        }
-
-        return instance;
-    }
-
-    //Texture
-    public static HttpManager Texture()
-    {
-        if(instance == null)
-        {
-            GameObject go = new GameObject("HttpTexture");
-            go.AddComponent<HttpManager>();
-        }
-        return instance;
-    }
-
-
     private void Awake()
     {
         if (instance == null)
@@ -92,23 +71,11 @@ public class HttpManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     public void SendRequest(HttpInfo httpInfo)
     {
-        if(httpInfo.requestType == RequestType.POST)
+        if (httpInfo.requestType == RequestType.POST)
         {
             StartCoroutine(Post(httpInfo));
-
         }
         else
         {
@@ -118,17 +85,16 @@ public class HttpManager : MonoBehaviour
 
     IEnumerator CoSendRequest(HttpInfo httpInfo)
     {
-
         UnityWebRequest req = null;
-
         //POST, GET, PUT, DELETE  б 
         switch (httpInfo.requestType)
         {
             case RequestType.GET:
                 //Debug.Log(httpInfo.url);
+                //req = UnityWebRequest.Get(httpInfo.testUrl);
                 req = UnityWebRequest.Get(httpInfo.url);
                 break;
-           
+
             case RequestType.PUT:
                 req = UnityWebRequest.Put(httpInfo.url, httpInfo.body);
                 break;
@@ -139,37 +105,30 @@ public class HttpManager : MonoBehaviour
                 req = UnityWebRequestTexture.GetTexture(httpInfo.url);
                 break;
         }
-
-        if(token.Length > 0)
+        if (token.Length > 0)
         {
-            req.SetRequestHeader("Authorization", token);
+            req.SetRequestHeader("Authentication", token);
         }
-
         yield return req.SendWebRequest();
-
         SetResult(req, httpInfo);
     }
 
     IEnumerator Post(HttpInfo httpInfo)
     {
         string str = JsonUtility.ToJson(httpInfo.body);
-        using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.testUrl, str))
+        using (UnityWebRequest req = UnityWebRequest.Post(httpInfo.url, str))
         {
             byte[] byteBody = Encoding.UTF8.GetBytes(httpInfo.body);
+            req.uploadHandler.Dispose();
             req.uploadHandler = new UploadHandlerRaw(byteBody);
             //헤더추가
             req.SetRequestHeader("Content-Type", "application/json");
 
             if (token.Length > 0)
             {
-                req.SetRequestHeader("Authorization", token);
-
-
+                req.SetRequestHeader("Authentication", token);
             }
-
             yield return req.SendWebRequest();
-
-
             SetResult(req, httpInfo);
         }
     }
@@ -201,6 +160,8 @@ public class HttpManager : MonoBehaviour
         }
         else
         {
+            httpInfo.onReceiveFail?.Invoke();
+            //로그인 안될때
             print("네트워크 에러 : " + req.error);
         }
     }

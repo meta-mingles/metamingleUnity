@@ -15,16 +15,18 @@ public class KHHBackgroundData : KHHData
         base.Awake();
         rawImage = GetComponent<RawImage>();
     }
-
+    
     public void Update()
     {
         if (IsSelected)
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 //파일 삭제
-                File.Delete(KHHEditData.FileMotionPath + "/" + fileName + fileExtension);
+                File.Delete(KHHEditData.FileImagePath + "/" + fileName + fileExtension);
                 khhDataManager.Refresh();
+                KHHEditManager.Instance.screenEditor.Refresh();
             }
         }
     }

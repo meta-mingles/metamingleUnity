@@ -56,7 +56,7 @@ public class KHHCustomizationDemo : MonoBehaviour
         m_UI.OnChangeColor += OnChangeColor;
     }
 
-    IEnumerator Start()
+    async void Start()
     {
         //init categories UI
         m_UI.SetCategories(CustomCategories.ToArray());
@@ -64,9 +64,12 @@ public class KHHCustomizationDemo : MonoBehaviour
             m_UI.SetCategoryValue(i, "");
 
         //load data
-        KHHUserCustom.Init();
-        KHHUserCustomData data = KHHUserCustom.LoadData();
+        KHHUserCustomData data = await KHHUserCustom.LoadData();
+        StartCoroutine(InitLoadCustom(data));
+    }
 
+    IEnumerator InitLoadCustom(KHHUserCustomData data)
+    {
         if (data == null || data.datas == null || data.datas.Count == 0)
         {
             m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody("f"));
@@ -82,7 +85,6 @@ public class KHHCustomizationDemo : MonoBehaviour
             }
             else
             {
-                if (d.itemIndex == 0) continue;
                 m_LoadingCoroutine = StartCoroutine(Co_LoadAndEquip(d.category, m_CustomizationOptions[d.category][d.itemIndex], d.materialDatas));
             }
             yield return m_LoadingCoroutine;
@@ -130,6 +132,7 @@ public class KHHCustomizationDemo : MonoBehaviour
             m_Equiped.Clear();
             m_CustomizationOptions.Clear();
             m_BodyParts.Clear();
+            KHHUserCustom.Clear();
         }
 
         //init the customization options for the selected body type
@@ -167,6 +170,8 @@ public class KHHCustomizationDemo : MonoBehaviour
 
     public void Equip(string cat, string path, CustomizationItemAsset item, List<KHHMaterialData> materialDatas = null)
     {
+        if (string.IsNullOrEmpty(path) || item == null) return;
+
         //if outfit, remove all othet pieces
         if (cat.Equals("outfit"))
         {
@@ -463,6 +468,14 @@ public class KHHCustomizationDemo : MonoBehaviour
 
         block.SetColor(property, color);
         renderer.SetPropertyBlock(block, materialIndex);
+
+        if (renderer.name.Contains("head.001_mesh") && materialIndex == 0)
+        {
+            MaterialPropertyBlock block2 = new MaterialPropertyBlock();
+            renderer.GetPropertyBlock(block2, 1);
+            block2.SetColor(property, color);
+            renderer.SetPropertyBlock(block2, 1);
+        }
 
         //store the properties for this material in case a new equip needs it
         var sharedMaterial = renderer.sharedMaterials[materialIndex];

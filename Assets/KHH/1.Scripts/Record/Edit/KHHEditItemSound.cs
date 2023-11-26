@@ -4,6 +4,7 @@ using Unity.Barracuda;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class KHHEditItemSound : KHHEditItem
 {
@@ -25,6 +26,9 @@ public class KHHEditItemSound : KHHEditItem
             audioSource.volume = value;
         }
     }
+
+    public Image itemImage;
+    public Sprite[] sprites;
 
     protected override void Awake()
     {
@@ -51,6 +55,7 @@ public class KHHEditItemSound : KHHEditItem
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                KHHEditManager.Instance.StopButtonEvent();
                 Remove();
             }
         }
@@ -69,26 +74,23 @@ public class KHHEditItemSound : KHHEditItem
         audioSource.Stop();
     }
 
-    public override void PlayEnd()
-    {
-        base.PlayEnd();
-        audioSource.Stop();
-    }
-
     public override void Remove()
     {
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}S");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCLX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SCRX");
-        PlayerPrefs.DeleteKey($"{KHHEditData.VideoName}SV");
-        screenEditor.EditItemList.Remove(screenEditor.EditItemList.Find(x => x == this));
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}S");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCLX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SCRX");
+        PlayerPrefs.DeleteKey($"{KHHEditData.VideoTitle}SV");
+        screenEditor.RemoveItem(this);
         Destroy(gameObject);
     }
 
     public override void LoadItemData(KHHScreenEditor editor, string filePath, string fileName, UnityAction action)
     {
         base.LoadItemData(editor, filePath, fileName, action);
+
+        if (isVoice) itemImage.sprite = sprites[0];
+        else itemImage.sprite = sprites[1];
 
         //오디오 로드
         StartCoroutine(CoLoadAudioData(filePath, action));
@@ -132,14 +134,16 @@ public class KHHEditItemSound : KHHEditItem
         KHHEditManager.Instance.SoundButtonEvent();
         KHHEditManager.Instance.soundDataManager.SetSelectedData(this);
         isSelected = true;
-        outline.enabled = true;
+        foreach (var outline in outlines)
+            outline.enabled = true;
         if (pairMotion != null) pairMotion.IsSelected = true;
     }
 
     public override void OnDeselect(BaseEventData eventData)
     {
         isSelected = false;
-        outline.enabled = false;
+        foreach (var outline in outlines)
+            outline.enabled = false;
         if (pairMotion != null) pairMotion.IsSelected = false;
     }
 }

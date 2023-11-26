@@ -33,12 +33,15 @@ public class KHHCustomCharacter : MonoBehaviour
         m_MaterialProperties = new Dictionary<Material, MaterialPropertyBlock>();
     }
 
-    IEnumerator Start()
+    async void Start()
     {
         //load data
-        KHHUserCustom.Init();
-        KHHUserCustomData data = KHHUserCustom.LoadData();
+        KHHUserCustomData data = await KHHUserCustom.LoadData();
+        StartCoroutine(InitLoadCustom(data));
+    }
 
+    IEnumerator InitLoadCustom(KHHUserCustomData data)
+    {
         if (data == null || data.datas == null || data.datas.Count == 0)
         {
             m_LoadingCoroutine = StartCoroutine(Co_LoadAndInitBody("f"));
@@ -54,7 +57,6 @@ public class KHHCustomCharacter : MonoBehaviour
             }
             else
             {
-                if (d.itemIndex == 0) continue;
                 m_LoadingCoroutine = StartCoroutine(Co_LoadAndEquip(d.category, m_CustomizationOptions[d.category][d.itemIndex], d.materialDatas));
             }
             yield return m_LoadingCoroutine;
@@ -125,9 +127,9 @@ public class KHHCustomCharacter : MonoBehaviour
         var bodyPath = GetAssetPath(bodyType, "body");
         yield return m_AssetLoader.LoadAsset<GameObject>(bodyPath, res => InitBody(bodyPath, res));
 
-        //initialize the head with the first available
-        string assetPath = m_CustomizationOptions["head"][0];
-        yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(assetPath, res => Equip("head", assetPath, res));
+        ////initialize the head with the first available
+        //string assetPath = m_CustomizationOptions["head"][0];
+        //yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(assetPath, res => Equip("head", assetPath, res));
 
         m_LoadingCoroutine = null;
     }
@@ -139,6 +141,7 @@ public class KHHCustomCharacter : MonoBehaviour
 
     public void Equip(string cat, string path, CustomizationItemAsset item, List<KHHMaterialData> materialDatas = null)
     {
+        if (string.IsNullOrEmpty(path) || item == null) return;
         //if outfit, remove all othet pieces
 
         ////unequip previous item
@@ -299,12 +302,12 @@ public class KHHCustomCharacter : MonoBehaviour
                 Color colorC = materials[i].GetColor("_Color_C_2");
                 if (materialData != null)
                 {
-                    if (materialData.ColorA != Color.black)
-                        colorA = materialData.ColorA;
-                    if (materialData.ColorB != Color.black)
-                        colorB = materialData.ColorB;
-                    if (materialData.ColorC != Color.black)
-                        colorC = materialData.ColorC;
+                    //if (materialData.ColorA != Color.black)
+                    colorA = materialData.ColorA;
+                    //if (materialData.ColorB != Color.black)
+                    colorB = materialData.ColorB;
+                    //if (materialData.ColorC != Color.black)
+                    colorC = materialData.ColorC;
                     OnChangeColor(auxRenderer, auxMatIndex, "_Color_A_2", colorA);
                     OnChangeColor(auxRenderer, auxMatIndex, "_Color_B_2", colorB);
                     OnChangeColor(auxRenderer, auxMatIndex, "_Color_C_2", colorC);

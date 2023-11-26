@@ -2,7 +2,9 @@
 using RockVR.Video;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Device;
 using UnityEngine.UI;
 
 public class KHHEditManager : MonoBehaviour
@@ -15,22 +17,21 @@ public class KHHEditManager : MonoBehaviour
     public KHHMotionDataManager motionDataManager;
     public KHHSoundDataManager soundDataManager;
     public KHHBackgroundDataManager backgroundDataMaanger;
+    public RockVR.Video.VideoCapture videoCapture;
 
     public Camera captureCamera;
-    public RenderTexture captureRenderTexture;
     public KHHScreenEditor screenEditor;
+    public RawImage screen;
     public GameObject barracudaRunner;
-
 
     [Header("Left")]
     public Button recordButton;
     public Button motionButton;
     public Button soundButton;
     public Button backgroundButton;
-    public Button captionButton;
 
     public Button settingButton;
-    public Button exitButton;
+    public Button homeButton;
 
     public GameObject motionPanel;
     public GameObject soundPanel;
@@ -39,6 +40,7 @@ public class KHHEditManager : MonoBehaviour
     public KHHEditSetting editSetting;
 
     [Header("Middle")]
+    public TMP_InputField titleInputField;
     public Button playButton;
     public Button stopButton;
     public Button exportButton;
@@ -50,7 +52,9 @@ public class KHHEditManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        KHHEditData.Open("test video");
+        titleInputField.text = KHHEditData.VideoTitle;
+
+        VideoCaptureCtrl.instance.Set();
     }
 
     // Start is called before the first frame update
@@ -64,7 +68,9 @@ public class KHHEditManager : MonoBehaviour
         if (backgroundButton != null) backgroundButton.onClick.AddListener(BackgroundButtonEvent);
 
         if (settingButton != null) settingButton.onClick.AddListener(SettingButtonEvent);
+        if (homeButton != null) homeButton.onClick.AddListener(HomeButtonEvent);
 
+        if (titleInputField != null) titleInputField.onEndEdit.AddListener(TitleInputFieldEvent);
         if (playButton != null) playButton.onClick.AddListener(PlayButtonEvent);
         if (stopButton != null) stopButton.onClick.AddListener(StopButtonEvent);
         if (exportButton != null) exportButton.onClick.AddListener(ExportButtonEvent);
@@ -75,7 +81,7 @@ public class KHHEditManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!init && KHHRecordManager.Instance.videoCapture.SetEnd)
+        if (!init && KHHRecordManager.Instance.videoCapture.SetEnd)
         {
             init = true;
             KHHCanvasShield.Instance.Close();
@@ -99,9 +105,12 @@ public class KHHEditManager : MonoBehaviour
         motionPanel.SetActive(true);
         soundPanel.SetActive(false);
         backgroundPanel.SetActive(false);
-        motionButton.image.color = new Color32(200, 200, 200, 255);
-        soundButton.image.color = new Color32(255, 255, 255, 255);
-        backgroundButton.image.color = new Color32(255, 255, 255, 255);
+        foreach (var image in motionButton.GetComponentsInChildren<Image>())
+            image.color = new Color32(64, 205, 182, 255);
+        foreach (var image in soundButton.GetComponentsInChildren<Image>())
+            image.color = Color.white;
+        foreach (var image in backgroundButton.GetComponentsInChildren<Image>())
+            image.color = Color.white;
 
         motionDataManager.Refresh();
     }
@@ -111,9 +120,12 @@ public class KHHEditManager : MonoBehaviour
         motionPanel.SetActive(false);
         soundPanel.SetActive(true);
         backgroundPanel.SetActive(false);
-        motionButton.image.color = new Color32(255, 255, 255, 255);
-        soundButton.image.color = new Color32(200, 200, 200, 255);
-        backgroundButton.image.color = new Color32(255, 255, 255, 255);
+        foreach (var image in motionButton.GetComponentsInChildren<Image>())
+            image.color = Color.white;
+        foreach (var image in soundButton.GetComponentsInChildren<Image>())
+            image.color = new Color32(64, 205, 182, 255);
+        foreach (var image in backgroundButton.GetComponentsInChildren<Image>())
+            image.color = Color.white;
 
         soundDataManager.Refresh();
     }
@@ -123,9 +135,12 @@ public class KHHEditManager : MonoBehaviour
         motionPanel.SetActive(false);
         soundPanel.SetActive(false);
         backgroundPanel.SetActive(true);
-        motionButton.image.color = new Color32(255, 255, 255, 255);
-        soundButton.image.color = new Color32(255, 255, 255, 255);
-        backgroundButton.image.color = new Color32(200, 200, 200, 255);
+        foreach (var image in motionButton.GetComponentsInChildren<Image>())
+            image.color = Color.white;
+        foreach (var image in soundButton.GetComponentsInChildren<Image>())
+            image.color = Color.white;
+        foreach (var image in backgroundButton.GetComponentsInChildren<Image>())
+            image.color = new Color32(64, 205, 182, 255);
 
         backgroundDataMaanger.Refresh();
     }
@@ -135,11 +150,32 @@ public class KHHEditManager : MonoBehaviour
         editSetting.Open();
     }
 
+    void HomeButtonEvent()
+    {
+        StopButtonEvent();
+        KHHEditData.Close();
+        GlobalValue.PrevSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        GlobalValue.CurSceneName = "ToolSelect";
+        UnityEngine.SceneManagement.SceneManager.LoadScene("ToolSelect");
+    }
+
+    void TitleInputFieldEvent(string t)
+    {
+        if (!KHHEditData.ChangeVideoTitle(t))
+        {
+            Debug.Log("중복");
+            titleInputField.text = KHHEditData.VideoTitle;
+        }
+    }
+
     void PlayButtonEvent()
     {
+        if (!screenEditor.Play()) return;
+
+        screen.color = Color.white;
+        screen.texture = videoCapture.FrameRenderTexture;
         playButton.gameObject.SetActive(false);
         stopButton.gameObject.SetActive(true);
-        screenEditor.Play();
     }
 
     public void StopButtonEvent()
@@ -147,10 +183,16 @@ public class KHHEditManager : MonoBehaviour
         playButton.gameObject.SetActive(true);
         stopButton.gameObject.SetActive(false);
         screenEditor.Stop();
+        screen.texture = null;
+        screen.color = new Color32(56, 60, 62, 255);
     }
 
     void ExportButtonEvent()
     {
+        if (!screenEditor.FileLoaded)
+            return;
+
+        StopButtonEvent();
         export.Open();
     }
 }
