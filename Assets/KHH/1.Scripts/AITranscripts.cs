@@ -181,7 +181,7 @@ public class AITranscripts : MonoBehaviour
         request.Headers.Add("Accept", "text/event-stream");
 
         ////헤더에 토큰 추가 (현재 생략 가능)
-        request.Headers.Add("Authorization", HttpManager.instance.token);
+        request.Headers.Add("Authentication", HttpManager.instance.token);
 
         request.Content = new ByteArrayContent(jsonData);
         request.Content.Headers.Add("Content-Type", "application/json");
@@ -246,7 +246,7 @@ public class AITranscripts : MonoBehaviour
         {
             www.uploadHandler = new UploadHandlerRaw(jsonData);
             www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Authorization", HttpManager.instance.token);
+            www.SetRequestHeader("Authentication", HttpManager.instance.token);
             www.SetRequestHeader("Content-Type", "application/json");
 
             yield return www.SendWebRequest();
@@ -305,7 +305,7 @@ public class AITranscripts : MonoBehaviour
         {
             www.uploadHandler = new UploadHandlerRaw(jsonData);
             www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Authorization", HttpManager.instance.token);
+            www.SetRequestHeader("Authentication", HttpManager.instance.token);
             www.SetRequestHeader("Content-Type", "application/json");
 
             yield return www.SendWebRequest();

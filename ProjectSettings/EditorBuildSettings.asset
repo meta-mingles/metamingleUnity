@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/KHH/0.Scenes/ToolLoginScene.unity
     guid: 85aa84ebb2f0fb44c859657c5faaf3ec
-  - enabled: 0
+  - enabled: 1
     path: Assets/KHH/0.Scenes/ToolSelect.unity
     guid: 4bdb912eb595a804dac0b13de4cdacc0
-  - enabled: 0
+  - enabled: 1
     path: Assets/KHH/0.Scenes/ToolCapture.unity
     guid: deeddd9199426d543ac1c508183458c9
   - enabled: 1

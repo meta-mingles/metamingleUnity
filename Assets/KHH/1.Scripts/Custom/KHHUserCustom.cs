@@ -157,9 +157,9 @@ public static class KHHUserCustom
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "http://metaverse.ohgiraffers.com:8080/avatar");
 
-            //request.Headers.Add("Authorization", HttpManager.instance.token);
             request.Content = new ByteArrayContent(jsonData);
             request.Content.Headers.Add("Content-Type", "application/json");
+            request.Headers.Add("Authentication", HttpManager.instance.token);
 
             // POST 요청 전송
             using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
@@ -203,8 +203,10 @@ public static class KHHUserCustom
         {
             try
             {
-                using var response = await client.GetAsync("http://metaverse.ohgiraffers.com:8080/avatar");
-                //await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://metaverse.ohgiraffers.com:8080/avatar");
+                request.Headers.Add("Authentication", HttpManager.instance.token);
+
+                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                 // 응답 처리
                 if (response.IsSuccessStatusCode)
