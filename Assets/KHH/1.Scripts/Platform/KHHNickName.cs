@@ -21,11 +21,10 @@ public class KHHNickName : MonoBehaviourPun
     }
     private void Update()
     {
-
+        EnterUI();
     }
     private void FixedUpdate()
     {
-        EnterUI();
         canvas.transform.LookAt(Camera.main.transform);
     }
 
