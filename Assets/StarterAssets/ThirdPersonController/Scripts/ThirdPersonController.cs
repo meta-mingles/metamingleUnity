@@ -1,4 +1,4 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -136,7 +136,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -156,8 +156,13 @@ namespace StarterAssets
         private void Update()
         {
             // UI 요소와 상호작용 중인지 확인
-            if (EventSystem.current.isFocused)
+            if (EventSystem.current.IsPointerOverGameObject() || PhotonChatManager.instance.IsSelected)
+            {
+                //애니메이션 초기화
+                _animator.SetFloat(_animIDSpeed, 0f);
+                _animator.SetFloat(_animIDMotionSpeed, 0f);
                 return; // UI 요소와 상호작용 중이면 아래의 움직임 관련 코드를 실행하지 않음
+            }
 
             _hasAnimator = TryGetComponent(out _animator);
 
@@ -169,10 +174,9 @@ namespace StarterAssets
         private void LateUpdate()
         {
             // UI 요소와 상호작용 중인지 확인
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
+            if (EventSystem.current.IsPointerOverGameObject() || PhotonChatManager.instance.IsSelected)
                 return; // UI 요소와 상호작용 중이면 아래의 움직임 관련 코드를 실행하지 않음
-            }
+
             CameraRotation();
         }
 

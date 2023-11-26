@@ -13,12 +13,14 @@ using UnityEngine.UIElements;
 
 public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
 {
+    public static PhotonChatManager instance;
+
     public TMP_InputField inputChat;
     public GameObject chatItemFactory;
     public RectTransform trContent;
     public RectTransform rtScrollView;
     public ScrollRect scrollRect;
-        
+
     float prevContentH;//채팅이 추가되기 전의 Content의 H 값을 가지고 있는 변수
     //photon Chat Setting
     ChatAppSettings chatAppSettings;
@@ -28,6 +30,12 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     public List<string> channelNames = new List<string>();
     //현재 선택된 채널
     int currChannelIdx = 0;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -209,5 +217,17 @@ public class PhotonChatManager : MonoBehaviourPun, IChatClientListener
     public void OnUserUnsubscribed(string channel, string user)
     {
 
+    }
+
+    bool isSelected = false;
+    public bool IsSelected { get { return isSelected; } }
+    public void ChatSelected()
+    {
+        isSelected = true;
+    }
+
+    public void ChatDeselected()
+    {
+        isSelected = false;
     }
 }
