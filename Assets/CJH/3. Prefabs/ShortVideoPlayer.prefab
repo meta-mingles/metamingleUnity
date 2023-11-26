@@ -1671,7 +1671,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8241539764084789305}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 359}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3436,6 +3436,7 @@ RectTransform:
   m_Children:
   - {fileID: 8670721029031453318}
   - {fileID: 8119162733505316390}
+  - {fileID: 225496104788005933}
   m_Father: {fileID: 8241539764084789305}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3651,7 +3652,6 @@ RectTransform:
   - {fileID: 3474839697787811876}
   - {fileID: 571751217852122934}
   - {fileID: 161119516595534447}
-  - {fileID: 225496104788005933}
   - {fileID: 8198551789374433246}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -3743,6 +3743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc9a84769f675d4eb673f9735a197c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  videoUrl: 
   videoPlayer: {fileID: 8241539764084789302}
   videoInfo:
     shortFormNo: 0
@@ -3770,7 +3771,6 @@ MonoBehaviour:
   like_Count: {fileID: 5345094986162877568}
   profilecolor: {fileID: 6693701038207951974}
   like_Button: {fileID: 2668735933095691388}
-  Sound_Button: {fileID: 0}
   colorChangeDuration: 0.4
   interactiveMovieList: {fileID: 5565993458271900200}
 --- !u!1 &8439779269252918878
@@ -3792,7 +3792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &225496104788005933
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3802,17 +3802,17 @@ RectTransform:
   m_GameObject: {fileID: 8439779269252918878}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.4285713, y: 1.4285713, z: 1.4285713}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9160162309360343156}
   - {fileID: 107333388903471091}
-  m_Father: {fileID: 8241539764084789305}
-  m_RootOrder: 5
+  m_Father: {fileID: 161119516595534447}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 183}
+  m_AnchoredPosition: {x: 20.428553, y: 274.28574}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5565993458271900200
