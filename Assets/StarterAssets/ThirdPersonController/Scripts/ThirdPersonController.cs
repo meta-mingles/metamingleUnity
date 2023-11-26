@@ -156,10 +156,9 @@ namespace StarterAssets
         private void Update()
         {
             // UI 요소와 상호작용 중인지 확인
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
+            if (EventSystem.current.isFocused)
                 return; // UI 요소와 상호작용 중이면 아래의 움직임 관련 코드를 실행하지 않음
-            }
+
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
