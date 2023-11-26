@@ -57,6 +57,7 @@ public class J_PlatformUIManager : MonoBehaviour
     public Button videoBt; //영상보러가기 버튼
     public Button customizeBt; //아바타 커스터마이징 가기 버튼
     [Header("Setting")]
+    public GameObject blockSetting;
     public CanvasGroup settingCG;
     public Button settingBt; //설정 버튼
     public GameObject settingTab; //설정창
@@ -104,7 +105,7 @@ public class J_PlatformUIManager : MonoBehaviour
     //떠오르기 애니메이션 ui
     void Init()
     {
-        settingCG.gameObject.SetActive(true);
+        blockSetting.SetActive(true);
         settingCG.transform.DOLocalMoveY(0, 0.5f).SetEase(Ease.Linear);
         settingCG.DOFade(1, 0.5f).SetEase(Ease.Linear).OnComplete(() => settingCG.blocksRaycasts = true);
     }
@@ -114,7 +115,7 @@ public class J_PlatformUIManager : MonoBehaviour
         settingCG.transform.DOLocalMoveY(-270f, 0.5f).SetEase(Ease.Linear);
         settingCG.DOFade(0, 0.5f).SetEase(Ease.Linear).OnComplete(() => 
         {
-            settingCG.gameObject.SetActive(false);
+            blockSetting.SetActive(false);
             settingCG.blocksRaycasts = true;
         });
     }
