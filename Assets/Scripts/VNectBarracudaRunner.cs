@@ -218,6 +218,9 @@ public class VNectBarracudaRunner : MonoBehaviour
 
     }
 
+
+    [System.NonSerialized] public int IsPredict = 1;
+
     /// <summary>
     /// Predict positions of each of joints based on network
     /// </summary>
@@ -227,7 +230,7 @@ public class VNectBarracudaRunner : MonoBehaviour
         // 예를 들어 관절 1이 있다고 할 때, 28*28인 feature map이 28개 있는데 이 중 가장 높은 확률값을 가지는 곳의 좌표를 찾는다. 
         // 찾은 좌표를 maxXIndex, maxYIndex, maxZIndex라고 하겠다
         List<int> position_list = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 19 });  // 내가 찾고자 하는 관절들 번호
-        var isPredict = 1;
+        IsPredict = 1;
         for (var j = 0; j < JointNum; j++)
         {
             var maxXIndex = 0;
@@ -257,7 +260,7 @@ public class VNectBarracudaRunner : MonoBehaviour
             // 구겨지지 않기 위한 장치
             if (position_list.Contains(j) && jointPoints[j].score3D < 0.15f)
             {
-                isPredict = 0;
+                IsPredict = 0;
                 break;
                 //Debug.Log("NO" + j + " " + jointPoints[j].score3D);
             }
@@ -275,7 +278,7 @@ public class VNectBarracudaRunner : MonoBehaviour
         // 탐색되지 않으면 이전 값으로 대체함.
         for (var j = 0; j < jointPoints.Length; j++)
         {
-            if (isPredict == 1)
+            if (IsPredict == 1)
             {
                 jointPoints[j].Save3D.x = jointPoints[j].Now3D.x;
                 jointPoints[j].Save3D.y = jointPoints[j].Now3D.y;

@@ -17,6 +17,7 @@ public class VideoCapture : MonoBehaviour
 
     private WebCamTexture webCamTexture;
     private RenderTexture videoTexture;
+    public WebCamTexture VideoTexture { get { return webCamTexture; } }
 
     private int videoScreenWidth = 1920;//2560;
     private int bgWidth, bgHeight;

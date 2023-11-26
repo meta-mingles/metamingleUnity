@@ -87,7 +87,7 @@ public class VisualizerTest : MonoBehaviour
 
     private void Update()
     {
-        if (!isInit) return;
+        if (!isInit || !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0) return;
         CloseEyes();
         Smiling();
         Talking();
@@ -95,14 +95,14 @@ public class VisualizerTest : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!isInit) return;
+        if (!isInit || !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0) return;
         // Inference. Switchable inference type anytime.
-        holisticPipeline.ProcessImage(videoCapture.MainTexture, holisticInferenceType);
+        holisticPipeline.ProcessImage(videoCapture.VideoTexture, holisticInferenceType);
     }
 
-    void OnRenderObject()
+    void FixedUpdate()
     {
-        if (!isInit || !barracudaRunner.IsTracking) return;
+        if (!isInit || !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0) return;
         if (holisticInferenceType == HolisticInferenceType.pose_only) return;
 
         if (holisticInferenceType == HolisticInferenceType.full ||
@@ -185,39 +185,45 @@ public class VisualizerTest : MonoBehaviour
     {
         // Results
         int BufferSize = 21;
-        Vector4[] LeftHandvertexData = new Vector4[BufferSize];
-        holisticPipeline.leftHandVertexBuffer.GetData(LeftHandvertexData);
-        float LeftHandScore = holisticPipeline.leftHandDetectionScore;
+        Vector4[] handvertexData = new Vector4[BufferSize];
+        ComputeBuffer computeBuffer = isRight ? holisticPipeline.rightHandVertexBuffer : holisticPipeline.leftHandVertexBuffer;
+        computeBuffer.GetData(handvertexData);
+        float handScore = isRight ? holisticPipeline.rightHandDetectionScore : holisticPipeline.leftHandDetectionScore;
 
-        Vector4[] RightHandvertexData = new Vector4[BufferSize];
-        holisticPipeline.rightHandVertexBuffer.GetData(RightHandvertexData);
-        float RightHandScore = holisticPipeline.rightHandDetectionScore;
+        //Debug.Log($"(처음) Left Hand: {LeftHandvertexData[0]}");
+        //Debug.Log($"(처음) Right Hand: {RightHandvertexData[0]}");
 
-        Debug.Log($"(처음) Left Hand: {LeftHandvertexData[0]}");
-        Debug.Log($"(처음) Right Hand: {RightHandvertexData[0]}");
+        //Debug.Log($"Left Hand: {LeftHandScore}");
+        //Debug.Log($"Right Hand: {RightHandScore}");
 
-        Debug.Log($"Left Hand: {LeftHandScore}");
-        Debug.Log($"Right Hand: {RightHandScore}");
-
-        if (LeftHandScore > handScoreThreshold && RightHandScore > handScoreThreshold)
+        if (handScore > handScoreThreshold)
         {
-            saveRight = RightHandvertexData;
-            saveLeft = LeftHandvertexData;
+            if (isRight)
+                saveRight = handvertexData;
+            else
+                saveLeft = handvertexData;
             isZero = false;
         }
         else
         {
-            RightHandvertexData = saveRight;
-            LeftHandvertexData = saveLeft;
+            handvertexData = isRight ? saveRight : saveLeft;
         }
 
         if (!isZero)
         {
-            RightHandUpdate(RightHandvertexData);
-            LeftHandUpdate(LeftHandvertexData);
+            if (isRight)
+            {
+                RightHandUpdate(handvertexData);
+                RightHandRotate();
+            }
+            else
+            {
+                LeftHandUpdate(handvertexData);
+                LeftHandRotate();
+            }
 
-            // 관절 업데이트
-            HandRotate();
+            //// 관절 업데이트
+            //HandRotate();
         }
 
         //// 오른손 업데이트 
@@ -331,7 +337,7 @@ public class VisualizerTest : MonoBehaviour
         }
     }
 
-    public void HandRotate()
+    void RightHandRotate()
     {
         // 오른쪽 엄지손가락
         float angle_Rthumb = CalculateAngle(handJoints[HandIndex.rthumb_cmc.Int()].Pos3D, handJoints[HandIndex.rthumb_mcp.Int()].Pos3D, handJoints[HandIndex.rthumb_ip.Int()].Pos3D);
@@ -373,7 +379,10 @@ public class VisualizerTest : MonoBehaviour
         //handJoints[HandIndex.rring_dip.Int()].Transform.rotation = handJoints[HandIndex.rindex_dip.Int()].InitRotation * Quaternion.Euler(0.0f, 0.0f, -angle_Rring - angle_Rring2 - angle_Rring3);
         //handJoints[HandIndex.rpinky_dip.Int()].Transform.rotation = handJoints[HandIndex.rindex_dip.Int()].InitRotation * Quaternion.Euler(0.0f, 0.0f, -angle_Rpinky - angle_Rpinky2 - angle_Rpinky3);
         ////UnityEngine.Debug.Log($"가운데 엄지손가락 PIP 관절 각도 {angle_index3}");
+    }
 
+    void LeftHandRotate()
+    {
         // 왼쪽 엄지손가락
         float angle_Lthumb = CalculateAngle(handJoints[HandIndex.lthumb_cmc.Int()].Pos3D, handJoints[HandIndex.lthumb_mcp.Int()].Pos3D, handJoints[HandIndex.lthumb_ip.Int()].Pos3D);
         handJoints[HandIndex.lthumb_mcp.Int()].Transform.localRotation = handJoints[HandIndex.lthumb_mcp.Int()].InitRotation * Quaternion.Euler(-angle_Lthumb, 0.0f, 0.0f);
