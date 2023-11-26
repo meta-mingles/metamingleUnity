@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -44,7 +45,7 @@ public class J_VideoReceiver : MonoBehaviour
         //서버한테 영상 정보 요청
         HttpInfo httpInfo = new HttpInfo();
         string url = "/short-form";
-        httpInfo.Set(RequestType.GET, url + "/"+ GlobalValue.directVideoNo + thumbnailUrl, OnCompleteSearchVideo);
+        httpInfo.Set(RequestType.GET, url + "/"+ GlobalValue.directVideoNo + thumbnailUrl, OnDirectVideo);
         HttpManager.instance.SendRequest(httpInfo);
     }
     //리스트가 열리는 씬
@@ -85,6 +86,22 @@ public class J_VideoReceiver : MonoBehaviour
             item.onClickEvent = CreateShortVideo;
         }
     }
+
+    //숏폼 다운
+    void OnDirectVideo(DownloadHandler downloadHandler)
+    {
+        ListLoad();
+
+        JObject jObject = JObject.Parse(downloadHandler.text);
+
+        ShortVideoInfo data =jObject["data"].ToObject<ShortVideoInfo>();
+
+        CreateShortVideo(data);
+
+        //list 버튼 = > 닫기 버튼눌렀을 때 리스트 생성
+
+    }
+
     //인터렉티브 비디오 열리는 함수
     public void CreateInteractiveMovie(ShortVideoInfo info)
     {
