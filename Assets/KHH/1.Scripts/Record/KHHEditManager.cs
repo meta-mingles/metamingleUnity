@@ -53,13 +53,12 @@ public class KHHEditManager : MonoBehaviour
     {
         Instance = this;
         titleInputField.text = KHHEditData.VideoTitle;
-
-        VideoCaptureCtrl.instance.Set();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        VideoCaptureCtrl.instance.Set();
         KHHCanvasShield.Instance.Show();
 
         if (recordButton != null) recordButton.onClick.AddListener(RecordButtonEvent);

@@ -9,6 +9,7 @@ public class KHHUICategoryItem : MonoBehaviour
     [SerializeField] private GameObject imageOff;
     [SerializeField] private GameObject imageOn;
     [SerializeField] private Image icon;
+    [SerializeField] private Sprite[] iconSprites;
     [SerializeField] private TextMeshProUGUI m_CategoryTitle;
     [SerializeField] private TextMeshProUGUI m_EquipedItemTitle;
     [SerializeField] private Button m_Button;
@@ -21,7 +22,34 @@ public class KHHUICategoryItem : MonoBehaviour
     public string Title
     {
         get => m_CategoryTitle.text;
-        set => m_CategoryTitle.text = value;
+        set
+        {
+            m_CategoryTitle.text = value;
+            switch (value)
+            {
+                case "body":
+                    icon.sprite = iconSprites[0];
+                    break;
+                case "head":
+                    icon.sprite = iconSprites[1];
+                    break;
+                case "hairstyle":
+                    icon.sprite = iconSprites[2];
+                    break;
+                case "top":
+                    icon.sprite = iconSprites[3];
+                    break;
+                case "bottom":
+                    icon.sprite = iconSprites[4];
+                    break;
+                case "shoes":
+                    icon.sprite = iconSprites[5];
+                    break;
+                case "outfit":
+                    icon.sprite = iconSprites[6];
+                    break;
+            }
+        }
     }
 
     public string Value
