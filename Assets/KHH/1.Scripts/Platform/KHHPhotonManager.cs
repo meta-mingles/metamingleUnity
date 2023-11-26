@@ -21,7 +21,7 @@ public class KHHPhotonManager : MonoBehaviour
         PhotonNetwork.SendRate = 30;
         PhotonNetwork.SerializationRate = 30;
 
-        player = PhotonNetwork.Instantiate("PlayerArmature", new Vector3(0.5f, -0.4f, 0.5f), new Quaternion(0, -90, 0, 0));
+        player = PhotonNetwork.Instantiate("PlayerArmature", new Vector3(0.5f, 3f, -10f), new Quaternion(0, 90, 0, 0));
         m_CinemachineVirtualCamera.Follow = player.transform.GetChild(0);
         m_CinemachineVirtualCamera.enabled = true;
     }

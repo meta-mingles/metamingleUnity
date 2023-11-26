@@ -3025,7 +3025,7 @@ MonoBehaviour:
     audioMixerGroup: {fileID: -6812495818299128031, guid: 3491045c6678d8549950e632492348a5,
       type: 2}
   - key: PlatformBGM
-    audioClip: {fileID: 8300000, guid: a7fa0983a5c6a6342b24c8e3b9fbfbaf, type: 3}
+    audioClip: {fileID: 8300000, guid: 6ca5dd40ddcd27849832cd93cb986da2, type: 3}
     audioMixerGroup: {fileID: -6812495818299128031, guid: 3491045c6678d8549950e632492348a5,
       type: 2}
   loadingSFXSoundInfos: []

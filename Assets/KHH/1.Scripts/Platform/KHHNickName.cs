@@ -37,7 +37,7 @@ public class KHHNickName : MonoBehaviourPun
     //플레이어가 전광판의 일정거리안에 들어가면 EnterUI가 생성된다.
     public void EnterUI()
     {
-        GameObject billboard = GameObject.Find("billboard");
+        GameObject billboard = GameObject.Find("Freeze circle");
         //플레이어와 전광판간의 거리를 잰다
         float distance = Vector3.Distance(billboard.transform.position, KHHPhotonManager.Instance.player.transform.position);
         //일정거리 안에 들어가면
