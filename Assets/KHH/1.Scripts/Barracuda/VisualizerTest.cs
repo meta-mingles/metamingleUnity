@@ -3,9 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 // Import HolisticBarracuda
 using MediaPipe.Holistic;
+using System.Collections.Generic;
+using Unity.Barracuda;
+using System.Linq;
 
 public class VisualizerTest : MonoBehaviour
 {
+    public static readonly int[] JointNums = { 2, 3, 5, 6, 9, 10, 13, 14, 17, 18, 23, 24, 26, 27, 30, 31, 34, 35, 38, 39 };
+
     // Blend Shape
     //public GameObject HeadSlot;
     public bool Drawhand = true;
@@ -27,11 +32,12 @@ public class VisualizerTest : MonoBehaviour
 
     // Hand Index
     private float KalmanParamQ = 0.001f;                                            // Kalman Param Q = 0.001
-    private float KalmanParamR = 0.0015f;                                           // Kalman Param R = 0.0015
+    private float KalmanParamR = 0.001f;                                           // Kalman Param R = 0.0015
     public HandInformation[] handInformations;
     public VideoCapture videoCapture;
 
     private HandInformation.HandJoint[] handJoints;
+    public HandInformation.HandJoint[] HandJoints { get { return handJoints; } }
 
     float blinkDelay = 5f;
     float blinkTime = 0f;
@@ -40,7 +46,7 @@ public class VisualizerTest : MonoBehaviour
     // Holistic Barracuda 속성들
     [SerializeField] VNectBarracudaRunner barracudaRunner;
     //[SerializeField, Range(0, 1)] float humanExistThreshold = 0.f;
-    [SerializeField, Range(0, 1)] float handScoreThreshold = 0.7f;
+    [SerializeField, Range(0, 1)] float handScoreThreshold = 0.8f;
     //[SerializeField] Shader handShader;
     [SerializeField] HolisticInferenceType holisticInferenceType = HolisticInferenceType.full;
 
@@ -51,6 +57,12 @@ public class VisualizerTest : MonoBehaviour
     //int InputImageSize = 448;
 
     bool isInit = false;
+
+    bool isRecording = false;
+    public bool IsRecording { get { return isRecording; } }
+    //녹화
+    List<string[]> recordData;
+    float recordTime = 0.0f;
 
     IEnumerator Start()
     {
@@ -90,7 +102,7 @@ public class VisualizerTest : MonoBehaviour
 
     private void Update()
     {
-        if (!isInit ) return;   //|| !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0
+        if (!isInit) return;   //|| !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0
         CloseEyes();
         Smiling();
         Talking();
@@ -98,6 +110,20 @@ public class VisualizerTest : MonoBehaviour
 
     void LateUpdate()
     {
+        //모델 녹화
+        if (handJoints != null && KHHRecordManager.Instance.StartRecord)
+        {
+            recordTime += Time.deltaTime;
+
+            string[] curJointData = new string[HandIndex.Count.Int() + 1];
+            curJointData[0] = recordTime.ToString();
+            for (int i = 0; i < JointNums.Length; i++)
+            {
+                curJointData[i + 1] = $"{handJoints[JointNums[i]].Transform.localRotation.x}_{handJoints[JointNums[i]].Transform.localRotation.y}_{handJoints[JointNums[i]].Transform.localRotation.z}_{handJoints[JointNums[i]].Transform.localRotation.w}";
+            }
+            recordData.Add(curJointData);
+        }
+
         if (!isInit || !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0) return;
         // Inference. Switchable inference type anytime.
         holisticPipeline.ProcessImage(videoCapture.VideoTexture, holisticInferenceType);
@@ -449,17 +475,17 @@ public class VisualizerTest : MonoBehaviour
 
     private void CloseEyes()
     {
-        blinkTime+=Time.deltaTime;
-        if(blinkTime > blinkDelay)
+        blinkTime += Time.deltaTime;
+        if (blinkTime > blinkDelay)
         {
             isCloseEyes = !isCloseEyes;
             if (isCloseEyes)
             {
-                blinkDelay = 4;
+                blinkDelay = 5;
             }
             else
             {
-                blinkDelay = 0.5f;
+                blinkDelay = 0.3f;
             }
             blinkTime = 0;
             eyeweight = Mathf.Clamp(eyeweight, 0, 100);
@@ -468,11 +494,11 @@ public class VisualizerTest : MonoBehaviour
 
         if (isCloseEyes)
         {
-            eyeweight += Time.deltaTime * 500f;
+            eyeweight += Time.deltaTime * 400f;
         }
         else
         {
-            eyeweight -= Time.deltaTime * 500f;
+            eyeweight -= Time.deltaTime * 400f;
         }
 
         //if (isCloseEyes)
@@ -535,5 +561,34 @@ public class VisualizerTest : MonoBehaviour
         measurement.P.x = KalmanParamR * (measurement.P.x + KalmanParamQ) / (KalmanParamR + measurement.P.x + KalmanParamQ);
         measurement.P.y = KalmanParamR * (measurement.P.y + KalmanParamQ) / (KalmanParamR + measurement.P.y + KalmanParamQ);
         measurement.P.z = KalmanParamR * (measurement.P.z + KalmanParamQ) / (KalmanParamR + measurement.P.z + KalmanParamQ);
+    }
+
+    //녹화 시작
+    public void StartRecord()
+    {
+        isRecording = true;
+        recordTime = 0.0f;
+        recordData = new List<string[]>();
+        string[] datas = new string[JointNums.Length + 1];
+        datas[0] = "time";
+        for (int i = 1; i < datas.Length; i++)
+            datas[i] = ((HandIndex)(JointNums[i - 1])).ToString();
+        recordData.Add(datas);
+
+        ////현재의 위치 저장
+        //string[] curJointData = new string[PositionIndex.Count.Int() + 1];
+        //curJointData[0] = recordTime.ToString();
+        //for (int i = 1; i < curJointData.Length; i++)
+        //    curJointData[i] = $"{model.JointPoints[i - 1].Pos3D.x}_{model.JointPoints[i - 1].Pos3D.y}_{model.JointPoints[i - 1].Pos3D.z}_{model.JointPoints[i - 1].InverseRotation.x}_{model.JointPoints[i - 1].InverseRotation.y}_{model.JointPoints[i - 1].InverseRotation.z}_{model.JointPoints[i - 1].InverseRotation.w}";
+        //recordData.Add(curJointData);
+    }
+
+
+    public void StopRecord(string filePath)
+    {
+        isRecording = false;
+
+        //TestFileName = fileName;
+        CSVManager.Instance.WriteCsv(filePath, recordData);
     }
 }
