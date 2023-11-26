@@ -21660,7 +21660,7 @@ MonoBehaviour:
   videoCapture: {fileID: 1873549733}
   barracudaRunner: {fileID: 1875476000}
   handScoreThreshold: 0.5
-  holisticInferenceType: 0
+  holisticInferenceType: 2
 --- !u!4 &1986636792
 Transform:
   m_ObjectHideFlags: 0

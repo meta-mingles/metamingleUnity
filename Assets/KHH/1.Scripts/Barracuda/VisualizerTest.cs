@@ -33,6 +33,9 @@ public class VisualizerTest : MonoBehaviour
 
     private HandInformation.HandJoint[] handJoints;
 
+    float blinkDelay = 5f;
+    float blinkTime = 0f;
+
 
     // Holistic Barracuda 속성들
     [SerializeField] VNectBarracudaRunner barracudaRunner;
@@ -87,7 +90,7 @@ public class VisualizerTest : MonoBehaviour
 
     private void Update()
     {
-        if (!isInit || !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0) return;
+        if (!isInit ) return;   //|| !barracudaRunner.IsTracking || barracudaRunner.IsPredict == 0
         CloseEyes();
         Smiling();
         Talking();
@@ -109,7 +112,7 @@ public class VisualizerTest : MonoBehaviour
             holisticInferenceType == HolisticInferenceType.pose_and_face ||
             holisticInferenceType == HolisticInferenceType.face_only)
         {
-            FaceRender();
+            //FaceRender();
         }
 
         if (holisticInferenceType == HolisticInferenceType.full ||
@@ -446,6 +449,23 @@ public class VisualizerTest : MonoBehaviour
 
     private void CloseEyes()
     {
+        blinkTime+=Time.deltaTime;
+        if(blinkTime > blinkDelay)
+        {
+            isCloseEyes = !isCloseEyes;
+            if (isCloseEyes)
+            {
+                blinkDelay = 4;
+            }
+            else
+            {
+                blinkDelay = 0.5f;
+            }
+            blinkTime = 0;
+            eyeweight = Mathf.Clamp(eyeweight, 0, 100);
+            skinnedMeshRenderer.SetBlendShapeWeight(24, eyeweight);
+        }
+
         if (isCloseEyes)
         {
             eyeweight += Time.deltaTime * 500f;
@@ -454,8 +474,17 @@ public class VisualizerTest : MonoBehaviour
         {
             eyeweight -= Time.deltaTime * 500f;
         }
-        eyeweight = Mathf.Clamp(eyeweight, 0, 100);
-        skinnedMeshRenderer.SetBlendShapeWeight(24, eyeweight);
+
+        //if (isCloseEyes)
+        //{
+        //    eyeweight += Time.deltaTime * 500f;
+        //}
+        //else
+        //{
+        //    eyeweight -= Time.deltaTime * 500f;
+        //}
+        //eyeweight = Mathf.Clamp(eyeweight, 0, 100);
+        //skinnedMeshRenderer.SetBlendShapeWeight(24, eyeweight);
 
     }
 

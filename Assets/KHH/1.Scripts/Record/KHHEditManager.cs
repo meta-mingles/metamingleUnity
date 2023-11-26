@@ -92,6 +92,7 @@ public class KHHEditManager : MonoBehaviour
         //전환이 가능한 상태
         if (KHHRecordManager.Instance.Init())
         {
+            screenEditor.Stop();
             record.SetActive(true);
             edit.SetActive(false);
             captureCamera.targetTexture = null;
