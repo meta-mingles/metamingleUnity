@@ -41,7 +41,7 @@ public class VisualizerTest : MonoBehaviour
     // Material 
     Material handMaterial;
 
-    int InputImageSize = 448;
+    //int InputImageSize = 448;
 
     bool isInit = false;
 

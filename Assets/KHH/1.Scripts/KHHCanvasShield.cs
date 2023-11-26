@@ -8,7 +8,7 @@ public class KHHCanvasShield : MonoBehaviour
     public static KHHCanvasShield Instance;
     Transform loadingImage;
 
-    float rotateSpeed = 180f;
+    //float rotateSpeed = 180f;
 
     void Awake()
     {

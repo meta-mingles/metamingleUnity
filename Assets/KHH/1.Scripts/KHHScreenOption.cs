@@ -2,12 +2,12 @@
 
 public class KHHScreenOption : MonoBehaviour
 {
+#if !UNITY_EDITOR
     bool isFullScreen = false;
 
     // Update is called once per frame
     void Update()
     {
-#if !UNITY_EDITOR
         //알트 + 엔터
         if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Return))
         {
@@ -21,6 +21,6 @@ public class KHHScreenOption : MonoBehaviour
                 Screen.SetResolution(1600, 900, false);
             }
         }
-#endif
     }
+#endif
 }
