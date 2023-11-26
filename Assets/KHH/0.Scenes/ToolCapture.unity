@@ -6136,6 +6136,7 @@ MonoBehaviour:
   - {fileID: 1322631142}
   - {fileID: 302944366}
   modelRecorder: {fileID: 754976543}
+  visualizerTest: {fileID: 1986636791}
   playTimeText: {fileID: 1351525349}
   endTimeText: {fileID: 1832958620}
 --- !u!1 &555892992
@@ -16563,6 +16564,7 @@ MonoBehaviour:
   recordStartButton: {fileID: 59431694}
   recordStopButton: {fileID: 231255313}
   modelRecorder: {fileID: 754976543}
+  visualizerTest: {fileID: 1986636791}
   motionDataManager: {fileID: 117738387}
   videoCapture: {fileID: 1873549733}
   barracudaRunner: {fileID: 1875476000}
@@ -21660,7 +21662,7 @@ MonoBehaviour:
   videoCapture: {fileID: 1873549733}
   barracudaRunner: {fileID: 1875476000}
   handScoreThreshold: 0.5
-  holisticInferenceType: 0
+  holisticInferenceType: 2
 --- !u!4 &1986636792
 Transform:
   m_ObjectHideFlags: 0

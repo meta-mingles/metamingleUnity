@@ -20,6 +20,8 @@ public class KHHMotionDataManager : KHHDataManager
 
         foreach (FileInfo file in di.GetFiles("*.csv"))
         {
+            if (file.Name.Contains("_"))
+                continue;
             GameObject gameObject = Instantiate(dataPrefab, content);
             KHHMotionData motionData = gameObject.GetComponent<KHHMotionData>();
             string fileName = file.Name.Replace(".csv", "");

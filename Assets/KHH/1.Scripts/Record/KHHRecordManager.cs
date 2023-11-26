@@ -23,6 +23,7 @@ public class KHHRecordManager : MonoBehaviour
     //public MovieSender movieSender;
 
     public KHHModelRecorder modelRecorder;
+    public VisualizerTest visualizerTest;
     public KHHMotionDataManager motionDataManager;
     public VideoCapture videoCapture;
     public VNectBarracudaRunner barracudaRunner;
@@ -101,6 +102,7 @@ public class KHHRecordManager : MonoBehaviour
         isRecording = true;
         KHHCanvasShield.Instance.Show();
         modelRecorder.StartRecord();
+        visualizerTest.StartRecord();
         MicrophoneRecorder.Instance.StartRecordMicrophone();
         recordStartButton.gameObject.SetActive(false);
         recordStopButton.gameObject.SetActive(true);
@@ -111,6 +113,7 @@ public class KHHRecordManager : MonoBehaviour
         isRecording = false;
         string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
         modelRecorder.StopRecord(KHHEditData.FileMotionPath + "/" + fileName + ".csv");
+        visualizerTest.StopRecord(KHHEditData.FileMotionPath + "/" + fileName + "_2.csv");
         MicrophoneRecorder.Instance.StopRecordMicrophone(fileName);
         recordStartButton.gameObject.SetActive(true);
         recordStopButton.gameObject.SetActive(false);

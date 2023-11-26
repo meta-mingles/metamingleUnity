@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +11,8 @@ public class KHHEditItemMotion : KHHEditItem
 {
     VNectModel model;
     public VNectModel Model { set { model = value; } }
+    VisualizerTest hand;
+    public VisualizerTest Hand { set { hand = value; } }
     //AudioSource audioSource;
 
     protected int curIdx = 0;
@@ -16,9 +20,9 @@ public class KHHEditItemMotion : KHHEditItem
     protected int endIdx = 0;
 
     protected List<float> timeList;
-    public List<float> TimeList { get { return timeList; } }
+    protected List<float> handTimeList;
     Dictionary<float, List<(Vector3, Quaternion)>> recordDic;
-    public Dictionary<float, List<(Vector3, Quaternion)>> RecordDic { get { return recordDic; } }
+    Dictionary<float, List<Quaternion>> handRecordDic;
 
     KHHEditItemSound pairSound;
     public KHHEditItemSound PairSound { set { pairSound = value; } }
@@ -61,6 +65,18 @@ public class KHHEditItemMotion : KHHEditItem
                 else rot = Quaternion.Lerp(recordDic[timeList[curIdx]][i].Item2, recordDic[timeList[curIdx + 1]][i].Item2, ratio);
                 model.JointPoints[i].Pos3D = pos;
                 model.JointPoints[i].InverseRotation = rot;
+            }
+
+            //손 위치 조정
+            ratio = (actionTime - (handTimeList[curIdx] - itemCorrectTime)) / (handTimeList[curIdx + 1] - handTimeList[curIdx]);
+            for (int i = 0; i < VisualizerTest.JointNums.Length; i++)
+            {
+                Quaternion rot;
+                if ((handRecordDic[handTimeList[curIdx]][i].normalized == Quaternion.identity) && (handRecordDic[handTimeList[curIdx + 1]][i].normalized == Quaternion.identity)) rot = Quaternion.identity; //recordList[timeList[curIdx + 1]][i].Item2;
+                else rot = Quaternion.Lerp(handRecordDic[handTimeList[curIdx]][i], handRecordDic[handTimeList[curIdx + 1]][i], ratio);
+
+                //if (hand.HandJoints[i].Transform != null)
+                hand.HandJoints[VisualizerTest.JointNums[i]].Transform.localRotation = rot;
             }
         }
 
@@ -130,10 +146,13 @@ public class KHHEditItemMotion : KHHEditItem
     public override void LoadItemData(KHHScreenEditor editor, string filePath, string fileName, UnityAction action)
     {
         base.LoadItemData(editor, filePath, fileName, action);
-        string[,] motionData = CSVManager.Instance.ReadCsv(filePath);
+        string[,] motionData = CSVManager.Instance.ReadCsv(filePath + ".csv");
+        string[,] handData = CSVManager.Instance.ReadCsv(filePath + "_2.csv");
 
         timeList = new List<float>();
+        handTimeList = new List<float>();
         recordDic = new Dictionary<float, List<(Vector3, Quaternion)>>();
+        handRecordDic = new Dictionary<float, List<Quaternion>>();
 
         for (int i = 1; i < motionData.GetLength(1); i++)
         {
@@ -153,6 +172,28 @@ public class KHHEditItemMotion : KHHEditItem
 
             timeList.Add(time);
             recordDic.Add(time, jointData);
+        }
+
+        for (int i = 1; i < handData.GetLength(1); i++)
+        {
+            if (string.IsNullOrEmpty(handData[0, i])) continue;
+            float time = float.Parse(handData[0, i]);
+            List<Quaternion> jointData = new List<Quaternion>();
+            for (int j = 1; j < handData.GetLength(0); j++)
+            {
+                if (string.IsNullOrEmpty(handData[j, i]))
+                {
+                    jointData.Add(quaternion.identity);
+                    continue;
+                }
+                string[] jointDatas = handData[j, i].Split('_');
+                Quaternion rot;
+                rot = new Quaternion(float.Parse(jointDatas[0]), float.Parse(jointDatas[1]), float.Parse(jointDatas[2]), float.Parse(jointDatas[3]));
+                jointData.Add(rot);
+            }
+
+            handTimeList.Add(time);
+            handRecordDic.Add(time, jointData);
         }
 
         curIdx = 0;

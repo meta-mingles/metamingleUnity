@@ -22,6 +22,7 @@ public class KHHScreenEditor : MonoBehaviour
 
     public Transform[] editItemParents;
     public KHHModelRecorder modelRecorder;
+    public VisualizerTest visualizerTest;
 
     public TextMeshProUGUI playTimeText;
     public TextMeshProUGUI endTimeText;
@@ -79,8 +80,9 @@ public class KHHScreenEditor : MonoBehaviour
                 GameObject go1 = Instantiate(editItemPrefabs[0], editItemParents[0]);
                 KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
                 editItemMotion.Init(KHHEditVideoState.MotionChangeX, KHHEditVideoState.MotionChangeLeftX, KHHEditVideoState.MotionChangeRightX);
-                editItemMotion.LoadItemData(this, filePathMotion + ".csv", KHHEditVideoState.MotionName, InitEnd);
+                editItemMotion.LoadItemData(this, filePathMotion, KHHEditVideoState.MotionName, InitEnd);
                 editItemMotion.Model = modelRecorder.Model;
+                editItemMotion.Hand = visualizerTest;
                 editItemList.Add(editItemMotion);
                 //보이스 데이터를 로드한다.
                 GameObject go2 = Instantiate(editItemPrefabs[1], editItemParents[1]);
@@ -212,8 +214,9 @@ public class KHHScreenEditor : MonoBehaviour
         GameObject go1 = Instantiate(editItemPrefabs[0], editItemParents[0]);
         KHHEditItemMotion editItemMotion = go1.GetComponent<KHHEditItemMotion>();
         editItemMotion.Init();
-        editItemMotion.LoadItemData(this, filePath + ".csv", fileName, null);
+        editItemMotion.LoadItemData(this, filePath, fileName, null);
         editItemMotion.Model = modelRecorder.Model;
+        editItemMotion.Hand = visualizerTest;
         editItemList.Add(editItemMotion);
 
         //보이스 데이터를 로드한다.
