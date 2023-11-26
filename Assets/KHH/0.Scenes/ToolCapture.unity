@@ -21658,6 +21658,7 @@ MonoBehaviour:
   - {fileID: 549373039}
   - {fileID: 2029472671}
   videoCapture: {fileID: 1873549733}
+  barracudaRunner: {fileID: 1875476000}
   handScoreThreshold: 0.5
   holisticInferenceType: 0
 --- !u!4 &1986636792

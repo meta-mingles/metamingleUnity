@@ -213,6 +213,26 @@ public class KHHCustomizationDemo : MonoBehaviour
             skinnedMesh.sharedMaterials = mesh.sharedMaterials;
         }
 
+        if ((item.name.Contains("head") || item.name.Contains("Head")) && materialDatas == null)
+        {
+            //body의 색상 가져오기
+            var body = m_Equiped["body"];
+            materialDatas = new List<KHHMaterialData>();
+            MaterialPropertyBlock block = new MaterialPropertyBlock();
+            body.renderers[0].GetPropertyBlock(block, 0);
+            Color color = block.GetColor("_Color_A_2");
+
+            MaterialPropertyBlock block1 = new MaterialPropertyBlock();
+            skinnedMesh.GetPropertyBlock(block1, 0);
+            block1.SetColor("_Color_A_2", color);
+            skinnedMesh.SetPropertyBlock(block1, 0);
+
+            MaterialPropertyBlock block2 = new MaterialPropertyBlock();
+            skinnedMesh.GetPropertyBlock(block2, 1);
+            block2.SetColor("_Color_A_2", color);
+            skinnedMesh.SetPropertyBlock(block2, 1);
+        }
+
         //instantiate objects, parent to target bones
         foreach (var obj in item.objects)
         {
@@ -469,7 +489,7 @@ public class KHHCustomizationDemo : MonoBehaviour
         block.SetColor(property, color);
         renderer.SetPropertyBlock(block, materialIndex);
 
-        if (renderer.name.Contains("head.001_mesh") && materialIndex == 0)
+        if ((renderer.name.Contains("head") || renderer.name.Contains("Head")) && materialIndex == 0)
         {
             MaterialPropertyBlock block2 = new MaterialPropertyBlock();
             renderer.GetPropertyBlock(block2, 1);

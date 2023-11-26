@@ -21,6 +21,9 @@ public class VisualizerTest : MonoBehaviour
     private float smileweight = 0f;
     private float eyeweight = 0f;
     private float mouthweight = 0f;
+    private Vector4[] saveLeft;
+    private Vector4[] saveRight;
+    private bool isZero = true;
 
     // Hand Index
     private float KalmanParamQ = 0.001f;                                            // Kalman Param Q = 0.001
@@ -32,6 +35,7 @@ public class VisualizerTest : MonoBehaviour
 
 
     // Holistic Barracuda 속성들
+    [SerializeField] VNectBarracudaRunner barracudaRunner;
     //[SerializeField, Range(0, 1)] float humanExistThreshold = 0.f;
     [SerializeField, Range(0, 1)] float handScoreThreshold = 0.7f;
     //[SerializeField] Shader handShader;
@@ -77,6 +81,8 @@ public class VisualizerTest : MonoBehaviour
         //handMaterial = new Material(handShader);
 
         isInit = true;
+        saveLeft = new Vector4[21];
+        saveRight = new Vector4[21];
     }
 
     private void Update()
@@ -96,7 +102,7 @@ public class VisualizerTest : MonoBehaviour
 
     void OnRenderObject()
     {
-        if (!isInit) return;
+        if (!isInit || !barracudaRunner.IsTracking) return;
         if (holisticInferenceType == HolisticInferenceType.pose_only) return;
 
         if (holisticInferenceType == HolisticInferenceType.full ||
@@ -180,93 +186,105 @@ public class VisualizerTest : MonoBehaviour
         // Results
         int BufferSize = 21;
         Vector4[] LeftHandvertexData = new Vector4[BufferSize];
-        float LeftHandScore = holisticPipeline.leftHandDetectionScore;
         holisticPipeline.leftHandVertexBuffer.GetData(LeftHandvertexData);
+        float LeftHandScore = holisticPipeline.leftHandDetectionScore;
 
         Vector4[] RightHandvertexData = new Vector4[BufferSize];
-        float RightHandScore = holisticPipeline.rightHandDetectionScore;
         holisticPipeline.rightHandVertexBuffer.GetData(RightHandvertexData);
+        float RightHandScore = holisticPipeline.rightHandDetectionScore;
 
-        //if (LeftHandScore < 0.7 || RightHandScore < 0.7)
+        Debug.Log($"(처음) Left Hand: {LeftHandvertexData[0]}");
+        Debug.Log($"(처음) Right Hand: {RightHandvertexData[0]}");
+
+        Debug.Log($"Left Hand: {LeftHandScore}");
+        Debug.Log($"Right Hand: {RightHandScore}");
+
+        if (LeftHandScore > handScoreThreshold && RightHandScore > handScoreThreshold)
+        {
+            saveRight = RightHandvertexData;
+            saveLeft = LeftHandvertexData;
+            isZero = false;
+        }
+        else
+        {
+            RightHandvertexData = saveRight;
+            LeftHandvertexData = saveLeft;
+        }
+
+        if (!isZero)
+        {
+            RightHandUpdate(RightHandvertexData);
+            LeftHandUpdate(LeftHandvertexData);
+
+            // 관절 업데이트
+            HandRotate();
+        }
+
+        //// 오른손 업데이트 
+        //if (RightHandScore > handScoreThreshold)
         //{
-        //    Debug.Log("Hands를 찾을 수 없습니다. 손을 보여주세요.");
+        //    RightHandUpdate(RightHandvertexData);
         //}
         //else
         //{
-        //    Debug.Log($"Left Hand: {LeftHandScore}");
-        //    Debug.Log($"Right Hand: {RightHandScore}");
+        //    int ind = 0;
+        //    foreach (Vector4 point in LeftHandvertexData)
+        //    {
+        //        //Debug.Log($"Left: {point}");
+        //        handJoints[ind].Now3D = handJoints[ind].Save3D;
+        //        ind += 1;
+        //    }
         //}
-        // Hand를 잘 찾지 못하면 이전 정보 저장하기
 
-        //Debug.Log($"Left Hand: {LeftHandScore}");
-        //Debug.Log($"Right Hand: {RightHandScore}");
+        //// 왼손 업데이트
+        //if (LeftHandScore > handScoreThreshold)
+        //{
+        //    LeftHandUpdate(LeftHandvertexData);
+        //}
+        //else
+        //{
+        //    int ind = 21;
+        //    foreach (Vector4 point in LeftHandvertexData)
+        //    {
+        //        //Debug.Log($"Left: {point}");
+        //        handJoints[ind].Now3D = handJoints[ind].Save3D;
+        //        ind += 1;
+        //    }
+        //}
+        ////Debug.Log($"Left Hand: {LeftHandvertexData[0]}");
+        ////Debug.Log($"Right Hand: {RightHandvertexData[0]}");
 
+        //foreach (var point in handJoints)
+        //{
+        //    KalmanUpdate(point);
+        //}
 
-        // 오른손 업데이트 
-        if (RightHandScore > handScoreThreshold)
-        {
-            RightHandUpdate(RightHandvertexData);
-        }
-        else
-        {
-            int ind = 0;
-            foreach (Vector4 point in LeftHandvertexData)
-            {
-                //Debug.Log($"Left: {point}");
-                handJoints[ind].Now3D = handJoints[ind].Save3D;
-                ind += 1;
-            }
-        }
+        //// Avatar 관절 움직이기
+        //HandRotate();
 
-        // 왼손 업데이트
-        if (LeftHandScore > handScoreThreshold)
-        {
-            LeftHandUpdate(LeftHandvertexData);
-        }
-        else
-        {
-            int ind = 21;
-            foreach (Vector4 point in LeftHandvertexData)
-            {
-                //Debug.Log($"Left: {point}");
-                handJoints[ind].Now3D = handJoints[ind].Save3D;
-                ind += 1;
-            }
-        }
-        //Debug.Log($"Left Hand: {LeftHandvertexData[0]}");
-        //Debug.Log($"Right Hand: {RightHandvertexData[0]}");
+        //// Draw Hands
+        //if (Drawhand == true)
+        //{
+        //    if (RightHandScore > handScoreThreshold || LeftHandScore > handScoreThreshold)
+        //    {
+        //        // Draw
+        //        var w = 448;
+        //        var h = 448;
+        //        handMaterial.SetVector("_uiScale", new Vector2(w, h));
+        //        handMaterial.SetVector("_pointColor", isRight ? Color.cyan : Color.yellow);
+        //        handMaterial.SetFloat("_handScoreThreshold", handScoreThreshold);
+        //        // Set inferenced hand landmark results.
+        //        handMaterial.SetBuffer("_vertices", isRight ? holisticPipeline.rightHandVertexBuffer : holisticPipeline.leftHandVertexBuffer);
 
-        foreach (var point in handJoints)
-        {
-            KalmanUpdate(point);
-        }
+        //        // Draw 21 key point circles.
+        //        handMaterial.SetPass(0);
+        //        Graphics.DrawProceduralNow(MeshTopology.Triangles, 96, holisticPipeline.handVertexCount);
 
-        // Avatar 관절 움직이기
-        HandRotate();
-
-        // Draw Hands
-        if (Drawhand == true)
-        {
-            if (RightHandScore > handScoreThreshold || LeftHandScore > handScoreThreshold)
-            {
-                // Draw
-                var w = 448;
-                var h = 448;
-                handMaterial.SetVector("_uiScale", new Vector2(w, h));
-                handMaterial.SetVector("_pointColor", isRight ? Color.cyan : Color.yellow);
-                handMaterial.SetFloat("_handScoreThreshold", handScoreThreshold);
-                // Set inferenced hand landmark results.
-                handMaterial.SetBuffer("_vertices", isRight ? holisticPipeline.rightHandVertexBuffer : holisticPipeline.leftHandVertexBuffer);
-
-                // Draw 21 key point circles.
-                handMaterial.SetPass(0);
-                Graphics.DrawProceduralNow(MeshTopology.Triangles, 96, holisticPipeline.handVertexCount);
-
-                // Draw skeleton lines.
-                handMaterial.SetPass(1);
-                Graphics.DrawProceduralNow(MeshTopology.Lines, 2, 4 * 5 + 1);
-            }
-        }
+        //        // Draw skeleton lines.
+        //        handMaterial.SetPass(1);
+        //        Graphics.DrawProceduralNow(MeshTopology.Lines, 2, 4 * 5 + 1);
+        //    }
+        //}
     }
 
     void OnDestroy()
@@ -284,6 +302,7 @@ public class VisualizerTest : MonoBehaviour
             handJoints[ind].Now3D = new Vector3(point.x, point.y, point.z);
             handJoints[ind].Save3D = handJoints[ind].Now3D;
             handJoints[ind].Prev3D[0] = handJoints[ind].Now3D;
+            KalmanUpdate(handJoints[ind]);
             for (int i = 1; i < handJoints[ind].Prev3D.Length; i++)
             {
                 handJoints[ind].Prev3D[i] = handJoints[ind].Prev3D[i] * 0.5f + handJoints[ind].Prev3D[i - 1] * (1f - 0.5f);
@@ -302,6 +321,7 @@ public class VisualizerTest : MonoBehaviour
             handJoints[ind].Now3D = new Vector3(point.x, point.y, point.z);
             handJoints[ind].Save3D = handJoints[ind].Now3D;
             handJoints[ind].Prev3D[0] = handJoints[ind].Now3D;
+            KalmanUpdate(handJoints[ind]);
             for (int i = 1; i < handJoints[ind].Prev3D.Length; i++)
             {
                 handJoints[ind].Prev3D[i] = handJoints[ind].Prev3D[i] * 0.5f + handJoints[ind].Prev3D[i - 1] * (1f - 0.5f);
@@ -408,10 +428,8 @@ public class VisualizerTest : MonoBehaviour
 
         // 각도 계산
         float angle = Vector3.Angle(vectorAB, vectorBC);
-        angle = angle < 20f ? 0f : angle;
-                
-        //if (float.IsNaN(angle))
-        //    angle = 0f;
+        angle = angle < 30f ? 0f : angle;
+        Debug.Log($"angle: {angle}");
         return angle;
     }
 

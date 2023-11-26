@@ -73,6 +73,7 @@ public class KHHRecordManager : MonoBehaviour
                 //대기
                 KHHCanvasShield.Instance.Close();
             }
+            return;
         }
 
         if (!barracudaRunner.IsTracking)
