@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
-using static UnityEditor.Progress;
+
 
 public class J_VideoReceiver : MonoBehaviour
 {
@@ -126,7 +123,11 @@ public class J_VideoReceiver : MonoBehaviour
     //숏폼비디오 닫는 함수
     void CloseShortVideo()
     {
-        interactiveVideoPlayer.gameObject.SetActive(false);
+        if(interactiveVideoPlayer != null)
+        {
+            interactiveVideoPlayer.gameObject.SetActive(false);
+        }
+
         thumbnailScrollView.SetActive(true);
   
     }

@@ -26,6 +26,4 @@ public class J_InteractiveMovieItem : MonoBehaviour
         choice1.text = m;
         choice2.text = n;
     }
-
-
 }

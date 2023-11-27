@@ -129,7 +129,7 @@ public class J_VideoPlayerBase : MonoBehaviour
         }
     }
     //영상 끄기
-    public virtual void CloseVideo()
+    public void CloseVideo()
     {
         onClickEvent?.Invoke();
         //InteractiveDTOS.ReferenceEquals(gameObject, null);

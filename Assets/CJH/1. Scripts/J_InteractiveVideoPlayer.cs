@@ -17,9 +17,4 @@ public class J_InteractiveVideoPlayer : J_VideoPlayerBase
     {
         restartBt.gameObject.SetActive(true);
     }
-    public override void CloseVideo()
-    {
-        base.CloseVideo();
-        this.gameObject.SetActive(false);
-    }
 }
