@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -17,12 +16,12 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public TMP_Text like_Count;
     public RawImage profilecolor;
     public Button like_Button; // 좋아요 버튼
-    private float colorChangeDuration = 0.5f;//색상변경시간
-    private Color[] rainbowColor = new Color[] { Color.green, Color.magenta, Color.yellow, Color.blue, Color.cyan, Color.red }; //무지개 색상 변화
+    public Button Sound_Button; //사운드 버튼
+    public float colorChangeDuration = 0.5f;//색상변경시간
     int likeCnt;
+    private Color[] rainbowColor = new Color[] { Color.green, Color.magenta, Color.yellow, Color.blue, Color.cyan, Color.red }; //무지개 색상 변화
     public J_InteractiveMovieItem interactiveMovieList;
-    public Action onColorChangeComplete;
-    private void Awake()
+    private void Start()
     {
         like_Button.onClick.AddListener(() => StartCoroutine(ChangeToRainbowAndThenBlack()));
         //처음엔 0 
@@ -37,15 +36,18 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public override void SetItem(ShortVideoInfo info)
     {
         base.SetItem(info);
+
         //제목
         title.text = videoInfo.title;
         //날짜 
         string[] temp = videoInfo.date.Split('T');
-        date.text  = "DATE : " + temp[0];
+        date.text = "DATE : " + temp[0];
+
         //영상 설명
         description.text = "DESCRIPTION : " + videoInfo.description;
         //크리에이터
         membername.text = videoInfo.memberName;
+
         //좋아요 수
         like_Count.text = videoInfo.shortFormLikeCnt.ToString();
     }
@@ -88,6 +90,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         }
         //서버랑 연동
     }
+
     //무지개색상변경
     IEnumerator ChangeToRainbowAndThenBlack()
     {
@@ -113,6 +116,4 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         }
         image.color = newColor;
     }
-
-
 }

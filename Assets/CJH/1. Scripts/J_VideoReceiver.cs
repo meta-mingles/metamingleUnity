@@ -4,6 +4,7 @@ using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Progress;
 
 public class J_VideoReceiver : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class J_VideoReceiver : MonoBehaviour
     public GameObject interactiveVideoFactory;
     public Transform trCtOFVideoSV; //비디오 스크롤뷰 생성장소
     private string thumbnailUrl;
+    J_InteractiveVideoPlayer interactiveVideoPlayer;
     //public GameObject errorVideoFactory; //조회실패 팝업창
     private void Awake()
     {
@@ -107,8 +109,9 @@ public class J_VideoReceiver : MonoBehaviour
     {
         //인터렉티브 비디오 생성
         GameObject video = Instantiate(interactiveVideoFactory, trCtOFVideoSV);
-        J_InteractiveVideoPlayer item = video.GetComponent<J_InteractiveVideoPlayer>();
-        item.SetItem(info);
+        interactiveVideoPlayer = video.GetComponent<J_InteractiveVideoPlayer>();
+        interactiveVideoPlayer.SetItem(info);
+        interactiveVideoPlayer.onClickEvent = CloseShortVideo;
     }
     //숏폼비디오 열리는 함수
     public void CreateShortVideo(ShortVideoInfo info)
@@ -123,7 +126,9 @@ public class J_VideoReceiver : MonoBehaviour
     //숏폼비디오 닫는 함수
     void CloseShortVideo()
     {
+        interactiveVideoPlayer.gameObject.SetActive(false);
         thumbnailScrollView.SetActive(true);
+  
     }
 }
 
