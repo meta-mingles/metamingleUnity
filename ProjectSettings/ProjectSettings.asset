@@ -806,7 +806,8 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     Standalone: 1
-  il2cppCompilerConfiguration: {}
+  il2cppCompilerConfiguration:
+    Standalone: 2
   managedStrippingLevel:
     EmbeddedLinux: 1
     GameCoreScarlett: 1
