@@ -37,29 +37,33 @@ public class KHHNickName : MonoBehaviourPun
     //플레이어가 전광판의 일정거리안에 들어가면 EnterUI가 생성된다.
     public void EnterUI()
     {
-        GameObject billboard = GameObject.Find("Freeze circle");
-        //플레이어와 전광판간의 거리를 잰다
-        float distance = Vector3.Distance(billboard.transform.position, KHHPhotonManager.Instance.player.transform.position);
-        //일정거리 안에 들어가면
-        if (distance < constDist)
+        if (photonView.IsMine)
         {
-            enterTab.SetActive(true);
-        }
-        else
-        {
-            enterTab.SetActive(false);
-        }
-        if (enterTab.activeSelf && Input.GetKeyDown(KeyCode.F))
-        {
-            GlobalValue.directVideoNo =  J_PlatformUIManager.Instance.videoNo;
-            GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
-            GlobalValue.CurSceneName = "VideoScene";
-            PhotonNetwork.LeaveRoom();
+            GameObject billboard = GameObject.Find("Freeze circle");
+            //플레이어와 전광판간의 거리를 잰다
+            float distance = Vector3.Distance(billboard.transform.position, KHHPhotonManager.Instance.player.transform.position);
+            //일정거리 안에 들어가면
+            if (distance < constDist)
+            {
+                enterTab.SetActive(true);
+            }
+            else
+            {
+                enterTab.SetActive(false);
+            }
+            if (enterTab.activeSelf && Input.GetKeyDown(KeyCode.F))
+            {
+                GlobalValue.directVideoNo = J_PlatformUIManager.Instance.videoNo;
+                GlobalValue.PrevSceneName = SceneManager.GetActiveScene().name;
+                GlobalValue.CurSceneName = "VideoScene";
+                PhotonNetwork.LeaveRoom();
 
-            SceneManager.LoadScene("VideoScene");
+                SceneManager.LoadScene("VideoScene");
 
-            //씬이동을 했을 때 비디오가 바로 나와야함
+                //씬이동을 했을 때 비디오가 바로 나와야함
 
+            }
         }
+      
     }
 }

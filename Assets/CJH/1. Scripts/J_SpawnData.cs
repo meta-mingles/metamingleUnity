@@ -1,21 +1,20 @@
-using System;
-using Unity.VisualScripting;
+ï»¿using System;
 using UnityEngine;
 
 [Serializable]
 public class EnemySpawnData
 {
-    //¾ÆÀÌµğ
-    public int id = 0;    //¿¡³Ê¹Ì      ---H
-    //½ºÅÜ
-    public int step = 0;  //½ºÅ×ÀÌÁö º°  ---S
-    //»ı¼º½Ã°£
+    //ì•„ì´ë””
+    public int id = 0;    //ì—ë„ˆë¯¸      ---H
+    //ìŠ¤í…
+    public int step = 0;  //ìŠ¤í…Œì´ì§€ ë³„  ---S
+    //ìƒì„±ì‹œê°„
     public float createTime = 0f;    //--- V
-    //À§Ä¡
+    //ìœ„ì¹˜
     public Vector3 position = Vector3.zero; //---Color
-    //È¸Àü¹æÇâ
+    //íšŒì „ë°©í–¥
     public Vector3 rotation = Vector3.zero;
-    //±âº» Àåºñ»óÅÂ
+    //ê¸°ë³¸ ì¥ë¹„ìƒíƒœ
     public int defaultWeapon = 0;
 }
 

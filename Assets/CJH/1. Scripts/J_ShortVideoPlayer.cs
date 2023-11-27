@@ -17,17 +17,21 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     public TMP_Text like_Count;
     public RawImage profilecolor;
     public Button like_Button; // 좋아요 버튼
-    public float colorChangeDuration = 0.5f;//색상변경시간
+    private float colorChangeDuration = 0.5f;//색상변경시간
     private Color[] rainbowColor = new Color[] { Color.green, Color.magenta, Color.yellow, Color.blue, Color.cyan, Color.red }; //무지개 색상 변화
+    int likeCnt;
     public J_InteractiveMovieItem interactiveMovieList;
     public Action onColorChangeComplete;
     private void Awake()
     {
+        like_Button.onClick.AddListener(() => StartCoroutine(ChangeToRainbowAndThenBlack()));
+        //처음엔 0 
+        like_Count.text = "0";
+        //but 누르고나서 서버에서 받는 좋아요수로 업데이트
         if (like_Button != null)
         {
             like_Button.onClick.AddListener(LikeButton);
         }
-        like_Button.onClick.AddListener(() => StartCoroutine(ChangeToRainbowAndThenBlack()));
     }
     //숏폼 비디오 서버 
     public override void SetItem(ShortVideoInfo info)
@@ -69,39 +73,29 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     }
     void LikeButton()
     {
-        int likeCnt = videoInfo.shortFormLikeCnt;
-        //좋아요 안 한 영상이라면
-        if (!videoInfo.isLike)
-        {
-            // HttpInfo 인스턴스 생성 및 설정
-            HttpInfo httpInfo = new HttpInfo();
-            string url = "/short-form/" + videoInfo.shortFormNo + "/like"; // 숏폼 번호를 URL에 포함
-            httpInfo.Set(RequestType.POST, url, (DownloadHandler downloadHandler) =>
-            {
-                JObject jObject = JObject.Parse(downloadHandler.text);
-                ShortVideoInfo data = jObject["data"].ToObject<ShortVideoInfo>();
-                bool isLike = jObject["data"].ToObject<bool>();
-                int like_Count = jObject["data"].ToObject<int>();
+        likeCnt = videoInfo.shortFormLikeCnt;
+        likeCnt += 1;
+        like_Count.text = likeCnt.ToString();
 
-            });
-            // HttpManager를 통해 요청 보내기
-            HttpManager.instance.SendRequest(httpInfo);
+        //계정당 한번
+        if (videoInfo.isLike == true) //숏폼을 좋아요 했다면
+        {
+            return;
         }
-        else //좋아요 한 영상이라면
+        else
         {
 
         }
-
+        //서버랑 연동
     }
-
     //무지개색상변경
     IEnumerator ChangeToRainbowAndThenBlack()
     {
         Image likeBtImage = like_Button.GetComponent<Image>();
         //무지개 색상 변경
-        foreach(Color color in rainbowColor)
+        foreach (Color color in rainbowColor)
         {
-            yield return StartCoroutine(ChangeColor(likeBtImage,color, colorChangeDuration));
+            yield return StartCoroutine(ChangeColor(likeBtImage, color, colorChangeDuration));
         }
         //최종 색깔 검정색으로 바뀐다.
         yield return like_Button.GetComponent<Image>().color = Color.black;
@@ -111,16 +105,14 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
     {
         float elapsedTime = 0; //경과 시간
         Color orignColor = like_Button.image.color;
-        while(elapsedTime < duration)
+        while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            image.color = Color.Lerp(orignColor,newColor,elapsedTime/duration);
+            image.color = Color.Lerp(orignColor, newColor, elapsedTime / duration);
             yield return null;
         }
         image.color = newColor;
-
-        // 색상 변경이 완료되면 콜백 함수 호출
-        onColorChangeComplete?.Invoke();
-
     }
+
+
 }

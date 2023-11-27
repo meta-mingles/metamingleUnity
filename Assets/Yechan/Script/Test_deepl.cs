@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using DeepL;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using System;
 
 public class Test_deepl : MonoBehaviour

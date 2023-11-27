@@ -1,15 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using System;
 using Newtonsoft.Json.Linq;
 using UnityEngine.Networking;
-using System.Security.Policy;
-using Unity.VisualScripting;
-using UnityEngine.Audio;
 using Photon.Pun;
 using DG.Tweening;
 
@@ -25,18 +20,7 @@ public class J_PlatformUIManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        //초기 언어설정
-        if (Application.systemLanguage == SystemLanguage.Korean)
-        {
-            GlobalValue.myLanguage = SystemLanguage.Korean;
-        }
-        else
-        {
-            GlobalValue.myLanguage = SystemLanguage.English;
-        }
-        //언어설정 초기값
-        koreanBt.GetComponent<Image>().sprite = languageBox;
-        englishBt.GetComponent<Image>().sprite = alpha;
+        
         //사운드 키기
         SoundManager.instance.BGMVolume = LinearToDecibel(0.3f); // 30 %로 시작
         SoundManager.instance.PlayBGM("PlatformBGM");
@@ -51,7 +35,6 @@ public class J_PlatformUIManager : MonoBehaviour
     [Header("Quiz")]
     public TMP_Text questionKorean; //한국질문
     public TMP_Text questionEnglish;//영어질문
-    private bool isDirect;
     public int videoNo;
     [Header("Platform")]
     public Button videoBt; //영상보러가기 버튼
@@ -75,13 +58,24 @@ public class J_PlatformUIManager : MonoBehaviour
     public GameObject billboard; //전광판
     public GameObject enterTab; // 입장 UI
     public Button enterBt;//입장 버튼
-    private float Distance; // 거리
     public float constDist = 3f; //일정거리
     private void Start()
     {
         //언어
         koreanBt.onClick.AddListener(() => ChangeLanguage("Korean", "?language=kr"));
         englishBt.onClick.AddListener(() => ChangeLanguage("English","?language=eng"));
+        //한국어 버튼일때
+        if (GlobalValue.myLanguage== SystemLanguage.Korean)
+        {
+            koreanBt.GetComponent<Image>().sprite = languageBox;
+            englishBt.GetComponent<Image>().sprite = alpha;
+        }
+        //영어 버튼일때
+        else
+        {
+            koreanBt.GetComponent<Image>().sprite = alpha;
+            englishBt.GetComponent<Image>().sprite = languageBox;
+        }
         //퀴즈
         GetQuiz();
     }

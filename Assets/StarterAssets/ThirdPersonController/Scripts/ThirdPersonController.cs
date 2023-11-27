@@ -155,6 +155,11 @@ namespace StarterAssets
 
         private void Update()
         {
+            if(transform.position.y < -10f)
+            {
+                transform.position = new Vector3(0.5f, 3f, -10f);
+                transform.rotation = new Quaternion(0, 90, 0, 0);
+            }
             // UI 요소와 상호작용 중인지 확인
             if (EventSystem.current.IsPointerOverGameObject() || PhotonChatManager.instance.IsSelected)
             {

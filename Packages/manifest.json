@@ -1,22 +1,29 @@
-﻿{
+{
   "scopedRegistries": [
     {
       "name": "Keijiro",
       "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.keijiro" ]
+      "scopes": [
+        "jp.keijiro"
+      ]
     },
     {
       "name": "creativeikep",
       "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.ikep" ]
+      "scopes": [
+        "jp.ikep"
+      ]
     },
     {
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
-      "scopes": [ "com.unity.uiextensions" ]
+      "scopes": [
+        "com.unity.uiextensions"
+      ]
     }
   ],
   "dependencies": {
+    "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.barracuda": "2.0.0",
     "com.unity.cinemachine": "2.8.9",
@@ -33,6 +40,7 @@
     "com.unity.timeline": "1.6.5",
     "com.unity.visualscripting": "1.8.0",
     "com.veriorpies.parrelsync": "https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync",
+    "jp.ikep.mediapipe.holistic": "1.1.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -63,7 +71,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "jp.ikep.mediapipe.holistic": "1.1.0"
+    "com.unity.modules.xr": "1.0.0"
   }
 }

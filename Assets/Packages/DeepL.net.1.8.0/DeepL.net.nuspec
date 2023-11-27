@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>DeepL.net</id>
+    <version>1.8.0</version>
+    <authors>DeepL SE</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>icon.png</icon>
+    <projectUrl>https://www.deepl.com/pro-api</projectUrl>
+    <description>DeepL.net is the official DeepL .NET client library.</description>
+    <releaseNotes>Release notes can be found at https://github.com/DeepLcom/deepl-dotnet/blob/main/CHANGELOG.md</releaseNotes>
+    <tags>deepl translation api i18n language translator</tags>
+    <readme>README.md</readme>
+    <repository url="https://github.com/DeepLcom/deepl-dotnet" />
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Microsoft.Extensions.Http.Polly" version="5.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="5.0.2" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Microsoft.Extensions.Http.Polly" version="5.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="5.0.2" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
