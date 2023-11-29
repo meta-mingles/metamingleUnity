@@ -44,7 +44,7 @@ public class J_ShortVideoPlayer : J_VideoPlayerBase
         date.text = "DATE : " + temp[0];
 
         //영상 설명
-        description.text = "DESCRIPTION : " + videoInfo.description;
+        description.text = videoInfo.description;
         //크리에이터
         membername.text = videoInfo.memberName;
 

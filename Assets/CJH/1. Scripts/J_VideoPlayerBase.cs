@@ -1,10 +1,11 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-public class J_VideoPlayerBase : MonoBehaviour
+public class J_VideoPlayerBase : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string videoUrl;
     public VideoPlayer videoPlayer;
@@ -17,6 +18,8 @@ public class J_VideoPlayerBase : MonoBehaviour
     public Slider soundSlider; //사운드 볼륨 조절 
     public TMP_Text currentTimeText;
     public TMP_Text totalTimeText;
+
+    public GameObject playArea;
 
     private void Awake()
     {
@@ -144,5 +147,22 @@ public class J_VideoPlayerBase : MonoBehaviour
             progressSlider.value = progress;
         }
     }
+
+    //플레이 바 특정영역을 벗어나면 껏다 켰다 하기
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (playArea != null)
+        {
+            playArea.SetActive(true); // Show the playArea
+        }
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (playArea != null)
+        {
+            playArea.SetActive(false); // Hide the playArea
+        }
+    }
+
 
 }
