@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
+//상속받는 자식 클래스 : 인터렉티브 무비
 public class J_InteractiveVideoPlayer : J_VideoPlayerBase
 {
     public Action<int> onClickRestart;

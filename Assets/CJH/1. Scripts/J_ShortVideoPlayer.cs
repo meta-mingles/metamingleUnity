@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
+//상속받는 자식클래스 : 숏폼 플레이어
 public class J_ShortVideoPlayer : J_VideoPlayerBase
 {
     [Header("ShortVideo info")]

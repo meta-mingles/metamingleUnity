@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
+//상속 클래스
+//비디오 플레이어의 부모
 public class J_VideoPlayerBase : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string videoUrl;
@@ -44,8 +46,10 @@ public class J_VideoPlayerBase : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         currentTimeText.text = FormatTime((int)videoPlayer.time);
     }
+    //영상 세팅
     public virtual void SetItem(ShortVideoInfo Info)
     {
+        //VidoePlayer이용하여 영상 세팅
         RenderTexture rt = new RenderTexture(1920, 1080, 24);
         videoPlayer.targetTexture = rt;
         videoPlayer.GetComponentInChildren<RawImage>().texture = rt;
@@ -55,6 +59,8 @@ public class J_VideoPlayerBase : MonoBehaviour, IPointerEnterHandler, IPointerEx
         // 영상 다운로드
         HttpInfo httpInfo = new HttpInfo();
         string subTitleurl = "";
+
+        //한글 or 영어 자막 세팅
         if (GlobalValue.myLanguage == SystemLanguage.Korean)
         {
             subTitleurl = "?language=kr";
@@ -63,7 +69,7 @@ public class J_VideoPlayerBase : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             subTitleurl = "?language=eng";
         }
-
+        //퀴즈로 연결되는 영상인지 확인
         if (GlobalValue.directVideoNo != 0)
         {
             videoUrl = videoInfo.url + GlobalValue.directVideoNo + subTitleurl;
@@ -73,28 +79,28 @@ public class J_VideoPlayerBase : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             videoUrl = videoInfo.url + subTitleurl;
         }
-
+        //영상 Get요청
         httpInfo.Set(RequestType.GET, videoUrl, (downloadHandler) =>
         {
             byte[] videoBytes = downloadHandler.data;
-            videoPlayer.url = videoInfo.url;
+            videoPlayer.url = videoInfo.url; 
             videoPlayer.prepareCompleted += OnVideoPrepared; //비디오 준비 완료 이벤트
-            videoPlayer.Play();
-            videoPlayer.loopPointReached += MakeInteractiveUI;
-            videoPlayer.loopPointReached += MakeRestartUI;
+            videoPlayer.Play(); //영상 재생
+            videoPlayer.loopPointReached += MakeInteractiveUI; //인터렉티브 UI 이벤트
+            videoPlayer.loopPointReached += MakeRestartUI; //Restart UI 이벤트
         }, null, false);
         HttpManager.instance.SendRequest(httpInfo);
         UpdateTimeText();
         UpdateProgressSlider();
     }
-    //비디오 준비
+    //비디오 생성전 영상 길이 표시
     private void OnVideoPrepared(VideoPlayer source)
     {
         double videoLength = source.length;
         int totalTime = Convert.ToInt32(videoLength);
         totalTimeText.text = FormatTime(totalTime);
     }
-
+    //시간 변환
     private string FormatTime(int timeInSeconds)
     {
         TimeSpan timeSpan = TimeSpan.FromSeconds(timeInSeconds);
