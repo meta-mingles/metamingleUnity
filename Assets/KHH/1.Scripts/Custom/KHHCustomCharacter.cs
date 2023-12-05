@@ -127,9 +127,9 @@ public class KHHCustomCharacter : MonoBehaviour
         var bodyPath = GetAssetPath(bodyType, "body");
         yield return m_AssetLoader.LoadAsset<GameObject>(bodyPath, res => InitBody(bodyPath, res));
 
-        ////initialize the head with the first available
-        //string assetPath = m_CustomizationOptions["head"][0];
-        //yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(assetPath, res => Equip("head", assetPath, res));
+        //initialize the head with the first available
+        string assetPath = m_CustomizationOptions["head"][0];
+        yield return m_AssetLoader.LoadAsset<CustomizationItemAsset>(assetPath, res => Equip("head", assetPath, res));
 
         m_LoadingCoroutine = null;
     }
@@ -175,6 +175,29 @@ public class KHHCustomCharacter : MonoBehaviour
             skinnedMesh.bounds = m_ReferenceMesh.bounds;
             skinnedMesh.sharedMesh = mesh.sharedMesh;
             skinnedMesh.sharedMaterials = mesh.sharedMaterials;
+        }
+
+        if ((item.name.Contains("head") || item.name.Contains("Head")) && materialDatas == null)
+        {
+            //body의 색상 가져오기
+            var body = m_Equiped["body"];
+            materialDatas = new List<KHHMaterialData>();
+            MaterialPropertyBlock block = new MaterialPropertyBlock();
+            body.renderers[0].GetPropertyBlock(block, 0);
+            if (block.HasColor("_Color_A_2"))
+            {
+                Color color = block.GetColor("_Color_A_2");
+
+                MaterialPropertyBlock block1 = new MaterialPropertyBlock();
+                skinnedMesh.GetPropertyBlock(block1, 0);
+                block1.SetColor("_Color_A_2", color);
+                skinnedMesh.SetPropertyBlock(block1, 0);
+
+                MaterialPropertyBlock block2 = new MaterialPropertyBlock();
+                skinnedMesh.GetPropertyBlock(block2, 1);
+                block2.SetColor("_Color_A_2", color);
+                skinnedMesh.SetPropertyBlock(block2, 1);
+            }
         }
 
         //instantiate objects, parent to target bones

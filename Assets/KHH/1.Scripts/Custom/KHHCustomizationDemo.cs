@@ -220,17 +220,20 @@ public class KHHCustomizationDemo : MonoBehaviour
             materialDatas = new List<KHHMaterialData>();
             MaterialPropertyBlock block = new MaterialPropertyBlock();
             body.renderers[0].GetPropertyBlock(block, 0);
-            Color color = block.GetColor("_Color_A_2");
+            if (block.HasColor("_Color_A_2"))
+            {
+                Color color = block.GetColor("_Color_A_2");
 
-            MaterialPropertyBlock block1 = new MaterialPropertyBlock();
-            skinnedMesh.GetPropertyBlock(block1, 0);
-            block1.SetColor("_Color_A_2", color);
-            skinnedMesh.SetPropertyBlock(block1, 0);
+                MaterialPropertyBlock block1 = new MaterialPropertyBlock();
+                skinnedMesh.GetPropertyBlock(block1, 0);
+                block1.SetColor("_Color_A_2", color);
+                skinnedMesh.SetPropertyBlock(block1, 0);
 
-            MaterialPropertyBlock block2 = new MaterialPropertyBlock();
-            skinnedMesh.GetPropertyBlock(block2, 1);
-            block2.SetColor("_Color_A_2", color);
-            skinnedMesh.SetPropertyBlock(block2, 1);
+                MaterialPropertyBlock block2 = new MaterialPropertyBlock();
+                skinnedMesh.GetPropertyBlock(block2, 1);
+                block2.SetColor("_Color_A_2", color);
+                skinnedMesh.SetPropertyBlock(block2, 1);
+            }
         }
 
         //instantiate objects, parent to target bones
