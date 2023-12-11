@@ -155,7 +155,7 @@ public static class KHHUserCustom
         // HttpClient 객체 생성
         using (HttpClient client = new HttpClient())
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://www.metamingle.store:8081/avatar");
+            var request = new HttpRequestMessage(HttpMethod.Post, "http://office.helloworldlabs.kr:8080/avatar");
 
             request.Content = new ByteArrayContent(jsonData);
             request.Content.Headers.Add("Content-Type", "application/json");
@@ -203,7 +203,7 @@ public static class KHHUserCustom
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, "http://www.metamingle.store:8081/avatar");
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://office.helloworldlabs.kr:8080/avatar");
                 request.Headers.Add("Authentication", HttpManager.instance.token);
 
                 using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);

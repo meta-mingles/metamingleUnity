@@ -67,7 +67,7 @@ public class KHHVideoCapture : MonoBehaviour
         return null;
     }
 
-    string uploadShortformURL = "http://www.metamingle.store:8081/short-form-firebase";
+    string uploadShortformURL = "http://office.helloworldlabs.kr:8080/short-form-firebase";
     public void UploadShortformVideo(string title, string description)
     {
         IsUploading = true;
@@ -125,7 +125,7 @@ public class KHHVideoCapture : MonoBehaviour
         }
     }
 
-    string uploadInteractiveURL = "http://www.metamingle.store:8081/interactive-movie";
+    string uploadInteractiveURL = "http://office.helloworldlabs.kr:8080/interactive-movie";
     public void UploadInteractiveVideo(string title, string description, string c1, string c1Path, string c2, string c2Path)
     {
         IsUploading = true;
