@@ -32,7 +32,7 @@ public class HttpInfo
         bool useDefaultUrl = true)
     {
         requestType = type;
-        if (useDefaultUrl) url = "http://metaverse.ohgiraffers.com:8080"; //기존 서버 url
+        if (useDefaultUrl) url = "http://office.helloworldlabs.kr:8080"; //기존 서버 url
         //if (useDefaultUrl) testUrl = "http://192.168.0.25:8080"; //기존 서버 url
         url += u;
         //testUrl += u;
