@@ -134,12 +134,12 @@ public static class KHHUserCustom
         {
             fileStream = new FileStream(Application.persistentDataPath + "/customData.json", FileMode.Create);
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
-            await PostJson(bytes);
             await fileStream.WriteAsync(bytes, 0, bytes.Length);
+            await PostJson(bytes);
         }
         catch (Exception e)
         {
-            Debug.LogError(e);
+            Debug.Log(e); //Debug.LogError(e);
         }
         finally
         {
