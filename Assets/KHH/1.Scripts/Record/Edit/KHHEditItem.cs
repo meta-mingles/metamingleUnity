@@ -90,70 +90,42 @@ public class KHHEditItem : Selectable
     {
         if (!isLoad) return;
 
-        //크기조절
-        if (left.isDrag)
+        if (left.isDrag || middle.isDrag || right.isDrag)
         {
-            changeLeftX += left.posXDiff;
-            if (maxLength > 0 && changeLeftX < 0)
+            //왼쪽을 잡았을때
+            if (left.isDrag)
             {
-                changeLeftX = 0;
+                changeLeftX += left.posXDiff;   //변화량
+                if (maxLength > 0 && changeLeftX < 0)   //정해진 길이가 있으면 그 길이보다 작아지지 못하게
+                    changeLeftX = 0;
+                else if (startX + changeLeftX > endX + changeRightX)    //왼쪽이 오른쪽보다 커지면 스탑
+                    changeLeftX = (endX + changeRightX) - startX;
             }
-            else if (startX + changeLeftX > endX + changeRightX)
+
+            if (middle.isDrag)
             {
-                changeLeftX = (endX + changeRightX) - startX;
+                changePosX += middle.posXDiff;
+                if (EndTime > screenEditor.maxTime) //최대시간보다 커지못하게
+                    changePosX = (screenEditor.maxTime * lengthScale) - (endX + changeRightX);
+
+                if (startX + changePosX + changeLeftX < 0)  //0초 아래로 내려가지 못하게
+                    changePosX = (startX + changeLeftX) * -1;
+            }
+
+            if (right.isDrag)
+            {
+                changeRightX += right.posXDiff;
+                if (EndTime > screenEditor.maxTime) //최대시간보다 커지못하게
+                    changeRightX = (screenEditor.maxTime * lengthScale) - (endX + changePosX);
+
+                if (maxLength > 0 && changeRightX > 0)  //정해진 길이가 있으면 그 길이보다 커지지 못하게
+                    changeRightX = 0;
+                else if (endX + changeRightX < startX + changeLeftX)    //오른쪽이 왼쪽보다 작아지면 스탑
+                    changeRightX = (startX + changeLeftX) - endX;
             }
 
             curLength = (endX + changeRightX) - (startX + changeLeftX);
-            item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
             item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
-            rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
-
-            itemCorrectTime = changeLeftX / lengthScale;
-            delayTime = (changePosX + changeLeftX) / lengthScale;
-
-            screenEditor.SetEndTime();
-        }
-
-        if (middle.isDrag)
-        {
-            changePosX += middle.posXDiff;
-            if (EndTime > screenEditor.maxTime)
-            {
-                changePosX = (screenEditor.maxTime * lengthScale) - (endX + changeRightX);
-            }
-
-            if (startX + changePosX + changeLeftX < 0)
-            {
-                changePosX = (startX + changeLeftX) * -1;
-            }
-
-            item.anchoredPosition = new Vector2(startX + changePosX + changeLeftX, item.anchoredPosition.y);
-            rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
-
-            itemCorrectTime = changeLeftX / lengthScale;
-            delayTime = (changePosX + changeLeftX) / lengthScale;
-
-            screenEditor.SetEndTime();
-        }
-
-        if (right.isDrag)
-        {
-            changeRightX += right.posXDiff;
-            if (EndTime > screenEditor.maxTime)
-            {
-                changeRightX = (screenEditor.maxTime * lengthScale) - (endX + changePosX);
-            }
-
-            if (maxLength > 0 && changeRightX > 0)
-            {
-                changeRightX = 0;
-            }
-            else if (endX + changeRightX < startX + changeLeftX)
-            {
-                changeRightX = (startX + changeLeftX) - endX;
-            }
-
-            curLength = (endX + changeRightX) - (startX + changeLeftX);
             item.sizeDelta = new Vector2(curLength, item.sizeDelta.y);
             rt.sizeDelta = new Vector2(startX + changePosX + changeLeftX + curLength, 60);
 
