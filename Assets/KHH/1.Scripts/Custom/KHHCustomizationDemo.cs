@@ -6,15 +6,15 @@ using UnityEngine;
 public class KHHCustomizationDemo : MonoBehaviour
 {
     public static readonly List<string> CustomCategories = new List<string>
-        {
-            "body",
-            "head",
-            "hairstyle",
-            "top",
-            "bottom",
-            "shoes",
-            "outfit"
-        };
+    {
+        "body",
+        "head",
+        "hairstyle",
+        "top",
+        "bottom",
+        "shoes",
+        "outfit"
+    };
 
     public class EquipedItem
     {

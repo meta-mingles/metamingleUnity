@@ -131,10 +131,12 @@ public class KHHVideoCapture : MonoBehaviour
         IsUploading = true;
 
         List<byte[]> videoBytes = new List<byte[]>();
-        List<string> paths = new List<string>();
-        paths.Add(filePath);
-        paths.Add(c1Path);
-        paths.Add(c2Path);
+        List<string> paths = new List<string>
+        {
+            filePath,
+            c1Path,
+            c2Path
+        };
         for (int i = 0; i < paths.Count; i++)
             videoBytes.Add(ReadVideoAsBytes(paths[i]));
 
@@ -157,10 +159,6 @@ public class KHHVideoCapture : MonoBehaviour
             {
                 form.AddBinaryData($"video{i + 1}", videoBytesList[i], $"video{i + 1}.mp4", "video/mp4");
             }
-
-            //form.AddBinaryData("video1", videoBytesList[0], "video1.mp4", "video/mp4"); //첫 동영상
-            //form.AddBinaryData("video2", videoBytesList[1], "video2.mp4", "video/mp4"); //선택지1
-            //form.AddBinaryData("video3", videoBytesList[2], "video3.mp4", "video/mp4"); //선택지2
 
             // Add the title to the form data.
             form.AddField("title", title);

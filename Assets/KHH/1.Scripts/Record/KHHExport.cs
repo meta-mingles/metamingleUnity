@@ -84,21 +84,20 @@ public class KHHExport : MonoBehaviour
     {
         screen.color = Color.white;
         screen.texture = videoCapture.FrameRenderTexture;
-        VideoCaptureCtrl.instance.StartCapture();
+        VideoCaptureCtrl.instance.StartCapture();   //녹화 시작
         yield return null;
 
+        //썸네일 생성
         RenderTexture rt = captureCamera.targetTexture;
         RenderTexture.active = rt;
-        Texture2D tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false); // png 파일에 쓰일 재료 
+        Texture2D tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
         RenderTexture.active = null;
 
         byte[] bytes;
         bytes = tex.EncodeToPNG();
-
         string path = KHHEditData.FilePath + "/thumbnail.png";
         System.IO.File.WriteAllBytes(path, bytes);
-
 
         while (screenEditor.IsPlaying)
             yield return null;
@@ -111,16 +110,8 @@ public class KHHExport : MonoBehaviour
 
         screen.color = new Color32(56, 60, 62, 255);
         screen.texture = null;
-        //captureCamera.targetTexture = captureRenderTexture;
         exportState = ExportState.None;
         uploadButton.interactable = true;
-
-        ////만든 mp4 영상에서 썸네일 생성
-        //Texture2D texture = new Texture2D(0, 0);
-        //texture.LoadImage(System.IO.File.ReadAllBytes(KHHVideoCapture.instance.FilePath));
-        //texture.Apply();
-        //byte[] bytes = texture.EncodeToPNG();
-        //System.IO.File.WriteAllBytes(KHHEditData.FilePath + "/thumbnail.png", bytes);
     }
 
     void UploadButtonEvent()
